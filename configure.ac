@@ -9,8 +9,6 @@
 AC_PREREQ(2.59)
 AC_INIT([libcassandra],[0.1],[http://github.com/posulliv/libcassandra])
 AC_CONFIG_SRCDIR([libcassandra/cassandra.cc])
-AC_CONFIG_AUX_DIR(config)
-AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 PANDORA_CANONICAL_TARGET
