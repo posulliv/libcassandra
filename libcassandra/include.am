@@ -1,0 +1,19 @@
+# vim:ft=automake
+# included from Top Level Makefile.am
+# All paths should be given relative to the root
+
+EXTRA_DIST+= \
+	     libcassandra/configure.h.in 
+
+nobase_include_HEADERS+= \
+			 libmemcached/first.h \
+			 libmemcached/second.h
+
+lib_LTLIBRARIES+= libcassandra/libcassandra.la
+libmemcached_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS} ${NO_CONVERSION}
+libmemcached_libcassandra_la_SOURCES = \
+				       libcassandra/first.cc \
+				       libcassandra/second.cc
+
+libmemcached_libcassandra_la_LDFLAGS= ${AM_LDFLAGS} -version-info ${CASSANDRA_LIBRARY_VERSION}
+
