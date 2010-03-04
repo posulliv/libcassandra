@@ -20,7 +20,7 @@ using namespace libcassandra;
 
 Cassandra::Cassandra(CassandraClient *in_thrift_client,
                      const string &in_host,
-                     int in_port);
+                     int in_port)
   :
     thrift_client(in_thrift_client),
     host(in_host),
@@ -30,7 +30,7 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
 {}
 
 
-~Cassandra::Cassandra() 
+Cassandra::~Cassandra()
 {
   delete thrift_client;
 }
@@ -38,7 +38,7 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
 
 void Cassandra::getKeyspaces(set<string> &key_spaces)
 {
-  thrift_client.desribe_keyspaces(key_spaces);
+  thrift_client->describe_keyspaces(key_spaces);
 }
 
 

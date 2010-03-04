@@ -14,8 +14,9 @@
 #include <transport/TSocket.h>
 #include <transport/TTransportUtils.h>
 
-#include "Cassandra.h"
+#include <libgenthrift/Cassandra.h>
 
+#include "cassandra.h"
 #include "cassandra_factory.h"
 
 using namespace libcassandra;
@@ -38,21 +39,19 @@ Cassandra *CassandraFactory::create()
 {
   CassandraClient *thrift_client= createThriftClient(host, port);
   Cassandra *ret= new(std::nothrow) Cassandra(thrift_client, host, port);
+  return ret;
 }
 
 
-CassandraClient *CassandraFactory::createThriftClient(const string &host,
-                                                      int port)
+CassandraClient *CassandraFactory::createThriftClient(const string &in_host,
+                                                      int in_port)
 {
-  shared_ptr<TTransport> socket(new TSocket(host, port));
-  shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-  shared_ptr<TTransport> protocol(new TBinaryProtocol(transport));
+  boost::shared_ptr<TTransport> socket(new TSocket(in_host, in_port));
+  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new(std::nothrow) CassandraClient(protocol);
 
-  try
-  {
-    transport->open();
-  }
+  transport->open(); /* throws an exception */
 
   return client;
 }

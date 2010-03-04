@@ -11,7 +11,7 @@ AC_INIT([libcassandra],[0.1],[http://github.com/posulliv/libcassandra])
 AC_CONFIG_SRCDIR([libcassandra/cassandra.cc])
 AC_CONFIG_MACRO_DIR([m4])
 
-PANDORA_CANONICAL_TARGET
+PANDORA_CANONICAL_TARGET(less-warnings, skip-visiblity)
 
 #shared library versioning
 CASSANDRA_LIBRARY_VERSION=1:0:0
@@ -33,9 +33,12 @@ AC_SEARCH_LIBS(gethostbyname, nsl)
 
 AC_CHECK_FUNCS([getline])
 
+PANDORA_REQUIRE_THRIFT
+
+AC_LANG_PUSH(C++)
 PANDORA_REQUIRE_PTHREAD
-#PANDORA_REQUIRE_THRIFT
 PANDORA_CXX_DEMANGLE
+AC_LANG_POP
 
 dnl Specialty checks
 DETECT_BYTEORDER
@@ -54,6 +57,7 @@ AS_IF([test "x$ac_cv_header_atomic_h" = "xyes"],[
 
 AC_CONFIG_FILES([
   Makefile
+  libgenthrift/configure.h
   libcassandra/configure.h
   ])
 AC_OUTPUT
