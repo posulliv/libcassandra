@@ -32,6 +32,6 @@ AC_DEFUN([PANDORA_HAVE_LIBTHRIFT],[
 AC_DEFUN([PANDORA_REQUIRE_LIBTHRIFT],[
   AC_REQUIRE([PANDORA_HAVE_LIBTHRIFT])
   AS_IF([test x$ac_cv_libthrift = xno],
-      AC_MSG_ERROR([libthrift is required for ${PACKAGE}. On Debian this can be found in libthrift-dev.]))
+      AC_MSG_ERROR([libthrift is required for ${PACKAGE}.]))
 ])
 
