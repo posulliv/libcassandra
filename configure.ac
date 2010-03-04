@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# libmemcached
-# Copyright (C) 2008 Brian Aker, Monty Taylor
+# libcassandra
+# Copyright (C) 2010 Padraig O'Sullivan
 # All rights reserved.
 #
 # Use and distribution licensed under the BSD license.  See
