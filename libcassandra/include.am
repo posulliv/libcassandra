@@ -7,13 +7,15 @@ EXTRA_DIST+= \
 
 nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
-			 libcassandra/cassandra_factory.h
+			 libcassandra/cassandra_factory.h \
+			 libcassandra/keyspace.h
 
 lib_LTLIBRARIES+= libcassandra/libcassandra.la
 libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS} ${NO_CONVERSION}
 libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra.cc \
-				       libcassandra/cassandra_factory.cc
+				       libcassandra/cassandra_factory.cc \
+				       libcassandra/keyspace.cc
 
 libcassandra_libcassandra_la_DEPENDENCIES= libgenthrift/libgenthrift.la
 libcassandra_libcassandra_la_LIBADD= libgenthrift/libgenthrift.la
