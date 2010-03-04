@@ -27,7 +27,6 @@ libgenthrift_libgenthrift_la_SOURCES= \
 libgenthrift_libgenthrift_la_CXXFLAGS= \
 				 ${AM_CXXFLAGS} 
 
-libgenthrift_libgenthrift_la_LDFLAGS= \
-				  $(LIBM) \
-				  -lthrift 
+libgenthrift_libgenthrift_la_LIBADD= \
+				  $(LIBTHRIFT) 
 
