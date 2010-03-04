@@ -59,6 +59,19 @@ void Keyspace::remove(const string &key,
 }
 
 
+Column Keyspace::getColumn(const string &key, const ColumnPath &col_path)
+{
+  validateColumnPath(col_path);
+  ColumnOrSuperColumn cosc;
+  client->getCassandra()->get(cosc, name, key, col_path, level);
+  if (cosc.column.name.empty())
+  {
+    /* throw an exception */
+  }
+  return cosc.column;
+}
+
+
 int64_t Keyspace::createTimestamp()
 {
   struct timeval tv;

@@ -38,6 +38,9 @@ public:
   void remove(const std::string &key,
               const org::apache::cassandra::ColumnPath &col_path);
 
+  org::apache::cassandra::Column getColumn(const std::string &key,
+                                           const org::apache::cassandra::ColumnPath &col_path);
+
 private:
 
   int64_t createTimestamp();
