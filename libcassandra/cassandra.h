@@ -46,23 +46,6 @@ public:
   };
 
   /**
-   * Return given key space, if the given key space does not exist, throw an exception.
-   */
-  //Keyspace getKeyspace(const std::string &keyspace_name);
-
-  /**
-   * Return a keyspace with the given consistency level.
-   */
-  //Keyspace getKeyspace(const std::string &keyspace_name,
-   //                    int consistency_level,
-    //                   FailoverPolicy failover_policy);
-
-  /**
-   * Remove the given keyspace.
-   */
-  //void removeKeyspace(Keyspace &key_space);
-
-  /**
    * Return all the keyspace names. Populate the set passed to this method.
    */
   void getKeyspaces(std::set<std::string> &key_spaces);
@@ -71,11 +54,6 @@ public:
    * Return the target server cluster name.
    */
   std::string getClusterName();
-
-  /**
-   * Return the config file content.
-   */
-  //std::string getConfigFile();
 
   /**
    * Return the server version.
