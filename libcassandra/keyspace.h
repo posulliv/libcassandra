@@ -47,6 +47,8 @@ private:
 
   void validateColumnPath(const org::apache::cassandra::ColumnPath &col_path);
 
+  void validateSuperColumnPath(const org::apache::cassandra::ColumnPath &col_path);
+
   Cassandra *client;
 
   std::string name;

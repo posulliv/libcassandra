@@ -104,3 +104,22 @@ void Keyspace::validateColumnPath(const ColumnPath &col_path)
   }
   /* if we get here, throw an exception */
 }
+
+
+void Keyspace::validateSuperColumnPath(const ColumnPath &col_path)
+{
+  map<string, string> cf_define= keyspace_desc[col_path.column_family];
+  if (cf_define.empty())
+  {
+    /* throw an exception */
+  }
+  string type= cf_define["Type"];
+  if (! type.compare("Super"))
+  {
+    if (! col_path.super_column.empty())
+    {
+      return;
+    }
+  }
+  /* if we get here, throw an exception */
+}
