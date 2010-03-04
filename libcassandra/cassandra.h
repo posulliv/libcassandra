@@ -12,6 +12,18 @@
 
 #include <string>
 #include <vector>
+#include <set>
+
+namespace org
+{
+namespace apache
+{
+namespace cassandra
+{
+class CassandraClient;
+}
+}
+}
 
 namespace libcassandra
 {
@@ -21,7 +33,7 @@ class Cassandra
 
 public:
 
-  Cassandra(CassandraClient *in_thrift_client,
+  Cassandra(org::apache::cassandra::CassandraClient *in_thrift_client,
             const std::string &in_host,
             int in_port);
   ~Cassandra();
@@ -72,11 +84,14 @@ public:
 
 private:
 
-  CassandraClient *thrift_client;
+  org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;
   int port;
   std::string cluster_name;
   std::string server_version;
+
+  Cassandra(const Cassandra&);
+  Cassandra &operator=(const Cassandra&);
 
 };
 

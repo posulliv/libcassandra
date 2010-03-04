@@ -15,5 +15,7 @@ libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra.cc \
 				       libcassandra/second.cc
 
+libcassandra_libcassandra_la_DEPENDENCIES= libgenthrift/libgenthrit.la
+libcassandra_libcassandra_la_LIBADD= $(LIBM) libgenthrift/libgenthrift.la
 libcassandra_libcassandra_la_LDFLAGS= ${AM_LDFLAGS} -version-info ${CASSANDRA_LIBRARY_VERSION}
 

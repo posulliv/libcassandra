@@ -21,6 +21,7 @@ SUBDIRS =
 test-docs:
 	(cd docs && $(MAKE) test-docs)
 include libcassandra/include.am
+include libgenthrift/include.am
 
 check-local: test-no-outputdiff
 

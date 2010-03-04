@@ -38,6 +38,6 @@ AC_DEFUN([PANDORA_HAVE_THRIFT],[
 AC_DEFUN([PANDORA_REQUIRE_THRIFT],[
   AC_REQUIRE([PANDORA_HAVE_THRIFT])
   AS_IF([test x$ac_cv_thrift= xno],
-      AC_MSG_ERROR([thrift required for ${PACKAGE}]))
+      AC_MSG_ERROR([thrift required]))
 ])
 

@@ -8,11 +8,14 @@
  */
 
 #include <string>
-#include <vector>
+#include <set>
+
+#include <libgenthrift/Cassandra.h>
 
 #include "cassandra.h"
 
 using namespace std;
+using namespace org::apache::cassandra;
 using namespace libcassandra;
 
 Cassandra::Cassandra(CassandraClient *in_thrift_client,

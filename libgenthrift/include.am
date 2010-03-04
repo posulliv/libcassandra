@@ -1,0 +1,33 @@
+# vim:ft=automake
+# included from Top Level Makefile.am
+# All paths should be given relative to the root
+#
+# Copyright (C) 2010 Padraig O'Sullivan
+# All rights reserved.
+#
+# Use and distribution licensed under the BSD license.  See
+# the COPYING file in the parent directory for full text.
+
+lib_LTLIBRARIES+= libgenthrift/libgenthrift.la
+
+EXTRA_DIST+= \
+	     libgenthrift/configure.h.in
+
+
+nobase_include_HEADERS+= \
+			 libgenthrift/cassandra_constants.h \
+			 libgenthrift/Cassandra.h \
+			 libgenthrift/cassandra_types.h 
+
+libgenthrift_libgenthrift_la_SOURCES= \
+				  libgenthrift/cassandra_constants.cpp \
+				  libgenthrift/Cassandra.cpp \
+				  libgenthrift/cassandra_types.cpp 
+
+libgenthrift_libgenthrift_la_CXXFLAGS= \
+				 ${AM_CXXFLAGS} 
+
+libgenthrift_libgenthrift_la_LDFLAGS= \
+				  $(LIBM) \
+				  -lthrift 
+
