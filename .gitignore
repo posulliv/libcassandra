@@ -24,3 +24,6 @@ libgenthrift/.deps/
 libcassandra/.deps/
 libcassandra/.dirstamp
 libcassandra/configure.h
+libgenthrift/.libs/
+libgenthrift/.dirstamp
+libcassandra/.libs/
