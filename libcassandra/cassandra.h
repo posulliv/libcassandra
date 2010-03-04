@@ -16,9 +16,15 @@
 namespace libcassandra
 {
 
-class CassandraClient
+class Cassandra
 {
+
 public:
+
+  Cassandra(CassandraClient *in_thrift_client,
+            const std::string &in_host,
+            int in_port);
+  ~Cassandra();
 
   enum FailoverPolicy
   {
@@ -30,24 +36,24 @@ public:
   /**
    * Return given key space, if the given key space does not exist, throw an exception.
    */
-  Keyspace getKeyspace(const std::string &keyspace_name);
+  //Keyspace getKeyspace(const std::string &keyspace_name);
 
   /**
    * Return a keyspace with the given consistency level.
    */
-  Keyspace getKeyspace(const std::string &keyspace_name,
-                       uint32_t consistency_level,
-                       FailoverPolicy failover_policy);
+  //Keyspace getKeyspace(const std::string &keyspace_name,
+   //                    int consistency_level,
+    //                   FailoverPolicy failover_policy);
 
   /**
    * Remove the given keyspace.
    */
-  void removeKeyspace(Keyspace &key_space);
+  //void removeKeyspace(Keyspace &key_space);
 
   /**
-   * Return all the keyspace names. Populate the vector passed to this method.
+   * Return all the keyspace names. Populate the set passed to this method.
    */
-  void getKeyspaces(std::vector<std::string> &key_spaces);
+  void getKeyspaces(std::set<std::string> &key_spaces);
 
   /**
    * Return the target server cluster name.
@@ -57,7 +63,7 @@ public:
   /**
    * Return the config file content.
    */
-  std::string getConfigFile();
+  //std::string getConfigFile();
 
   /**
    * Return the server version.
@@ -66,14 +72,14 @@ public:
 
 private:
 
-  /** list of known keyspaces */
-  std::vector<std::string> keyspaces;
+  CassandraClient *thrift_client;
+  std::string host;
+  int port;
   std::string cluster_name;
-  std::string config_file;
   std::string server_version;
 
 };
 
-} /* end namespace cassandra */
+} /* end namespace libcassandra */
 
 #endif /* __LIBCASSANDRA_CASSANDRA_H */

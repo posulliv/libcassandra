@@ -15,11 +15,45 @@
 using namespace std;
 using namespace libcassandra;
 
-CassandraClient::CassandraClient(thrift_client,
-                                 keyspace_factory,
-                                 const string &url,
-                                 uint32_t port,
-                                 client_pool)
+Cassandra::Cassandra(CassandraClient *in_thrift_client,
+                     const string &in_host,
+                     int in_port);
+  :
+    thrift_client(in_thrift_client),
+    host(in_host),
+    port(in_port),
+    cluster_name(),
+    server_version()
 {}
 
-~CassandraClient::CassandraClient() {}
+
+~Cassandra::Cassandra() 
+{
+  delete thrift_client;
+}
+
+
+void Cassandra::getKeyspaces(set<string> &key_spaces)
+{
+  thrift_client.desribe_keyspaces(key_spaces);
+}
+
+
+string Cassandra::getClusterName()
+{
+  if (cluster_name.empty())
+  {
+    thrift_client->describe_cluster_name(cluster_name);
+  }
+  return cluster_name;
+}
+
+
+string Cassandra::getServerVersion()
+{
+  if (server_version.empty())
+  {
+    thrift_client->describe_version(server_version);
+  }
+  return server_version;
+}
