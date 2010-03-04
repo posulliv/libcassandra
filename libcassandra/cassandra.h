@@ -46,19 +46,29 @@ public:
   };
 
   /**
-   * Return all the keyspace names. Populate the set passed to this method.
+   * @return the underlying cassandra thrift client.
+   */
+  org::apache::cassandra::CassandraClient *getCassandra();
+
+  /**
+   * @return all the keyspace names. Populate the set passed to this method.
    */
   void getKeyspaces(std::set<std::string> &key_spaces);
 
   /**
-   * Return the target server cluster name.
+   * @return the target server cluster name.
    */
   std::string getClusterName();
 
   /**
-   * Return the server version.
+   * @return the server version.
    */
   std::string getServerVersion();
+
+  /**
+   * @return a string property from the server
+   */
+  void getStringProperty(std::string &return_val, const std::string &property);
 
 private:
 

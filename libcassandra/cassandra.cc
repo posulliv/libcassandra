@@ -36,6 +36,12 @@ Cassandra::~Cassandra()
 }
 
 
+CassandraClient *Cassandra::getCassandra()
+{
+  return thrift_client;
+}
+
+
 void Cassandra::getKeyspaces(set<string> &key_spaces)
 {
   thrift_client->describe_keyspaces(key_spaces);
@@ -59,4 +65,10 @@ string Cassandra::getServerVersion()
     thrift_client->describe_version(server_version);
   }
   return server_version;
+}
+
+
+void Cassandra::getStringProperty(string &return_val, const string &property)
+{
+  thrift_client->get_string_property(return_val, property);
 }
