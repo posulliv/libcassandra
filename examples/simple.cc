@@ -5,8 +5,8 @@
 #include <set>
 #include <stdio.h>
 
-#include "cassandra_factory.h"
-#include "cassandra.h"
+#include <libcassandra/cassandra_factory.h>
+#include <libcassandra/cassandra.h>
 
 using namespace std;
 using namespace libcassandra;
