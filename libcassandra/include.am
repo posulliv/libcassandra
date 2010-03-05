@@ -11,7 +11,7 @@ nobase_include_HEADERS+= \
 			 libcassandra/keyspace.h
 
 lib_LTLIBRARIES+= libcassandra/libcassandra.la
-libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS} ${NO_CONVERSION}
+libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS}
 libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra.cc \
 				       libcassandra/cassandra_factory.cc \
