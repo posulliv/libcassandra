@@ -18,6 +18,6 @@ libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/keyspace.cc
 
 libcassandra_libcassandra_la_DEPENDENCIES= libgenthrift/libgenthrift.la
-libcassandra_libcassandra_la_LIBADD= libgenthrift/libgenthrift.la
+libcassandra_libcassandra_la_LIBADD= $(LIBM) libgenthrift/libgenthrift.la
 libcassandra_libcassandra_la_LDFLAGS= ${AM_LDFLAGS} -version-info ${CASSANDRA_LIBRARY_VERSION}
 
