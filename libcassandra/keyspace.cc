@@ -72,6 +72,26 @@ Column Keyspace::getColumn(const string &key, const ColumnPath &col_path)
 }
 
 
+vector<Column> Keyspace::getSlice(const string &key,
+                                  const ColumnParent &col_parent,
+                                  const SlicePredicate &pred)
+{
+  vector<ColumnOrSuperColumn> ret_cosc;
+  vector<Column> result;
+  client->getCassandra()->get_slice(ret_cosc, name, key, col_parent, pred, level);
+  for (vector<ColumnOrSuperColumn>::iterator it= ret_cosc.begin();
+       it != ret_cosc.end();
+       ++it)
+  {
+    if (! (*it).column.name.empty())
+    {
+      result.push_back((*it).column);
+    }
+  }
+  return result;
+}
+
+
 int32_t Keyspace::getCount(const string &key, const ColumnParent &col_parent)
 {
   return (client->getCassandra()->get_count(name, key, col_parent, level));

@@ -12,6 +12,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 #include <libgenthrift/cassandra_types.h>
 
@@ -40,6 +41,10 @@ public:
 
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const org::apache::cassandra::ColumnPath &col_path);
+
+  std::vector<org::apache::cassandra::Column> getSlice(const std::string &key,
+                                                       const org::apache::cassandra::ColumnParent &col_parent,
+                                                       const org::apache::cassandra::SlicePredicate &pred);
 
   int32_t getCount(const std::string &key,
                    const org::apache::cassandra::ColumnParent &col_parent);
