@@ -33,7 +33,7 @@ public:
   ~Keyspace() {}
 
   void insert(const std::string &key,
-              const org::apache::cassandra::ColumnPath &col_path,
+              org::apache::cassandra::ColumnPath &col_path,
               const std::string &value);
 
   void remove(const std::string &key,

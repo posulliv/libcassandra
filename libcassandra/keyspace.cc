@@ -43,11 +43,15 @@ Keyspace::Keyspace(Cassandra *in_client,
 
 
 void Keyspace::insert(const string &key,
-                      const ColumnPath &col_path,
+                      ColumnPath &col_path,
                       const string &value)
 {
   /* validate the column path */
   validateColumnPath(col_path);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.column= true;
+  col_path.__isset.super_column= true;
+  /* actually perform the insert */
   client->getCassandra()->insert(name, key, col_path, value, createTimestamp(), level);
 }
 
