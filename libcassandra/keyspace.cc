@@ -72,6 +72,12 @@ Column Keyspace::getColumn(const string &key, const ColumnPath &col_path)
 }
 
 
+int32_t Keyspace::getCount(const string &key, const ColumnParent &col_parent)
+{
+  return (client->getCassandra()->get_count(name, key, col_parent, level));
+}
+
+
 int64_t Keyspace::createTimestamp()
 {
   struct timeval tv;

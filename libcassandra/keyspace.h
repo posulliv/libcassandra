@@ -41,6 +41,9 @@ public:
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const org::apache::cassandra::ColumnPath &col_path);
 
+  int32_t getCount(const std::string &key,
+                   const org::apache::cassandra::ColumnParent &col_parent);
+
 private:
 
   int64_t createTimestamp();
