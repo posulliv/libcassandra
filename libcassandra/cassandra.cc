@@ -26,7 +26,8 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
     host(in_host),
     port(in_port),
     cluster_name(),
-    server_version()
+    server_version(),
+    config_file()
 {}
 
 
@@ -65,6 +66,16 @@ string Cassandra::getServerVersion()
     thrift_client->describe_version(server_version);
   }
   return server_version;
+}
+
+
+string Cassandra::getConfigFile()
+{
+  if (config_file.empty())
+  {
+    thrift_client->get_string_property(config_file, "config file");
+  }
+  return config_file;
 }
 
 

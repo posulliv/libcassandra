@@ -66,6 +66,11 @@ public:
   std::string getServerVersion();
 
   /**
+   * @return the configuration file.
+   */
+  std::string getConfigFile();
+
+  /**
    * @return a string property from the server
    */
   void getStringProperty(std::string &return_val, const std::string &property);
@@ -77,6 +82,7 @@ private:
   int port;
   std::string cluster_name;
   std::string server_version;
+  std::string config_file;
 
   Cassandra(const Cassandra&);
   Cassandra &operator=(const Cassandra&);
