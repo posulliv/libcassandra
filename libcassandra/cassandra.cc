@@ -125,3 +125,15 @@ void Cassandra::getStringProperty(string &return_val, const string &property)
 {
   thrift_client->get_string_property(return_val, property);
 }
+
+
+string Cassandra::getHost()
+{
+  return host;
+}
+
+
+int Cassandra::getPort() const
+{
+  return port;
+}

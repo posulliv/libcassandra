@@ -82,6 +82,16 @@ public:
    */
   void getStringProperty(std::string &return_val, const std::string &property);
 
+  /**
+   * @return hostname
+   */
+  std::string getHost();
+
+  /**
+   * @return port number
+   */
+  int getPort() const;
+
 private:
 
   org::apache::cassandra::CassandraClient *thrift_client;
