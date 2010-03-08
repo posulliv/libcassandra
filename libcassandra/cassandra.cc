@@ -27,7 +27,8 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
     port(in_port),
     cluster_name(),
     server_version(),
-    config_file()
+    config_file(),
+    token_map()
 {}
 
 
@@ -76,6 +77,47 @@ string Cassandra::getConfigFile()
     thrift_client->get_string_property(config_file, "config file");
   }
   return config_file;
+}
+
+
+map<string, string> Cassandra::getTokenMap(bool fresh)
+{
+  if (token_map.empty() || fresh)
+  {
+    token_map.clear();
+    string str_tokens;
+    thrift_client->get_string_property(str_tokens, "token map");
+    /* parse the tokens which are in the form {"token1":"host1","token2":"host2"} */
+    /* first remove the { brackets on either side */
+    str_tokens.erase(0, 1);
+    str_tokens.erase(str_tokens.length() - 1, 1);
+    /* now build a vector of token pairs */
+    vector<string> token_pairs;
+    string::size_type last_pos= str_tokens.find_first_not_of(',', 0);
+    string::size_type pos= str_tokens.find_first_of(',', last_pos);
+    while (pos != string::npos || last_pos != string::npos)
+    {
+      token_pairs.push_back(str_tokens.substr(last_pos, pos - last_pos));
+      last_pos= str_tokens.find_first_not_of(',', pos);
+      pos= str_tokens.find_first_of(',', last_pos);
+    }
+    /* now iterate through the token pairs and populate the map */
+    for (vector<string>::iterator it= token_pairs.begin();
+         it != token_pairs.end();
+         ++it)
+    {
+      string input= *it;
+      pos= input.find_first_of(':', 0);
+      string token= input.substr(0, pos);
+      string the_host= input.substr(pos + 1);
+      token.erase(0, 1);
+      token.erase(token.length() - 1, 1);
+      the_host.erase(0, 1);
+      the_host.erase(the_host.length() - 1, 1);
+      token_map[token]= the_host;
+    }
+  }
+  return token_map;
 }
 
 

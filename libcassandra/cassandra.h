@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
 
 namespace org
 {
@@ -71,6 +72,12 @@ public:
   std::string getConfigFile();
 
   /**
+   * @param[in] fresh whether to refresh the token map or not
+   * @return a map of the tokens in this cluster
+   */
+  std::map<std::string, std::string> getTokenMap(bool fresh);
+
+  /**
    * @return a string property from the server
    */
   void getStringProperty(std::string &return_val, const std::string &property);
@@ -83,6 +90,7 @@ private:
   std::string cluster_name;
   std::string server_version;
   std::string config_file;
+  std::map<std::string, std::string> token_map;
 
   Cassandra(const Cassandra&);
   Cassandra &operator=(const Cassandra&);

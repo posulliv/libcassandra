@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <set>
+#include <string>
 #include <stdio.h>
 
 #include <libcassandra/cassandra_factory.h>
@@ -27,6 +28,14 @@ int main()
   for (set<string>::iterator it = key_out.begin(); it != key_out.end(); ++it)
   {
     printf("keyspace: %s\n", (*it).c_str());
+  }
+
+  map<string, string> tokens= client->getTokenMap(false);
+  for (map<string, string>::iterator it= tokens.begin();
+       it != tokens.end();
+       ++it)
+  {
+    printf("%s : %s\n", it->first.c_str(), it->second.c_str());
   }
 
   delete client;
