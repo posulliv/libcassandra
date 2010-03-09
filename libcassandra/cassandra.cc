@@ -13,6 +13,7 @@
 #include <libgenthrift/Cassandra.h>
 
 #include "cassandra.h"
+#include "keyspace.h"
 
 using namespace std;
 using namespace org::apache::cassandra;
@@ -28,7 +29,9 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
     cluster_name(),
     server_version(),
     config_file(),
-    token_map()
+    key_spaces(),
+    token_map(),
+    keyspace_map()
 {}
 
 
@@ -44,9 +47,24 @@ CassandraClient *Cassandra::getCassandra()
 }
 
 
-void Cassandra::getKeyspaces(set<string> &key_spaces)
+set<string> Cassandra::getKeyspaces()
 {
-  thrift_client->describe_keyspaces(key_spaces);
+  if (key_spaces.empty())
+  {
+    thrift_client->describe_keyspaces(key_spaces);
+  }
+  return key_spaces;
+}
+
+
+Keyspace *Cassandra::getKeyspace(const string &name)
+{
+  Keyspace *ret= keyspace_map[name];
+  if (! ret)
+  {
+    getKeyspaces();
+  }
+  return ret;
 }
 
 
@@ -137,3 +155,5 @@ int Cassandra::getPort() const
 {
   return port;
 }
+
+

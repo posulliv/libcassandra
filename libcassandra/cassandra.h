@@ -29,6 +29,8 @@ class CassandraClient;
 namespace libcassandra
 {
 
+class Keyspace;
+
 class Cassandra
 {
 
@@ -52,9 +54,14 @@ public:
   org::apache::cassandra::CassandraClient *getCassandra();
 
   /**
-   * @return all the keyspace names. Populate the set passed to this method.
+   * @return all the keyspace names.
    */
-  void getKeyspaces(std::set<std::string> &key_spaces);
+  std::set<std::string> getKeyspaces();
+
+  /**
+   * @return the keyspace with the given name.
+   */
+  Keyspace *getKeyspace(const std::string &name);
 
   /**
    * @return the target server cluster name.
@@ -100,7 +107,9 @@ private:
   std::string cluster_name;
   std::string server_version;
   std::string config_file;
+  std::set<std::string> key_spaces;
   std::map<std::string, std::string> token_map;
+  std::map<std::string, Keyspace *> keyspace_map;
 
   Cassandra(const Cassandra&);
   Cassandra &operator=(const Cassandra&);
