@@ -70,12 +70,44 @@ set<string> Cassandra::getKeyspaces()
 
 Keyspace *Cassandra::getKeyspace(const string &name)
 {
-  Keyspace *ret= keyspace_map[name];
+  return getKeyspace(name, DCQUORUM);
+}
+
+
+Keyspace *Cassandra::getKeyspace(const string &name,
+                                 ConsistencyLevel level)
+{
+  string keymap_name= buildKeyspaceMapName(name, level);
+  Keyspace *ret= keyspace_map[keymap_name];
   if (! ret)
   {
     getKeyspaces();
+    set<string>::iterator it= key_spaces.find(name);
+    if (it != key_spaces.end())
+    {
+      map< string, map<string, string> > keyspace_desc;
+      thrift_client->describe_keyspace(keyspace_desc, name);
+      ret= new(std::nothrow) Keyspace(this, name, keyspace_desc, level);
+      if (! ret)
+      {
+        /* throw an exception */
+      }
+      keyspace_map[keymap_name]= ret;
+    }
+    else
+    {
+      /* throw an exception */
+    }
   }
   return ret;
+}
+
+
+void Cassandra::removeKeyspace(Keyspace *k)
+{
+  string keymap_name= buildKeyspaceMapName(k->getName(), k->getConsistencyLevel());
+  keyspace_map.erase(keymap_name);
+  delete k; /* not sure if this is a good idea here */
 }
 
 
@@ -168,9 +200,10 @@ int Cassandra::getPort() const
 }
 
 
-void Cassandra::buildKeyspaceMapName(string &keyspace, int level)
+string Cassandra::buildKeyspaceMapName(string keyspace, int level)
 {
   keyspace.append("[");
   keyspace.append(toString(level));
   keyspace.append("]");
+  return keyspace;
 }

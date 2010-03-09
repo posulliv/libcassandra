@@ -102,6 +102,18 @@ int32_t Keyspace::getCount(const string &key, const ColumnParent &col_parent)
 }
 
 
+string Keyspace::getName()
+{
+  return name;
+}
+
+
+ConsistencyLevel Keyspace::getConsistencyLevel() const
+{
+  return level;
+}
+
+
 int64_t Keyspace::createTimestamp()
 {
   struct timeval tv;

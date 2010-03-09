@@ -49,6 +49,10 @@ public:
   int32_t getCount(const std::string &key,
                    const org::apache::cassandra::ColumnParent &col_parent);
 
+  std::string getName();
+
+  org::apache::cassandra::ConsistencyLevel getConsistencyLevel() const;
+
 private:
 
   int64_t createTimestamp();

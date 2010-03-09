@@ -64,6 +64,16 @@ public:
   Keyspace *getKeyspace(const std::string &name);
 
   /**
+   * @return the keyspace with the given name at the given consistency level.
+   */
+  Keyspace *getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel level);
+
+  /**
+   * Remove the given keyspace.
+   */
+  void removeKeyspace(Keyspace *k);
+
+  /**
    * @return the target server cluster name.
    */
   std::string getClusterName();
@@ -104,7 +114,7 @@ private:
   /**
    * Creates a unique map name for the keyspace and its consistency level
    */
-  void buildKeyspaceMapName(std::string &keyspace, int level);
+  std::string buildKeyspaceMapName(std::string keyspace, int level);
 
   org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;
