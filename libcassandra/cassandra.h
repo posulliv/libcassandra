@@ -101,6 +101,11 @@ public:
 
 private:
 
+  /**
+   * Creates a unique map name for the keyspace and its consistency level
+   */
+  void buildKeyspaceMapName(std::string &keyspace, int level);
+
   org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;
   int port;

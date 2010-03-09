@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <sstream>
 
 #include <libgenthrift/Cassandra.h>
 
@@ -18,6 +19,16 @@
 using namespace std;
 using namespace org::apache::cassandra;
 using namespace libcassandra;
+
+/* utility functions */
+
+template<class T>
+inline string toString(const T &tt)
+{
+  stringstream ss;
+  ss << tt;
+  return ss.str();
+}
 
 Cassandra::Cassandra(CassandraClient *in_thrift_client,
                      const string &in_host,
@@ -157,3 +168,9 @@ int Cassandra::getPort() const
 }
 
 
+void Cassandra::buildKeyspaceMapName(string &keyspace, int level)
+{
+  keyspace.append("[");
+  keyspace.append(toString(level));
+  keyspace.append("]");
+}
