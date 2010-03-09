@@ -8,6 +8,9 @@
 
 #include <libcassandra/cassandra_factory.h>
 #include <libcassandra/cassandra.h>
+#include <libcassandra/keyspace.h>
+
+#include <libgenthrift/Cassandra.h>
 
 using namespace std;
 using namespace libcassandra;
@@ -23,8 +26,7 @@ int main()
   string clus_name= client->getClusterName();
   printf("cluster name: %s\n", clus_name.c_str());
 
-  set<string> key_out;
-  client->getKeyspaces(key_out);
+  set<string> key_out= client->getKeyspaces();
   for (set<string>::iterator it = key_out.begin(); it != key_out.end(); ++it)
   {
     printf("keyspace: %s\n", (*it).c_str());
@@ -38,7 +40,16 @@ int main()
     printf("%s : %s\n", it->first.c_str(), it->second.c_str());
   }
 
+  Keyspace *key_space= client->getKeyspace("drizzle");
+  org::apache::cassandra::ColumnPath col_path;
+  col_path.column_family.assign("Data");
+  col_path.column.assign("second");
+  org::apache::cassandra::Column res= key_space->getColumn("padraig", col_path);
+
+  printf("Value in column retrieved is: %s\n", res.value.c_str());
+
   delete client;
+  delete key_space;
 
   return 0;
 }

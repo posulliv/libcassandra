@@ -40,7 +40,7 @@ public:
               const org::apache::cassandra::ColumnPath &col_path);
 
   org::apache::cassandra::Column getColumn(const std::string &key,
-                                           const org::apache::cassandra::ColumnPath &col_path);
+                                           org::apache::cassandra::ColumnPath &col_path);
 
   std::vector<org::apache::cassandra::Column> getSlice(const std::string &key,
                                                        const org::apache::cassandra::ColumnParent &col_parent,

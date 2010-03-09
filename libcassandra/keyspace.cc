@@ -63,9 +63,11 @@ void Keyspace::remove(const string &key,
 }
 
 
-Column Keyspace::getColumn(const string &key, const ColumnPath &col_path)
+Column Keyspace::getColumn(const string &key, ColumnPath &col_path)
 {
   validateColumnPath(col_path);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.column= true;
   ColumnOrSuperColumn cosc;
   client->getCassandra()->get(cosc, name, key, col_path, level);
   if (cosc.column.name.empty())

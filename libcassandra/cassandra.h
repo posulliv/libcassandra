@@ -15,6 +15,8 @@
 #include <set>
 #include <map>
 
+#include "libgenthrift/cassandra_types.h"
+
 namespace org
 {
 namespace apache
