@@ -10,8 +10,6 @@
 #include <libcassandra/cassandra.h>
 #include <libcassandra/keyspace.h>
 
-#include <libgenthrift/Cassandra.h>
-
 using namespace std;
 using namespace libcassandra;
 
@@ -41,12 +39,12 @@ int main()
   }
 
   Keyspace *key_space= client->getKeyspace("drizzle");
-  org::apache::cassandra::ColumnPath col_path;
-  col_path.column_family.assign("Data");
-  col_path.column.assign("second");
-  org::apache::cassandra::Column res= key_space->getColumn("padraig", col_path);
+  /* insert data */
+  key_space->insertColumn("sarah", "Data", "third", "this is data being inserted!");
+  /* retrieve that data */
+  string res= key_space->getColumnValue("sarah", "Data", "third");
 
-  printf("Value in column retrieved is: %s\n", res.value.c_str());
+  printf("Value in column retrieved is: %s\n", res.c_str());
 
   delete client;
   delete key_space;

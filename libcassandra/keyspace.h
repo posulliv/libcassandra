@@ -32,15 +32,26 @@ public:
            org::apache::cassandra::ConsistencyLevel in_level);
   ~Keyspace() {}
 
-  void insert(const std::string &key,
-              org::apache::cassandra::ColumnPath &col_path,
-              const std::string &value);
+  void insertColumn(const std::string &key,
+                    const std::string &column_family,
+                    const std::string &column_name,
+                    const std::string &value);
+
+  void insertSuperColumn(const std::string &key,
+                         const std::string &column_family,
+                         const std::string &column_name,
+                         const std::string &value);
 
   void remove(const std::string &key,
               const org::apache::cassandra::ColumnPath &col_path);
 
   org::apache::cassandra::Column getColumn(const std::string &key,
-                                           org::apache::cassandra::ColumnPath &col_path);
+                                           const std::string &column_family,
+                                           const std::string &column_name);
+
+  std::string getColumnValue(const std::string &key,
+                             const std::string &column_family,
+                             const std::string &column_name);
 
   std::vector<org::apache::cassandra::Column> getSlice(const std::string &key,
                                                        const org::apache::cassandra::ColumnParent &col_parent,

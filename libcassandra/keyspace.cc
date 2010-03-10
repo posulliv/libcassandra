@@ -42,15 +42,35 @@ Keyspace::Keyspace(Cassandra *in_client,
 {}
 
 
-void Keyspace::insert(const string &key,
-                      ColumnPath &col_path,
-                      const string &value)
+void Keyspace::insertColumn(const string &key,
+                            const string &column_family,
+                            const string &column_name,
+                            const string &value)
 {
-  /* validate the column path */
-  validateColumnPath(col_path);
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
   /* this is ugly but thanks to thrift is needed */
   col_path.__isset.column= true;
+  /* validate the column path */
+  validateColumnPath(col_path);
+  /* actually perform the insert */
+  client->getCassandra()->insert(name, key, col_path, value, createTimestamp(), level);
+}
+
+
+void Keyspace::insertSuperColumn(const string &key,
+                                 const string &column_family,
+                                 const string &column_name,
+                                 const string &value)
+{
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
+  /* this is ugly but thanks to thrift is needed */
   col_path.__isset.super_column= true;
+  /* validate the column path */
+  validateSuperColumnPath(col_path);
   /* actually perform the insert */
   client->getCassandra()->insert(name, key, col_path, value, createTimestamp(), level);
 }
@@ -63,11 +83,16 @@ void Keyspace::remove(const string &key,
 }
 
 
-Column Keyspace::getColumn(const string &key, ColumnPath &col_path)
+Column Keyspace::getColumn(const string &key, 
+                           const string &column_family,
+                           const string &column_name)
 {
-  validateColumnPath(col_path);
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
   /* this is ugly but thanks to thrift is needed */
   col_path.__isset.column= true;
+  validateColumnPath(col_path);
   ColumnOrSuperColumn cosc;
   client->getCassandra()->get(cosc, name, key, col_path, level);
   if (cosc.column.name.empty())
@@ -75,6 +100,26 @@ Column Keyspace::getColumn(const string &key, ColumnPath &col_path)
     /* throw an exception */
   }
   return cosc.column;
+}
+
+
+string Keyspace::getColumnValue(const string &key, 
+                                const string &column_family,
+                                const string &column_name)
+{
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.column= true;
+  validateColumnPath(col_path);
+  ColumnOrSuperColumn cosc;
+  client->getCassandra()->get(cosc, name, key, col_path, level);
+  if (cosc.column.name.empty())
+  {
+    /* throw an exception */
+  }
+  return cosc.column.value;
 }
 
 
