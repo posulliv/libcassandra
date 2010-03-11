@@ -57,6 +57,14 @@ public:
                                                        const org::apache::cassandra::ColumnParent &col_parent,
                                                        const org::apache::cassandra::SlicePredicate &pred);
 
+  std::map<std::string, std::vector<org::apache::cassandra::Column> > 
+  getRangeSlice(const org::apache::cassandra::ColumnParent &col_parent,
+                const org::apache::cassandra::SlicePredicate &pred,
+                const std::string &start,
+                const std::string &finish,
+                const int32_t count);
+
+
   int32_t getCount(const std::string &key,
                    const org::apache::cassandra::ColumnParent &col_parent);
 
@@ -67,6 +75,12 @@ public:
 private:
 
   int64_t createTimestamp();
+
+  std::vector<org::apache::cassandra::Column> 
+  getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
+
+  std::vector<org::apache::cassandra::SuperColumn> 
+  getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
 
   void validateColumnPath(const org::apache::cassandra::ColumnPath &col_path);
 
