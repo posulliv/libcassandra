@@ -265,6 +265,12 @@ ConsistencyLevel Keyspace::getConsistencyLevel() const
 }
 
 
+map< string, map<string, string> > Keyspace::getDescription()
+{
+  return keyspace_desc;
+}
+
+
 int64_t Keyspace::createTimestamp()
 {
   struct timeval tv;

@@ -83,6 +83,8 @@ public:
 
   org::apache::cassandra::ConsistencyLevel getConsistencyLevel() const;
 
+  std::map< std::string, std::map<std::string, std::string> > getDescription();
+
 private:
 
   int64_t createTimestamp();
