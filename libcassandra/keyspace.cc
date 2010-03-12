@@ -172,6 +172,35 @@ map<string, vector<Column> > Keyspace::getRangeSlice(const ColumnParent &col_par
 }
 
 
+map<string, vector<SuperColumn> > Keyspace::getSuperRangeSlice(const ColumnParent &col_parent,
+                                                               const SlicePredicate &pred,
+                                                               const string &start,
+                                                               const string &finish,
+                                                               const int32_t row_count)
+{
+  map<string, vector<SuperColumn> > ret;
+  vector<KeySlice> key_slices;
+  client->getCassandra()->get_range_slice(key_slices, 
+                                          name, 
+                                          col_parent, 
+                                          pred, 
+                                          start, 
+                                          finish,
+                                          row_count,
+                                          level);
+  if (! key_slices.empty())
+  {
+    for (vector<KeySlice>::iterator it= key_slices.begin();
+         it != key_slices.end();
+         ++it)
+    {
+      ret.insert(make_pair((*it).key, getSuperColumnList((*it).columns)));
+    }
+  }
+  return ret;
+}
+
+
 vector<Column> Keyspace::getColumnList(vector<ColumnOrSuperColumn> &cols)
 {
   vector<Column> ret(cols.size());

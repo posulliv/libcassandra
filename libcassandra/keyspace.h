@@ -64,6 +64,13 @@ public:
                 const std::string &finish,
                 const int32_t count);
 
+  std::map<std::string, std::vector<org::apache::cassandra::SuperColumn> > 
+  getSuperRangeSlice(const org::apache::cassandra::ColumnParent &col_parent,
+                     const org::apache::cassandra::SlicePredicate &pred,
+                     const std::string &start,
+                     const std::string &finish,
+                     const int32_t count);
+
 
   int32_t getCount(const std::string &key,
                    const org::apache::cassandra::ColumnParent &col_parent);
