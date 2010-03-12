@@ -39,6 +39,9 @@ public:
   CassandraFactory(const std::string &in_host, int in_port);
   ~CassandraFactory() {}
 
+  /**
+   * Create an instance of a CassandraClient with whatever the host and port is set to.
+   */
   Cassandra *create();
 
 private:

@@ -32,11 +32,27 @@ public:
            org::apache::cassandra::ConsistencyLevel in_level);
   ~Keyspace() {}
 
+  /**
+   * Insert a column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
   void insertColumn(const std::string &key,
                     const std::string &column_family,
                     const std::string &column_name,
                     const std::string &value);
 
+  /**
+   * Insert a super column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
   void insertSuperColumn(const std::string &key,
                          const std::string &column_family,
                          const std::string &column_name,
@@ -45,10 +61,16 @@ public:
   void remove(const std::string &key,
               const org::apache::cassandra::ColumnPath &col_path);
 
+  /**
+   * @return a column
+   */
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const std::string &column_family,
                                            const std::string &column_name);
 
+  /**
+   * @return the value for the column that corresponds to the given parameters
+   */
   std::string getColumnValue(const std::string &key,
                              const std::string &column_family,
                              const std::string &column_name);
@@ -76,13 +98,25 @@ public:
                      const int32_t count);
 
 
+  /**
+   * @return number of columns in a row or super column
+   */
   int32_t getCount(const std::string &key,
                    const org::apache::cassandra::ColumnParent &col_parent);
 
+  /**
+   * @return name of this keyspace
+   */
   std::string getName();
 
+  /**
+   * @return the consistency level for this keyspace
+   */
   org::apache::cassandra::ConsistencyLevel getConsistencyLevel() const;
 
+  /**
+   * @return the keyspace description
+   */
   std::map< std::string, std::map<std::string, std::string> > getDescription();
 
 private:
