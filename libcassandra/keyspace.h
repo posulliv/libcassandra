@@ -53,6 +53,10 @@ public:
                              const std::string &column_family,
                              const std::string &column_name);
 
+  org::apache::cassandra::SuperColumn getSuperColumn(const std::string &key,
+                                                     const std::string &column_family,
+                                                     const std::string &super_column_name);
+
   std::vector<org::apache::cassandra::Column> getSlice(const std::string &key,
                                                        const org::apache::cassandra::ColumnParent &col_parent,
                                                        const org::apache::cassandra::SlicePredicate &pred);

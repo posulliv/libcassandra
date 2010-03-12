@@ -123,6 +123,26 @@ string Keyspace::getColumnValue(const string &key,
 }
 
 
+SuperColumn Keyspace::getSuperColumn(const string &key, 
+                                     const string &column_family,
+                                     const string &super_column_name)
+{
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.super_column.assign(super_column_name);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.super_column= true;
+  validateSuperColumnPath(col_path);
+  ColumnOrSuperColumn cosc;
+  client->getCassandra()->get(cosc, name, key, col_path, level);
+  if (cosc.super_column.name.empty())
+  {
+    /* throw an exception */
+  }
+  return cosc.super_column;
+}
+
+
 vector<Column> Keyspace::getSlice(const string &key,
                                   const ColumnParent &col_parent,
                                   const SlicePredicate &pred)
