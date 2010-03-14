@@ -100,6 +100,21 @@ void Keyspace::removeColumn(const string &key,
 }
 
 
+void Keyspace::removeSuperColumn(const string &key,
+                                 const string &column_family,
+                                 const string &column_name)
+{
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.super_column= true;
+  /* validate the column path */
+  validateSuperColumnPath(col_path);
+  client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
+}
+
+
 Column Keyspace::getColumn(const string &key, 
                            const string &column_family,
                            const string &column_name)

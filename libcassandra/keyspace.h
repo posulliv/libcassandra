@@ -79,6 +79,17 @@ public:
                     const std::string &column_name);
 
   /**
+   * Remove a super column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   */
+  void removeSuperColumn(const std::string &key,
+                         const std::string &column_family,
+                         const std::string &column_name);
+
+  /**
    * @return a column
    */
   org::apache::cassandra::Column getColumn(const std::string &key,
@@ -138,6 +149,9 @@ public:
 
 private:
 
+  /**
+   * @return a timestamp in micro-seconds
+   */
   int64_t createTimestamp();
 
   std::vector<org::apache::cassandra::Column> 
