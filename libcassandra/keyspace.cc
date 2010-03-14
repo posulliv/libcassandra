@@ -20,6 +20,7 @@
 
 #include "cassandra.h"
 #include "keyspace.h"
+#include "exception.h"
 
 using namespace libcassandra;
 using namespace std;

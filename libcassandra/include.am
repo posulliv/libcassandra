@@ -8,7 +8,8 @@ EXTRA_DIST+= \
 nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
 			 libcassandra/cassandra_factory.h \
-			 libcassandra/keyspace.h
+			 libcassandra/keyspace.h \
+			 libcassandra/exception.h
 
 lib_LTLIBRARIES+= libcassandra/libcassandra.la
 libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS}
