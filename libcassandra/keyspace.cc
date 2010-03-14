@@ -79,6 +79,23 @@ void Keyspace::insertSuperColumn(const string &key,
 void Keyspace::remove(const string &key,
                       const ColumnPath &col_path)
 {
+  /* validate the column path */
+  validateColumnPath(col_path);
+  client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
+}
+
+
+void Keyspace::removeColumn(const string &key,
+                            const string &column_family,
+                            const string &column_name)
+{
+  ColumnPath col_path;
+  col_path.column_family.assign(column_family);
+  col_path.column.assign(column_name);
+  /* this is ugly but thanks to thrift is needed */
+  col_path.__isset.column= true;
+  /* validate the column path */
+  validateColumnPath(col_path);
   client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
 }
 

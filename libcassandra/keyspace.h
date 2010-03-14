@@ -58,8 +58,25 @@ public:
                          const std::string &column_name,
                          const std::string &value);
 
+  /**
+   * Remove the column or super column at the given column path.
+   *
+   * @param[in] key the column or super column key
+   * @param[in] col_path the path to the column or super column
+   */
   void remove(const std::string &key,
               const org::apache::cassandra::ColumnPath &col_path);
+
+  /**
+   * Remove a column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   */
+  void removeColumn(const std::string &key,
+                    const std::string &column_family,
+                    const std::string &column_name);
 
   /**
    * @return a column
