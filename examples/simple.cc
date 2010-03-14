@@ -22,12 +22,12 @@ int main()
   Cassandra *client= factory.create();
 
   string clus_name= client->getClusterName();
-  printf("cluster name: %s\n", clus_name.c_str());
+  cout << "cluster name: " << clus_name << endl;
 
   set<string> key_out= client->getKeyspaces();
   for (set<string>::iterator it = key_out.begin(); it != key_out.end(); ++it)
   {
-    printf("keyspace: %s\n", (*it).c_str());
+    cout << "keyspace: " << *it << endl;
   }
 
   map<string, string> tokens= client->getTokenMap(false);
@@ -35,16 +35,25 @@ int main()
        it != tokens.end();
        ++it)
   {
-    printf("%s : %s\n", it->first.c_str(), it->second.c_str());
+    cout << it->first << " : " << it->second << endl;
   }
 
   Keyspace *key_space= client->getKeyspace("drizzle");
   /* insert data */
-  key_space->insertColumn("sarah", "Data", "third", "this is data being inserted!");
-  /* retrieve that data */
-  string res= key_space->getColumnValue("sarah", "Data", "third");
-
-  printf("Value in column retrieved is: %s\n", res.c_str());
+  try
+  {
+    key_space->insertColumn("sarah", "Data", "third", "this is data being inserted!");
+    /* retrieve that data */
+    string res= key_space->getColumnValue("sarah", "Data", "third");
+    cout << "Value in column retrieved is: " << res << endl;
+  }
+  catch (org::apache::cassandra::InvalidRequestException &ire)
+  {
+    cout << ire.why << endl;
+    delete client;
+    delete key_space;
+    return 1;
+  }
 
   delete client;
   delete key_space;

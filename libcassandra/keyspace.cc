@@ -131,6 +131,7 @@ Column Keyspace::getColumn(const string &key,
   if (cosc.column.name.empty())
   {
     /* throw an exception */
+    throw(InvalidRequestException());
   }
   return cosc.column;
 }
@@ -151,6 +152,7 @@ string Keyspace::getColumnValue(const string &key,
   if (cosc.column.name.empty())
   {
     /* throw an exception */
+    throw(InvalidRequestException());
   }
   return cosc.column.value;
 }
@@ -171,6 +173,7 @@ SuperColumn Keyspace::getSuperColumn(const string &key,
   if (cosc.super_column.name.empty())
   {
     /* throw an exception */
+    throw(InvalidRequestException());
   }
   return cosc.super_column;
 }
@@ -318,6 +321,7 @@ void Keyspace::validateColumnPath(const ColumnPath &col_path)
   if (cf_define.empty())
   {
     /* throw an exception */
+    throw(InvalidRequestException());
   }
   string type= cf_define["Type"];
   if (! type.compare("Standard"))
@@ -335,6 +339,7 @@ void Keyspace::validateColumnPath(const ColumnPath &col_path)
     }
   }
   /* if we get here, throw an exception */
+  throw(InvalidRequestException());
 }
 
 
@@ -344,6 +349,7 @@ void Keyspace::validateSuperColumnPath(const ColumnPath &col_path)
   if (cf_define.empty())
   {
     /* throw an exception */
+    throw(InvalidRequestException());
   }
   string type= cf_define["Type"];
   if (! type.compare("Super"))
@@ -354,4 +360,5 @@ void Keyspace::validateSuperColumnPath(const ColumnPath &col_path)
     }
   }
   /* if we get here, throw an exception */
+  throw(InvalidRequestException());
 }
