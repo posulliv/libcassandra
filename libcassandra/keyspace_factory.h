@@ -11,26 +11,14 @@
 #define __LIBCASSANDRA_KEYSPACE_FACTORY_H
 
 #include <string>
-#include <vector>
+#include <map>
 #include <tr1/memory>
-
-namespace org 
-{ 
-namespace apache 
-{ 
-namespace cassandra 
-{
-
-class CassandraClient;
-
-} 
-}
-}
 
 namespace libcassandra
 {
 
 class Keyspace;
+class Cassandra;
 
 class KeyspaceFactory
 {
@@ -45,7 +33,7 @@ public:
    */
   std::tr1::shared_ptr<Keyspace> create(Cassandra *client,
                                         const std::string &name,
-                                        const std::map< std::string, std::map<std:;string, std::string> > &descrip,
+                                        const std::map< std::string, std::map<std::string, std::string> > &descrip,
                                         org::apache::cassandra::ConsistencyLevel level);
 
 };

@@ -34,7 +34,7 @@ KeyspaceFactory::KeyspaceFactory() {}
 KeyspaceFactory::~KeyspaceFactory() {}
 
 
-tr1::shared_ptr<keyspace> KeyspaceFactory::create(Cassandra *client,
+tr1::shared_ptr<Keyspace> KeyspaceFactory::create(Cassandra *client,
                                                   const string &name,
                                                   const map< string, map<string, string> > &descrip,
                                                   ConsistencyLevel level)
