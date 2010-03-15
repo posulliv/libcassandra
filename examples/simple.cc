@@ -19,7 +19,7 @@ static int port= 9160;
 int main()
 {
   CassandraFactory factory(host, port);
-  Cassandra *client= factory.create();
+  tr1::shared_ptr<Cassandra> client(factory.create());
 
   string clus_name= client->getClusterName();
   cout << "cluster name: " << clus_name << endl;
@@ -50,12 +50,10 @@ int main()
   catch (org::apache::cassandra::InvalidRequestException &ire)
   {
     cout << ire.why << endl;
-    delete client;
     delete key_space;
     return 1;
   }
 
-  delete client;
   delete key_space;
 
   return 0;

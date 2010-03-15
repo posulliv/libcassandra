@@ -34,11 +34,13 @@ CassandraFactory::CassandraFactory(const string &in_host, int in_port)
     port(in_port)
 {}
 
+CassandraFactory::~CassandraFactory() {}
 
-Cassandra *CassandraFactory::create()
+
+tr1::shared_ptr<Cassandra> CassandraFactory::create()
 {
   CassandraClient *thrift_client= createThriftClient(host, port);
-  Cassandra *ret= new(std::nothrow) Cassandra(thrift_client, host, port);
+  tr1::shared_ptr<Cassandra> ret(new Cassandra(thrift_client, host, port));
   return ret;
 }
 

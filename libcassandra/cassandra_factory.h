@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <tr1/memory>
 
 namespace org 
 { 
@@ -37,12 +38,12 @@ class CassandraFactory
 public:
 
   CassandraFactory(const std::string &in_host, int in_port);
-  ~CassandraFactory() {}
+  ~CassandraFactory();
 
   /**
-   * Create an instance of a CassandraClient with whatever the host and port is set to.
+   * @return a shared ptr which points to a Cassandra client
    */
-  Cassandra *create();
+  std::tr1::shared_ptr<Cassandra> create();
 
 private:
 
