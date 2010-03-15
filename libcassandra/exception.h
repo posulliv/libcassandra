@@ -46,6 +46,24 @@ private:
 
 };
 
+class Error : public Exception
+{
+
+public:
+
+  Error(const std::string &msg, int in_errno)
+    :
+      Exception(msg, in_errno)
+  {}
+
+  Error(const char *msg, int in_errno)
+    :
+      Exception(msg, in_errno)
+  {}
+
+  virtual ~Error() throw() {}
+};
+
 } /* end namespace libcassandra */
 
 #endif /* __LIBCASSANDRA_EXCEPTION_H */

@@ -15,6 +15,7 @@
 
 #include "cassandra.h"
 #include "keyspace.h"
+#include "exception.h"
 
 using namespace std;
 using namespace org::apache::cassandra;
@@ -91,12 +92,14 @@ Keyspace *Cassandra::getKeyspace(const string &name,
       if (! ret)
       {
         /* throw an exception */
+        throw(Error("Error allocating memory for Keyspace.", 0));
       }
       keyspace_map[keymap_name]= ret;
     }
     else
     {
       /* throw an exception */
+      throw(NotFoundException());
     }
   }
   return ret;
