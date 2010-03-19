@@ -37,6 +37,7 @@ class CassandraFactory
 
 public:
 
+  CassandraFactory(const std::string &server_list);
   CassandraFactory(const std::string &in_host, int in_port);
   ~CassandraFactory();
 

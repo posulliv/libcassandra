@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <sstream>
 
 #include <protocol/TBinaryProtocol.h>
 #include <transport/TSocket.h>
@@ -27,6 +28,21 @@ using namespace apache::thrift::transport;
 using namespace org::apache::cassandra;
 using namespace boost;
 
+
+CassandraFactory::CassandraFactory(const string &server_list)
+  :
+    host(),
+    port(0)
+{
+  /* get the host name from the server list string */
+  string::size_type pos= server_list.find_first_of(':');
+  host= server_list.substr(0, pos);
+  /* get the port from the server list string */
+  string tmp_port= server_list.substr(pos + 1);
+  /* convert to integer */
+  istringstream int_stream(tmp_port);
+  int_stream >> port;
+}
 
 CassandraFactory::CassandraFactory(const string &in_host, int in_port)
   :
