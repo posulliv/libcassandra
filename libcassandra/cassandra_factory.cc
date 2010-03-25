@@ -55,17 +55,27 @@ CassandraFactory::~CassandraFactory() {}
 
 tr1::shared_ptr<Cassandra> CassandraFactory::create()
 {
-  CassandraClient *thrift_client= createThriftClient(host, port);
+  /* Default is Buffered Transport */
+  return create(0);
+}
+
+tr1::shared_ptr<Cassandra> CassandraFactory::create(int framed_transport)
+{
+  CassandraClient *thrift_client= createThriftClient(host, port, framed_transport);
   tr1::shared_ptr<Cassandra> ret(new Cassandra(thrift_client, host, port));
   return ret;
 }
 
-
 CassandraClient *CassandraFactory::createThriftClient(const string &in_host,
-                                                      int in_port)
+                                                      int in_port, int framed_transport)
 {
   boost::shared_ptr<TTransport> socket(new TSocket(in_host, in_port));
-  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TTransport> transport;
+  if(framed_transport) {
+    transport = boost::shared_ptr<TTransport> (new TFramedTransport(socket));
+  }else{
+    transport = boost::shared_ptr<TTransport> (new TBufferedTransport(socket));
+  }
   boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new(std::nothrow) CassandraClient(protocol);
 
