@@ -179,12 +179,36 @@ SuperColumn Keyspace::getSuperColumn(const string &key,
 }
 
 
-vector<Column> Keyspace::getSlice(const string &key,
-                                  const ColumnParent &col_parent,
-                                  const SlicePredicate &pred)
+vector<Column> Keyspace::getSliceNames(const string &key,
+                                       const ColumnParent &col_parent,
+                                       SlicePredicate &pred)
 {
   vector<ColumnOrSuperColumn> ret_cosc;
   vector<Column> result;
+  /* damn you thrift! */
+  pred.__isset.column_names= true;
+  client->getCassandra()->get_slice(ret_cosc, name, key, col_parent, pred, level);
+  for (vector<ColumnOrSuperColumn>::iterator it= ret_cosc.begin();
+       it != ret_cosc.end();
+       ++it)
+  {
+    if (! (*it).column.name.empty())
+    {
+      result.push_back((*it).column);
+    }
+  }
+  return result;
+}
+
+
+vector<Column> Keyspace::getSliceRange(const string &key,
+                                       const ColumnParent &col_parent,
+                                       SlicePredicate &pred)
+{
+  vector<ColumnOrSuperColumn> ret_cosc;
+  vector<Column> result;
+  /* damn you thrift! */
+  pred.__isset.slice_range= true;
   client->getCassandra()->get_slice(ret_cosc, name, key, col_parent, pred, level);
   for (vector<ColumnOrSuperColumn>::iterator it= ret_cosc.begin();
        it != ret_cosc.end();
