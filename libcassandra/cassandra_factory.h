@@ -52,7 +52,8 @@ private:
   org::apache::cassandra::CassandraClient *createThriftClient(const std::string &host,
                                                               int port);
   org::apache::cassandra::CassandraClient *createThriftClient(const std::string &host,
-                                                              int port, int framed_transport);
+                                                              int port, 
+                                                              int framed_transport);
 
   std::string host;
 
