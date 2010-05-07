@@ -26,14 +26,29 @@ class Keyspace
 
 public:
 
-  Keyspace(Cassandra *in_client, 
+  Keyspace(Cassandra *in_client,
            const std::string &in_name,
            const std::map< std::string, std::map<std::string, std::string> > &in_desc,
            org::apache::cassandra::ConsistencyLevel in_level);
   ~Keyspace() {}
 
   /**
-   * Insert a column
+   * Insert a column, possibly inside a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
+  void insertColumn(const std::string &key,
+                    const std::string &column_family,
+                    const std::string &super_column_name,
+                    const std::string &column_name,
+                    const std::string &value);
+
+  /**
+   * Insert a column, directly in a columnfamily
    *
    * @param[in] key the column key
    * @param[in] column_family the column family
@@ -46,51 +61,76 @@ public:
                     const std::string &value);
 
   /**
-   * Insert a super column
+	* Removes all the columns that match the given column path
+	*
+	* @param[in] key the column or super column key
+	* @param[in] col_path the path to the column or super column
+	*/
+  void remove(
+		  const std::string &key,
+		  const org::apache::cassandra::ColumnPath &col_path
+		  );
+
+  /**
+	* Removes all the columns that match the given arguments
+	* Can remove all under a column family, an individual column or supercolumn under a column family, or an individual column under a supercolumn
+	*
+	* @param[in] key the column key
+	* @param[in] column_family the column family
+	* @param[in] super_column_name the super column name (optional)
+	* @param[in] column_name the column name (optional)
+	*/
+  void remove(
+		  const std::string &key,
+		  const std::string &column_family,
+		  const std::string &super_column_name,
+		  const std::string &column_name
+		  );
+
+  /**
+   * Remove a column, possibly inside a supercolumn
    *
    * @param[in] key the column key
    * @param[in] column_family the column family
-   * @param[in] column_name the column name
-   * @param[in] value the column value
-   */
-  void insertSuperColumn(const std::string &key,
-                         const std::string &column_family,
-                         const std::string &column_name,
-                         const std::string &value);
-
-  /**
-   * Remove the column or super column at the given column path.
-   *
-   * @param[in] key the column or super column key
-   * @param[in] col_path the path to the column or super column
-   */
-  void remove(const std::string &key,
-              const org::apache::cassandra::ColumnPath &col_path);
-
-  /**
-   * Remove a column
-   *
-   * @param[in] key the column key
-   * @param[in] column_family the column family
-   * @param[in] column_name the column name
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
    */
   void removeColumn(const std::string &key,
                     const std::string &column_family,
+                    const std::string &super_column_name,
                     const std::string &column_name);
 
+
   /**
-   * Remove a super column
+   * Remove a super column and all columns under it
    *
    * @param[in] key the column key
    * @param[in] column_family the column family
-   * @param[in] column_name the column name
+   * @param[in] super_column_name the super column name
    */
   void removeSuperColumn(const std::string &key,
                          const std::string &column_family,
-                         const std::string &column_name);
+                         const std::string &super_column_name);
 
   /**
    * @return a column
+	*
+	* @param[in] key the column key
+	* @param[in] column_family the column family
+	* @param[in] super_column_name the super column name (optional)
+	* @param[in] column_name the column name (optional)
+   */
+  org::apache::cassandra::Column getColumn(const std::string &key,
+                                           const std::string &column_family,
+                                           const std::string &super_column_name,
+                                           const std::string &column_name);
+
+  /**
+   * @return a column
+	*
+	* @param[in] key the column key
+	* @param[in] column_family the column family
+	* @param[in] column_name the column name (optional)
    */
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const std::string &column_family,
@@ -98,6 +138,23 @@ public:
 
   /**
    * @return the value for the column that corresponds to the given parameters
+	*
+	* @param[in] key the column key
+	* @param[in] column_family the column family
+	* @param[in] super_column_name the super column name (optional)
+	* @param[in] column_name the column name (optional)
+   */
+  std::string getColumnValue(const std::string &key,
+                             const std::string &column_family,
+                             const std::string &super_column_name,
+                             const std::string &column_name);
+
+  /**
+   * @return the value for the column that corresponds to the given parameters
+	*
+	* @param[in] key the column key
+	* @param[in] column_family the column family
+	* @param[in] column_name the column name (optional)
    */
   std::string getColumnValue(const std::string &key,
                              const std::string &column_family,
@@ -115,14 +172,14 @@ public:
                                                             const org::apache::cassandra::ColumnParent &col_parent,
                                                             org::apache::cassandra::SlicePredicate &pred);
 
-  std::map<std::string, std::vector<org::apache::cassandra::Column> > 
+  std::map<std::string, std::vector<org::apache::cassandra::Column> >
   getRangeSlice(const org::apache::cassandra::ColumnParent &col_parent,
                 const org::apache::cassandra::SlicePredicate &pred,
                 const std::string &start,
                 const std::string &finish,
                 const int32_t count);
 
-  std::map<std::string, std::vector<org::apache::cassandra::SuperColumn> > 
+  std::map<std::string, std::vector<org::apache::cassandra::SuperColumn> >
   getSuperRangeSlice(const org::apache::cassandra::ColumnParent &col_parent,
                      const org::apache::cassandra::SlicePredicate &pred,
                      const std::string &start,
@@ -158,10 +215,10 @@ private:
    */
   int64_t createTimestamp();
 
-  std::vector<org::apache::cassandra::Column> 
+  std::vector<org::apache::cassandra::Column>
   getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
 
-  std::vector<org::apache::cassandra::SuperColumn> 
+  std::vector<org::apache::cassandra::SuperColumn>
   getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
 
   void validateColumnPath(const org::apache::cassandra::ColumnPath &col_path);

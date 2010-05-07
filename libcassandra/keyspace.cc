@@ -42,16 +42,19 @@ Keyspace::Keyspace(Cassandra *in_client,
     level(in_level)
 {}
 
-
 void Keyspace::insertColumn(const string &key,
                             const string &column_family,
+                            const string &super_column_name,
                             const string &column_name,
                             const string &value)
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
+  if (!super_column_name.empty()) {
+	  col_path.super_column.assign(super_column_name);
+	  col_path.__isset.super_column= true;
+  }
   col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
   col_path.__isset.column= true;
   /* validate the column path */
   validateColumnPath(col_path);
@@ -60,20 +63,12 @@ void Keyspace::insertColumn(const string &key,
 }
 
 
-void Keyspace::insertSuperColumn(const string &key,
-                                 const string &column_family,
-                                 const string &column_name,
-                                 const string &value)
+void Keyspace::insertColumn(const string &key,
+                            const string &column_family,
+                            const string &column_name,
+                            const string &value)
 {
-  ColumnPath col_path;
-  col_path.column_family.assign(column_family);
-  col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
-  col_path.__isset.super_column= true;
-  /* validate the column path */
-  validateSuperColumnPath(col_path);
-  /* actually perform the insert */
-  client->getCassandra()->insert(name, key, col_path, value, createTimestamp(), level);
+	insertColumn(key, column_family, "", column_name, value);
 }
 
 
@@ -86,44 +81,55 @@ void Keyspace::remove(const string &key,
 }
 
 
-void Keyspace::removeColumn(const string &key,
-                            const string &column_family,
-                            const string &column_name)
+void Keyspace::remove(const string &key,
+                      const string &column_family,
+                      const string &super_column_name,
+                      const string &column_name)
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
-  col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
-  col_path.__isset.column= true;
-  /* validate the column path */
-  validateColumnPath(col_path);
-  client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
+  if (!super_column_name.empty()) {
+	  col_path.column.assign(super_column_name);
+	  col_path.__isset.super_column= true;
+  }
+  if (!column_name.empty()) {
+	  col_path.column.assign(column_name);
+	  col_path.__isset.column= true;
+  }
+  remove(key, col_path);
 }
 
-
-void Keyspace::removeSuperColumn(const string &key,
-                                 const string &column_family,
-                                 const string &column_name)
+void Keyspace::removeColumn(
+		const string &key,
+		const string &column_family,
+		const string &super_column_name,
+		const string &column_name
+		)
 {
-  ColumnPath col_path;
-  col_path.column_family.assign(column_family);
-  col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
-  col_path.__isset.super_column= true;
-  /* validate the column path */
-  validateSuperColumnPath(col_path);
-  client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
+	remove(key, column_family, super_column_name, column_name);
 }
 
+void Keyspace::removeSuperColumn(
+		const string &key,
+		const string &column_family,
+		const string &super_column_name
+		)
+{
+	remove(key, column_family, super_column_name, "");
+}
 
-Column Keyspace::getColumn(const string &key, 
+Column Keyspace::getColumn(const string &key,
                            const string &column_family,
+                           const string &super_column_name,
                            const string &column_name)
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
+  if (!super_column_name.empty()) {
+	  col_path.super_column.assign(super_column_name);
+	  col_path.__isset.super_column= true;
+  }
   col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
   col_path.__isset.column= true;
   validateColumnPath(col_path);
   ColumnOrSuperColumn cosc;
@@ -136,29 +142,31 @@ Column Keyspace::getColumn(const string &key,
   return cosc.column;
 }
 
-
-string Keyspace::getColumnValue(const string &key, 
-                                const string &column_family,
-                                const string &column_name)
+Column Keyspace::getColumn(const string &key,
+                           const string &column_family,
+                           const string &column_name)
 {
-  ColumnPath col_path;
-  col_path.column_family.assign(column_family);
-  col_path.column.assign(column_name);
-  /* this is ugly but thanks to thrift is needed */
-  col_path.__isset.column= true;
-  validateColumnPath(col_path);
-  ColumnOrSuperColumn cosc;
-  client->getCassandra()->get(cosc, name, key, col_path, level);
-  if (cosc.column.name.empty())
-  {
-    /* throw an exception */
-    throw(InvalidRequestException());
-  }
-  return cosc.column.value;
+	return getColumn(key, column_family, "", column_name);
 }
 
 
-SuperColumn Keyspace::getSuperColumn(const string &key, 
+string Keyspace::getColumnValue(const string &key,
+                                const string &column_family,
+                                const string &super_column_name,
+                                const string &column_name)
+{
+	return getColumn(key, column_family, super_column_name, column_name).value;
+}
+
+string Keyspace::getColumnValue(const string &key,
+                                const string &column_family,
+                                const string &column_name)
+{
+	return getColumn(key, column_family, column_name).value;
+}
+
+
+SuperColumn Keyspace::getSuperColumn(const string &key,
                                      const string &column_family,
                                      const string &super_column_name)
 {
@@ -231,11 +239,11 @@ map<string, vector<Column> > Keyspace::getRangeSlice(const ColumnParent &col_par
 {
   map<string, vector<Column> > ret;
   vector<KeySlice> key_slices;
-  client->getCassandra()->get_range_slice(key_slices, 
-                                          name, 
-                                          col_parent, 
-                                          pred, 
-                                          start, 
+  client->getCassandra()->get_range_slice(key_slices,
+                                          name,
+                                          col_parent,
+                                          pred,
+                                          start,
                                           finish,
                                           row_count,
                                           level);
@@ -260,11 +268,11 @@ map<string, vector<SuperColumn> > Keyspace::getSuperRangeSlice(const ColumnParen
 {
   map<string, vector<SuperColumn> > ret;
   vector<KeySlice> key_slices;
-  client->getCassandra()->get_range_slice(key_slices, 
-                                          name, 
-                                          col_parent, 
-                                          pred, 
-                                          start, 
+  client->getCassandra()->get_range_slice(key_slices,
+                                          name,
+                                          col_parent,
+                                          pred,
+                                          start,
                                           finish,
                                           row_count,
                                           level);
