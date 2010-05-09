@@ -61,31 +61,27 @@ public:
                     const std::string &value);
 
   /**
-	* Removes all the columns that match the given column path
-	*
-	* @param[in] key the column or super column key
-	* @param[in] col_path the path to the column or super column
-	*/
-  void remove(
-		  const std::string &key,
-		  const org::apache::cassandra::ColumnPath &col_path
-		  );
+   * Removes all the columns that match the given column path
+   *
+   * @param[in] key the column or super column key
+   * @param[in] col_path the path to the column or super column
+   */
+  void remove(const std::string &key,
+              const org::apache::cassandra::ColumnPath &col_path);
 
   /**
-	* Removes all the columns that match the given arguments
-	* Can remove all under a column family, an individual column or supercolumn under a column family, or an individual column under a supercolumn
-	*
-	* @param[in] key the column key
-	* @param[in] column_family the column family
-	* @param[in] super_column_name the super column name (optional)
-	* @param[in] column_name the column name (optional)
-	*/
-  void remove(
-		  const std::string &key,
-		  const std::string &column_family,
-		  const std::string &super_column_name,
-		  const std::string &column_name
-		  );
+   * Removes all the columns that match the given arguments
+   * Can remove all under a column family, an individual column or supercolumn under a column family, or an individual column under a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   */
+  void remove(const std::string &key,
+              const std::string &column_family,
+              const std::string &super_column_name,
+              const std::string &column_name);
 
   /**
    * Remove a column, possibly inside a supercolumn
@@ -113,12 +109,13 @@ public:
                          const std::string &super_column_name);
 
   /**
+   * Rertieve a column.
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
    * @return a column
-	*
-	* @param[in] key the column key
-	* @param[in] column_family the column family
-	* @param[in] super_column_name the super column name (optional)
-	* @param[in] column_name the column name (optional)
    */
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const std::string &column_family,
@@ -126,23 +123,25 @@ public:
                                            const std::string &column_name);
 
   /**
+   * Retrieve a column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name (optional)
    * @return a column
-	*
-	* @param[in] key the column key
-	* @param[in] column_family the column family
-	* @param[in] column_name the column name (optional)
    */
   org::apache::cassandra::Column getColumn(const std::string &key,
                                            const std::string &column_family,
                                            const std::string &column_name);
 
   /**
+   * Retrieve a column value
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
    * @return the value for the column that corresponds to the given parameters
-	*
-	* @param[in] key the column key
-	* @param[in] column_family the column family
-	* @param[in] super_column_name the super column name (optional)
-	* @param[in] column_name the column name (optional)
    */
   std::string getColumnValue(const std::string &key,
                              const std::string &column_family,
@@ -150,11 +149,12 @@ public:
                              const std::string &column_name);
 
   /**
+   * Retrieve a column value
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name (optional)
    * @return the value for the column that corresponds to the given parameters
-	*
-	* @param[in] key the column key
-	* @param[in] column_family the column family
-	* @param[in] column_name the column name (optional)
    */
   std::string getColumnValue(const std::string &key,
                              const std::string &column_family,

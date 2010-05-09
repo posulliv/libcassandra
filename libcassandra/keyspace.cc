@@ -42,6 +42,7 @@ Keyspace::Keyspace(Cassandra *in_client,
     level(in_level)
 {}
 
+
 void Keyspace::insertColumn(const string &key,
                             const string &column_family,
                             const string &super_column_name,
@@ -50,9 +51,10 @@ void Keyspace::insertColumn(const string &key,
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
-  if (!super_column_name.empty()) {
-	  col_path.super_column.assign(super_column_name);
-	  col_path.__isset.super_column= true;
+  if (! super_column_name.empty()) 
+  {
+    col_path.super_column.assign(super_column_name);
+    col_path.__isset.super_column= true;
   }
   col_path.column.assign(column_name);
   col_path.__isset.column= true;
@@ -68,7 +70,7 @@ void Keyspace::insertColumn(const string &key,
                             const string &column_name,
                             const string &value)
 {
-	insertColumn(key, column_family, "", column_name, value);
+  insertColumn(key, column_family, "", column_name, value);
 }
 
 
@@ -88,35 +90,36 @@ void Keyspace::remove(const string &key,
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
-  if (!super_column_name.empty()) {
-	  col_path.column.assign(super_column_name);
-	  col_path.__isset.super_column= true;
+  if (! super_column_name.empty()) 
+  {
+    col_path.column.assign(super_column_name);
+    col_path.__isset.super_column= true;
   }
-  if (!column_name.empty()) {
-	  col_path.column.assign(column_name);
-	  col_path.__isset.column= true;
+  if (! column_name.empty()) 
+  {
+    col_path.column.assign(column_name);
+    col_path.__isset.column= true;
   }
   remove(key, col_path);
 }
 
-void Keyspace::removeColumn(
-		const string &key,
-		const string &column_family,
-		const string &super_column_name,
-		const string &column_name
-		)
+
+void Keyspace::removeColumn(const string &key,
+                            const string &column_family,
+                            const string &super_column_name,
+                            const string &column_name)
 {
-	remove(key, column_family, super_column_name, column_name);
+  remove(key, column_family, super_column_name, column_name);
 }
 
-void Keyspace::removeSuperColumn(
-		const string &key,
-		const string &column_family,
-		const string &super_column_name
-		)
+
+void Keyspace::removeSuperColumn(const string &key,
+                                 const string &column_family,
+                                 const string &super_column_name)
 {
-	remove(key, column_family, super_column_name, "");
+  remove(key, column_family, super_column_name, "");
 }
+
 
 Column Keyspace::getColumn(const string &key,
                            const string &column_family,
@@ -125,9 +128,10 @@ Column Keyspace::getColumn(const string &key,
 {
   ColumnPath col_path;
   col_path.column_family.assign(column_family);
-  if (!super_column_name.empty()) {
-	  col_path.super_column.assign(super_column_name);
-	  col_path.__isset.super_column= true;
+  if (! super_column_name.empty()) 
+  {
+    col_path.super_column.assign(super_column_name);
+    col_path.__isset.super_column= true;
   }
   col_path.column.assign(column_name);
   col_path.__isset.column= true;
@@ -146,7 +150,7 @@ Column Keyspace::getColumn(const string &key,
                            const string &column_family,
                            const string &column_name)
 {
-	return getColumn(key, column_family, "", column_name);
+  return getColumn(key, column_family, "", column_name);
 }
 
 
@@ -155,8 +159,9 @@ string Keyspace::getColumnValue(const string &key,
                                 const string &super_column_name,
                                 const string &column_name)
 {
-	return getColumn(key, column_family, super_column_name, column_name).value;
+  return getColumn(key, column_family, super_column_name, column_name).value;
 }
+
 
 string Keyspace::getColumnValue(const string &key,
                                 const string &column_family,
