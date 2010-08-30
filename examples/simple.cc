@@ -38,7 +38,7 @@ int main()
     cout << it->first << " : " << it->second << endl;
   }
 
-  Keyspace *key_space= client->getKeyspace("drizzle");
+  tr1::shared_ptr<Keyspace> key_space= client->getKeyspace("drizzle");
   /* insert data */
   try
   {
@@ -50,11 +50,8 @@ int main()
   catch (org::apache::cassandra::InvalidRequestException &ire)
   {
     cout << ire.why << endl;
-    delete key_space;
     return 1;
   }
-
-  delete key_space;
 
   return 0;
 }
