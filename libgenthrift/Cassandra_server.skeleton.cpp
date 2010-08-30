@@ -112,6 +112,11 @@ class CassandraHandler : virtual public CassandraIf {
     printf("describe_ring\n");
   }
 
+  void describe_partitioner(std::string& _return) {
+    // Your implementation goes here
+    printf("describe_partitioner\n");
+  }
+
   void describe_keyspace(std::map<std::string, std::map<std::string, std::string> > & _return, const std::string& keyspace) {
     // Your implementation goes here
     printf("describe_keyspace\n");

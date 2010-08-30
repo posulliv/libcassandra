@@ -32,6 +32,7 @@ class CassandraIf {
   virtual void describe_cluster_name(std::string& _return) = 0;
   virtual void describe_version(std::string& _return) = 0;
   virtual void describe_ring(std::vector<TokenRange> & _return, const std::string& keyspace) = 0;
+  virtual void describe_partitioner(std::string& _return) = 0;
   virtual void describe_keyspace(std::map<std::string, std::map<std::string, std::string> > & _return, const std::string& keyspace) = 0;
   virtual void describe_splits(std::vector<std::string> & _return, const std::string& start_token, const std::string& end_token, const int32_t keys_per_split) = 0;
 };
@@ -92,6 +93,9 @@ class CassandraNull : virtual public CassandraIf {
     return;
   }
   void describe_ring(std::vector<TokenRange> & /* _return */, const std::string& /* keyspace */) {
+    return;
+  }
+  void describe_partitioner(std::string& /* _return */) {
     return;
   }
   void describe_keyspace(std::map<std::string, std::map<std::string, std::string> > & /* _return */, const std::string& /* keyspace */) {
@@ -1074,7 +1078,7 @@ class Cassandra_insert_args {
  public:
 
   Cassandra_insert_args() : keyspace(""), key(""), value(""), timestamp(0) {
-    consistency_level = (ConsistencyLevel)0;
+    consistency_level = (ConsistencyLevel)1;
 
   }
 
@@ -1196,7 +1200,7 @@ class Cassandra_batch_insert_args {
  public:
 
   Cassandra_batch_insert_args() : keyspace(""), key("") {
-    consistency_level = (ConsistencyLevel)0;
+    consistency_level = (ConsistencyLevel)1;
 
   }
 
@@ -1310,7 +1314,7 @@ class Cassandra_remove_args {
  public:
 
   Cassandra_remove_args() : keyspace(""), key(""), timestamp(0) {
-    consistency_level = (ConsistencyLevel)0;
+    consistency_level = (ConsistencyLevel)1;
 
   }
 
@@ -1433,7 +1437,7 @@ class Cassandra_batch_mutate_args {
  public:
 
   Cassandra_batch_mutate_args() : keyspace("") {
-    consistency_level = (ConsistencyLevel)0;
+    consistency_level = (ConsistencyLevel)1;
 
   }
 
@@ -2015,15 +2019,19 @@ class Cassandra_describe_ring_result {
   virtual ~Cassandra_describe_ring_result() throw() {}
 
   std::vector<TokenRange>  success;
+  InvalidRequestException ire;
 
   struct __isset {
-    __isset() : success(false) {}
+    __isset() : success(false), ire(false) {}
     bool success;
+    bool ire;
   } __isset;
 
   bool operator == (const Cassandra_describe_ring_result & rhs) const
   {
     if (!(success == rhs.success))
+      return false;
+    if (!(ire == rhs.ire))
       return false;
     return true;
   }
@@ -2045,6 +2053,92 @@ class Cassandra_describe_ring_presult {
   virtual ~Cassandra_describe_ring_presult() throw() {}
 
   std::vector<TokenRange> * success;
+  InvalidRequestException ire;
+
+  struct __isset {
+    __isset() : success(false), ire(false) {}
+    bool success;
+    bool ire;
+  } __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+class Cassandra_describe_partitioner_args {
+ public:
+
+  Cassandra_describe_partitioner_args() {
+  }
+
+  virtual ~Cassandra_describe_partitioner_args() throw() {}
+
+
+  bool operator == (const Cassandra_describe_partitioner_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Cassandra_describe_partitioner_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Cassandra_describe_partitioner_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+class Cassandra_describe_partitioner_pargs {
+ public:
+
+
+  virtual ~Cassandra_describe_partitioner_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+class Cassandra_describe_partitioner_result {
+ public:
+
+  Cassandra_describe_partitioner_result() : success("") {
+  }
+
+  virtual ~Cassandra_describe_partitioner_result() throw() {}
+
+  std::string success;
+
+  struct __isset {
+    __isset() : success(false) {}
+    bool success;
+  } __isset;
+
+  bool operator == (const Cassandra_describe_partitioner_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Cassandra_describe_partitioner_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Cassandra_describe_partitioner_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+class Cassandra_describe_partitioner_presult {
+ public:
+
+
+  virtual ~Cassandra_describe_partitioner_presult() throw() {}
+
+  std::string* success;
 
   struct __isset {
     __isset() : success(false) {}
@@ -2319,6 +2413,9 @@ class CassandraClient : virtual public CassandraIf {
   void describe_ring(std::vector<TokenRange> & _return, const std::string& keyspace);
   void send_describe_ring(const std::string& keyspace);
   void recv_describe_ring(std::vector<TokenRange> & _return);
+  void describe_partitioner(std::string& _return);
+  void send_describe_partitioner();
+  void recv_describe_partitioner(std::string& _return);
   void describe_keyspace(std::map<std::string, std::map<std::string, std::string> > & _return, const std::string& keyspace);
   void send_describe_keyspace(const std::string& keyspace);
   void recv_describe_keyspace(std::map<std::string, std::map<std::string, std::string> > & _return);
@@ -2356,6 +2453,7 @@ class CassandraProcessor : virtual public ::apache::thrift::TProcessor {
   void process_describe_cluster_name(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
   void process_describe_version(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
   void process_describe_ring(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
+  void process_describe_partitioner(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
   void process_describe_keyspace(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
   void process_describe_splits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot);
  public:
@@ -2379,6 +2477,7 @@ class CassandraProcessor : virtual public ::apache::thrift::TProcessor {
     processMap_["describe_cluster_name"] = &CassandraProcessor::process_describe_cluster_name;
     processMap_["describe_version"] = &CassandraProcessor::process_describe_version;
     processMap_["describe_ring"] = &CassandraProcessor::process_describe_ring;
+    processMap_["describe_partitioner"] = &CassandraProcessor::process_describe_partitioner;
     processMap_["describe_keyspace"] = &CassandraProcessor::process_describe_keyspace;
     processMap_["describe_splits"] = &CassandraProcessor::process_describe_splits;
   }
@@ -2585,6 +2684,18 @@ class CassandraMultiface : virtual public CassandraIf {
         return;
       } else {
         ifaces_[i]->describe_ring(_return, keyspace);
+      }
+    }
+  }
+
+  void describe_partitioner(std::string& _return) {
+    uint32_t sz = ifaces_.size();
+    for (uint32_t i = 0; i < sz; ++i) {
+      if (i == sz - 1) {
+        ifaces_[i]->describe_partitioner(_return);
+        return;
+      } else {
+        ifaces_[i]->describe_partitioner(_return);
       }
     }
   }
