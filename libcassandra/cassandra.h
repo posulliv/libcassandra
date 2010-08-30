@@ -14,6 +14,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <tr1/memory>
 
 #include "libgenthrift/cassandra_types.h"
 
@@ -63,17 +64,17 @@ public:
   /**
    * @return the keyspace with the given name.
    */
-  Keyspace *getKeyspace(const std::string &name);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name);
 
   /**
    * @return the keyspace with the given name at the given consistency level.
    */
-  Keyspace *getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel level);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel level);
 
   /**
    * Remove the given keyspace.
    */
-  void removeKeyspace(Keyspace *k);
+  void removeKeyspace(std::tr1::shared_ptr<Keyspace> k);
 
   /**
    * @return the target server cluster name.
@@ -126,7 +127,7 @@ private:
   std::string config_file;
   std::set<std::string> key_spaces;
   std::map<std::string, std::string> token_map;
-  std::map<std::string, Keyspace *> keyspace_map;
+  std::map<std::string, std::tr1::shared_ptr<Keyspace> > keyspace_map;
 
   Cassandra(const Cassandra&);
   Cassandra &operator=(const Cassandra&);
