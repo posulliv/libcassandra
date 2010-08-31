@@ -18,6 +18,7 @@ libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS}
 libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra.cc \
 				       libcassandra/cassandra_factory.cc \
+				       libcassandra/cassandra_host.cc \
 				       libcassandra/keyspace.cc \
 				       libcassandra/keyspace_factory.cc
 
