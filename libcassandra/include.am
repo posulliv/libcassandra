@@ -8,6 +8,7 @@ EXTRA_DIST+= \
 nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
 			 libcassandra/cassandra_factory.h \
+			 libcassandra/cassandra_host.h \
 			 libcassandra/keyspace.h \
 			 libcassandra/keyspace_factory.h \
 			 libcassandra/exception.h
