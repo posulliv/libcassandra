@@ -17,6 +17,7 @@ config.status
 config.sub
 config/plugin.ac
 config/pandora_vc_revinfo
+config/top.h
 Makefile
 Makefile.in
 autom4te.cache/
@@ -24,6 +25,7 @@ libgenthrift/.deps/
 libcassandra/.deps/
 libcassandra/.dirstamp
 libcassandra/configure.h
+libcassandra/.libs/
 libgenthrift/.libs/
 libgenthrift/.dirstamp
-libcassandra/.libs/
+libgenthrift/configure.h
