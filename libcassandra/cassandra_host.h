@@ -40,7 +40,7 @@ public:
    * By default, use TSocket transport in thrift
    * This matches the default cassandra configuration
    */
-  bool FRAMED_TRANSPORT_BY_DEFAULT = false;
+  static const bool FRAMED_TRANSPORT_BY_DEFAULT = false;
 
   CassandraHost(const std::string &in_url);
   CassandraHost(const std::string &in_url, int in_port);
@@ -52,7 +52,7 @@ public:
 
   const std::string &getIPAddress() const;
 
-  const int getPort() const;
+  int getPort() const;
 
 private:
 

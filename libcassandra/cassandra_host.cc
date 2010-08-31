@@ -16,18 +16,18 @@ using namespace libcassandra;
 using namespace std;
 
 
-CassandraHost::CassandraHost(const string &in_url)
+CassandraHost::CassandraHost(const string &)
   :
     name(),
     host(),
     ip_address(),
-    url()
+    url(),
     port(0)
 {
 }
 
 
-CassandraHost::CassandraHost(const string &in_url, int in_port)
+CassandraHost::CassandraHost(const string &, int )
   :
     name(),
     host(),
@@ -48,7 +48,7 @@ const string &CassandraHost::getName() const
 
 const string &CassandraHost::getHost() const
 {
-  return host
+  return host;
 }
 
 
@@ -58,7 +58,7 @@ const string &CassandraHost::getIPAddress() const
 }
 
 
-const int getPort() const
+int CassandraHost::getPort() const
 {
   return port;
 }

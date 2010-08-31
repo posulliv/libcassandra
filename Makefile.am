@@ -4,6 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUFFIXES =
 PHONY =
 TESTS =
+check_PROGRAMS =
 CLEANFILES =
 bin_PROGRAMS =
 noinst_HEADERS =
@@ -22,8 +23,9 @@ test-docs:
 	(cd docs && $(MAKE) test-docs)
 include libgenthrift/include.am
 include libcassandra/include.am
+include tests/include.am
 
-check-local: test-no-outputdiff
+TESTS += ${check_PROGRAMS}
 
 
 fedora:
