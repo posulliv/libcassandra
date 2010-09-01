@@ -42,6 +42,7 @@ public:
    */
   static const bool FRAMED_TRANSPORT_BY_DEFAULT = false;
 
+  CassandraHost();
   CassandraHost(const std::string &in_url);
   CassandraHost(const std::string &in_url, int in_port);
   ~CassandraHost();
@@ -51,6 +52,8 @@ public:
   const std::string &getHost() const;
 
   const std::string &getIPAddress() const;
+
+  const std::string &getURL() const;
 
   int getPort() const;
 

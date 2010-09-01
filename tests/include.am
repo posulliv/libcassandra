@@ -10,7 +10,8 @@ unit: tests/tests
 	tests/tests
 
 tests_tests_SOURCES = \
+			      tests/cassandra_host_test.cc \
 			      tests/main.cc 
 
 tests_tests_LDADD= \
-  ${LTLIBGTEST}
+  ${lib_LTLIBRARIES} ${LTLIBTHRIFT} ${LTLIBGTEST}

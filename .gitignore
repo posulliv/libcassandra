@@ -31,4 +31,5 @@ libgenthrift/.dirstamp
 libgenthrift/configure.h
 tests/.deps
 tests/.dirstamp
+tests/.libs
 tests/tests
