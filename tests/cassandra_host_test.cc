@@ -25,20 +25,3 @@ TEST(CassandraHost, ConstructorFromURL)
   EXPECT_STREQ(url.c_str(), c.getURL().c_str());
 }
 
-
-TEST(CassandraHost, parsePortFromURL)
-{
-  const string url("localhost:9160");
-  const CassandraHost c;
-  int port = c.parsePortFromURL(url);
-  EXPECT_EQ(9160, port);
-}
-
-
-TEST(CassandraHost, parseHostFromURL)
-{
-  const string url("localhost:9160");
-  const CassandraHost c;
-  string host = c.parseHostFromURL(url);
-  EXPECT_STREQ("localhost", host.c_str());
-}

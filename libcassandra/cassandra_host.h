@@ -57,10 +57,6 @@ public:
 
   int getPort() const;
 
-  int parsePortFromURL(const std::string &in_url) const;
-
-  std::string parseHostFromURL(const std::string &in_url) const;
-
 private:
 
   std::string name;

@@ -9,9 +9,10 @@ nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
 			 libcassandra/cassandra_factory.h \
 			 libcassandra/cassandra_host.h \
+			 libcassandra/exception.h \
 			 libcassandra/keyspace.h \
 			 libcassandra/keyspace_factory.h \
-			 libcassandra/exception.h
+			 libcassandra/util_functions.h
 
 lib_LTLIBRARIES+= libcassandra/libcassandra.la
 libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS}
@@ -20,7 +21,8 @@ libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra_factory.cc \
 				       libcassandra/cassandra_host.cc \
 				       libcassandra/keyspace.cc \
-				       libcassandra/keyspace_factory.cc
+				       libcassandra/keyspace_factory.cc \
+				       libcassandra/util_functions.cc
 
 libcassandra_libcassandra_la_DEPENDENCIES= libgenthrift/libgenthrift.la
 libcassandra_libcassandra_la_LIBADD= $(LIBM) libgenthrift/libgenthrift.la

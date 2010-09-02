@@ -17,7 +17,6 @@ using namespace libcassandra;
 using namespace std;
 
 
-
 CassandraHost::CassandraHost()
   :
     name(),
@@ -82,27 +81,3 @@ int CassandraHost::getPort() const
   return port;
 }
 
-
-int CassandraHost::parsePortFromURL(const string &in_url) const
-{
-  size_t pos= in_url.find_first_of(":");
-  int found_port= DEFAULT_PORT;
-  if (pos == string::npos)
-  {
-    return found_port;
-  }
-  istringstream port_stream(in_url.substr(pos + 1));
-  port_stream >> found_port;
-  return found_port;
-}
-
-
-string CassandraHost::parseHostFromURL(const string &in_url) const
-{
-  size_t pos= in_url.find_first_of(":");
-  if (pos == string::npos)
-  {
-    return in_url;
-  }
-  return in_url.substr(0, pos);
-}
