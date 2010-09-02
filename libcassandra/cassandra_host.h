@@ -44,7 +44,7 @@ public:
 
   CassandraHost();
   CassandraHost(const std::string &in_url);
-  CassandraHost(const std::string &in_url, int in_port);
+  CassandraHost(const std::string &in_host, int in_port);
   ~CassandraHost();
 
   const std::string &getName() const;

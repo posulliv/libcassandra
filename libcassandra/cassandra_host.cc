@@ -12,9 +12,10 @@
 
 #include "cassandra.h"
 #include "cassandra_host.h"
+#include "util_functions.h"
 
-using namespace libcassandra;
 using namespace std;
+using namespace libcassandra;
 
 
 CassandraHost::CassandraHost()
@@ -36,17 +37,25 @@ CassandraHost::CassandraHost(const string &in_url)
     url(in_url),
     port(0)
 {
+  host= parseHostFromURL(url);
+  port= parsePortFromURL(url);
 }
 
 
-CassandraHost::CassandraHost(const string &, int )
+CassandraHost::CassandraHost(const string &in_host, int in_port)
   :
     name(),
-    host(),
+    host(in_host),
     ip_address(),
     url(),
-    port(0)
-{}
+    port(in_port)
+{
+  url.append(host);
+  url.append(":");
+  ostringstream port_str;
+  port_str << port;
+  url.append(port_str.str());
+}
 
 
 CassandraHost::~CassandraHost() {}
