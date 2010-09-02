@@ -10,6 +10,12 @@ $ ./configure
 $ make 
 $ make install
 
+== Running unit tests
+
+If Google's C++ unit test framework, gtest, is installed on your machine, the unit tests can be run.
+
+$ make check
+
 == Compiling apps with libcassandra
 
 $ g++ file.cc -lcassandra -lthrift -I/usr/local/include/thfit
