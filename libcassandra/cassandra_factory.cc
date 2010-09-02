@@ -31,6 +31,7 @@ using namespace boost;
 
 CassandraFactory::CassandraFactory(const string &server_list)
   :
+    url(server_list),
     host(),
     port(0)
 {
@@ -44,11 +45,20 @@ CassandraFactory::CassandraFactory(const string &server_list)
   int_stream >> port;
 }
 
+
 CassandraFactory::CassandraFactory(const string &in_host, int in_port)
   :
+    url(),
     host(in_host),
     port(in_port)
-{}
+{
+  url.append(host);
+  url.append(":");
+  ostringstream port_str;
+  port_str << port;
+  url.append(port_str.str());
+}
+
 
 CassandraFactory::~CassandraFactory() {}
 
@@ -59,12 +69,14 @@ tr1::shared_ptr<Cassandra> CassandraFactory::create()
   return create(0);
 }
 
+
 tr1::shared_ptr<Cassandra> CassandraFactory::create(int framed_transport)
 {
   CassandraClient *thrift_client= createThriftClient(host, port, framed_transport);
   tr1::shared_ptr<Cassandra> ret(new Cassandra(thrift_client, host, port));
   return ret;
 }
+
 
 CassandraClient *CassandraFactory::createThriftClient(const string &in_host,
                                                       int in_port, 
@@ -88,3 +100,20 @@ CassandraClient *CassandraFactory::createThriftClient(const string &in_host,
   return client;
 }
 
+
+const string &CassandraFactory::getURL() const
+{
+  return url;
+}
+
+
+const string &CassandraFactory::getHost() const
+{
+  return host;
+}
+
+
+int CassandraFactory::getPort() const
+{
+  return port;
+}
