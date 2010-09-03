@@ -7,6 +7,7 @@
 #define cassandra_TYPES_H
 
 #include <Thrift.h>
+#include <TApplicationException.h>
 #include <protocol/TProtocol.h>
 #include <transport/TTransport.h>
 
@@ -23,6 +24,7 @@ enum ConsistencyLevel {
   ALL = 5,
   ANY = 6
 };
+
 
 class Column {
  public:
@@ -60,6 +62,7 @@ class Column {
 
 };
 
+
 class SuperColumn {
  public:
 
@@ -93,6 +96,12 @@ class SuperColumn {
 
 };
 
+typedef struct _ColumnOrSuperColumn__isset {
+  _ColumnOrSuperColumn__isset() : column(false), super_column(false) {}
+  bool column;
+  bool super_column;
+} _ColumnOrSuperColumn__isset;
+
 class ColumnOrSuperColumn {
  public:
 
@@ -107,11 +116,7 @@ class ColumnOrSuperColumn {
   Column column;
   SuperColumn super_column;
 
-  struct __isset {
-    __isset() : column(false), super_column(false) {}
-    bool column;
-    bool super_column;
-  } __isset;
+  _ColumnOrSuperColumn__isset __isset;
 
   bool operator == (const ColumnOrSuperColumn & rhs) const
   {
@@ -135,6 +140,7 @@ class ColumnOrSuperColumn {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class NotFoundException : public ::apache::thrift::TException {
  public:
@@ -162,6 +168,7 @@ class NotFoundException : public ::apache::thrift::TException {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class InvalidRequestException : public ::apache::thrift::TException {
  public:
@@ -193,6 +200,7 @@ class InvalidRequestException : public ::apache::thrift::TException {
 
 };
 
+
 class UnavailableException : public ::apache::thrift::TException {
  public:
 
@@ -220,6 +228,7 @@ class UnavailableException : public ::apache::thrift::TException {
 
 };
 
+
 class TimedOutException : public ::apache::thrift::TException {
  public:
 
@@ -246,6 +255,7 @@ class TimedOutException : public ::apache::thrift::TException {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class AuthenticationException : public ::apache::thrift::TException {
  public:
@@ -277,6 +287,7 @@ class AuthenticationException : public ::apache::thrift::TException {
 
 };
 
+
 class AuthorizationException : public ::apache::thrift::TException {
  public:
 
@@ -307,6 +318,11 @@ class AuthorizationException : public ::apache::thrift::TException {
 
 };
 
+typedef struct _ColumnParent__isset {
+  _ColumnParent__isset() : super_column(false) {}
+  bool super_column;
+} _ColumnParent__isset;
+
 class ColumnParent {
  public:
 
@@ -321,10 +337,7 @@ class ColumnParent {
   std::string column_family;
   std::string super_column;
 
-  struct __isset {
-    __isset() : super_column(false) {}
-    bool super_column;
-  } __isset;
+  _ColumnParent__isset __isset;
 
   bool operator == (const ColumnParent & rhs) const
   {
@@ -347,6 +360,12 @@ class ColumnParent {
 
 };
 
+typedef struct _ColumnPath__isset {
+  _ColumnPath__isset() : super_column(false), column(false) {}
+  bool super_column;
+  bool column;
+} _ColumnPath__isset;
+
 class ColumnPath {
  public:
 
@@ -362,11 +381,7 @@ class ColumnPath {
   std::string super_column;
   std::string column;
 
-  struct __isset {
-    __isset() : super_column(false), column(false) {}
-    bool super_column;
-    bool column;
-  } __isset;
+  _ColumnPath__isset __isset;
 
   bool operator == (const ColumnPath & rhs) const
   {
@@ -392,6 +407,7 @@ class ColumnPath {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class SliceRange {
  public:
@@ -432,6 +448,12 @@ class SliceRange {
 
 };
 
+typedef struct _SlicePredicate__isset {
+  _SlicePredicate__isset() : column_names(false), slice_range(false) {}
+  bool column_names;
+  bool slice_range;
+} _SlicePredicate__isset;
+
 class SlicePredicate {
  public:
 
@@ -446,11 +468,7 @@ class SlicePredicate {
   std::vector<std::string>  column_names;
   SliceRange slice_range;
 
-  struct __isset {
-    __isset() : column_names(false), slice_range(false) {}
-    bool column_names;
-    bool slice_range;
-  } __isset;
+  _SlicePredicate__isset __isset;
 
   bool operator == (const SlicePredicate & rhs) const
   {
@@ -475,6 +493,14 @@ class SlicePredicate {
 
 };
 
+typedef struct _KeyRange__isset {
+  _KeyRange__isset() : start_key(false), end_key(false), start_token(false), end_token(false) {}
+  bool start_key;
+  bool end_key;
+  bool start_token;
+  bool end_token;
+} _KeyRange__isset;
+
 class KeyRange {
  public:
 
@@ -492,13 +518,7 @@ class KeyRange {
   std::string end_token;
   int32_t count;
 
-  struct __isset {
-    __isset() : start_key(false), end_key(false), start_token(false), end_token(false) {}
-    bool start_key;
-    bool end_key;
-    bool start_token;
-    bool end_token;
-  } __isset;
+  _KeyRange__isset __isset;
 
   bool operator == (const KeyRange & rhs) const
   {
@@ -533,6 +553,7 @@ class KeyRange {
 
 };
 
+
 class KeySlice {
  public:
 
@@ -566,6 +587,12 @@ class KeySlice {
 
 };
 
+typedef struct _Deletion__isset {
+  _Deletion__isset() : super_column(false), predicate(false) {}
+  bool super_column;
+  bool predicate;
+} _Deletion__isset;
+
 class Deletion {
  public:
 
@@ -581,11 +608,7 @@ class Deletion {
   std::string super_column;
   SlicePredicate predicate;
 
-  struct __isset {
-    __isset() : super_column(false), predicate(false) {}
-    bool super_column;
-    bool predicate;
-  } __isset;
+  _Deletion__isset __isset;
 
   bool operator == (const Deletion & rhs) const
   {
@@ -612,6 +635,12 @@ class Deletion {
 
 };
 
+typedef struct _Mutation__isset {
+  _Mutation__isset() : column_or_supercolumn(false), deletion(false) {}
+  bool column_or_supercolumn;
+  bool deletion;
+} _Mutation__isset;
+
 class Mutation {
  public:
 
@@ -626,11 +655,7 @@ class Mutation {
   ColumnOrSuperColumn column_or_supercolumn;
   Deletion deletion;
 
-  struct __isset {
-    __isset() : column_or_supercolumn(false), deletion(false) {}
-    bool column_or_supercolumn;
-    bool deletion;
-  } __isset;
+  _Mutation__isset __isset;
 
   bool operator == (const Mutation & rhs) const
   {
@@ -654,6 +679,7 @@ class Mutation {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class TokenRange {
  public:
@@ -690,6 +716,7 @@ class TokenRange {
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
+
 
 class AuthenticationRequest {
  public:

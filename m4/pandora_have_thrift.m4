@@ -7,31 +7,49 @@ dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
 dnl
 
-dnl --------------------------------------------------------------------
-dnl  Check for Thrift
-dnl --------------------------------------------------------------------
+AC_DEFUN([_PANDORA_SEARCH_THRIFT],[
+  AC_REQUIRE([AC_LIB_PREFIX])
+ 
+  dnl --------------------------------------------------------------------
+  dnl  Check for thrift
+  dnl --------------------------------------------------------------------
+ 
+  AC_ARG_ENABLE([thrift],
+    [AS_HELP_STRING([--disable-thrift],
+      [Build with thrift support @<:@default=on@:>@])],
+    [ac_enable_thrift="$enableval"],
+    [ac_enable_thrift="yes"])
+ 
+  AS_IF([test "x$ac_enable_thrift" = "xyes"],[
+    AC_LANG_PUSH(C++)
+    AC_LIB_HAVE_LINKFLAGS(thrift,,[
+      #include <thrift/Thrift.h>
+    ],[
+      apache::thrift::TOutput test_output;
+    ])
+    AC_LANG_POP()
 
-AC_DEFUN([_PANDORA_SEARCH_LIBTHRIFT],[
-  AC_REQUIRE([PANDORA_HAVE_PTHREAD])
+	 dnl Thrift's generated code as well as its own headers include thrift headers
+	 dnl without a "thrift/" prefix, which means even though the above adds -I PREFIX/include
+	 dnl We also need -I PREFIX/include/thrift
+	 AC_LIB_APPENDTOVAR([INCTHRIFT], [-I]$LIBTHRIFT_PREFIX[/include/thrift])
+	 AC_LIB_APPENDTOVAR([CPPFLAGS], [-I]$LIBTHRIFT_PREFIX[/include/thrift])
 
-  AC_LANG_PUSH([C++])
-  save_CXXFLAGS="${CXXFLAGS}"
-  CXXFLAGS="${PTHREAD_CFLAGS} ${CXXFLAGS}"
-  AC_LIB_HAVE_LINKFLAGS(thrift,,
-    [#include <thrift/config.h>],
-    [PACKAGE_STRING])
-  AM_CXXFLAGS="${AM_CXXFLAGS} -I/usr/local/include/thrift"
-  CXXFLAGS="${save_CXXFLAGS}"
-  AC_LANG_POP()
+  ],[
+    ac_cv_libthrift="no"
+  ])
+  
+  AM_CONDITIONAL(HAVE_LIBTHRIFT, [test "x${ac_cv_libthrift}" = "xyes"])
+  
 ])
-
-AC_DEFUN([PANDORA_HAVE_LIBTHRIFT],[
-  AC_REQUIRE([_PANDORA_SEARCH_LIBTHRIFT])
+ 
+AC_DEFUN([PANDORA_HAVE_THRIFT],[
+  AC_REQUIRE([_PANDORA_SEARCH_THRIFT])
 ])
-
-AC_DEFUN([PANDORA_REQUIRE_LIBTHRIFT],[
-  AC_REQUIRE([PANDORA_HAVE_LIBTHRIFT])
-  AS_IF([test x$ac_cv_libthrift = xno],
-      AC_MSG_ERROR([libthrift is required for ${PACKAGE}.]))
+ 
+AC_DEFUN([PANDORA_REQUIRE_THRIFT],[
+  AC_REQUIRE([PANDORA_HAVE_THRIFT])
+  AS_IF([test "x$ac_cv_libthrift" = "xno"],[
+      AC_MSG_ERROR([thrift required for ${PACKAGE}])
+  ])
 ])
-
