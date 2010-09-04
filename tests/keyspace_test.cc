@@ -61,3 +61,22 @@ TEST_F(KeyspaceTest, DeleteColumn)
   ks->removeColumn("sarah", "Standard1", "", "third");
   ASSERT_THROW(ks->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
 }
+
+
+TEST_F(KeyspaceTest, InsertSuperColumn)
+{
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  const string mock_data("this is mock data being inserted...");
+  ks->insertColumn("teeny", "Super1", "padraig", "third", mock_data);
+  string res= ks->getColumnValue("teeny", "Super1", "padraig", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+}
+
+
+TEST_F(KeyspaceTest, DeleteSuperColumn)
+{
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  ks->removeSuperColumn("teeny", "Super1", "padraig");
+  ASSERT_THROW(ks->getColumnValue("teeny", "Super1", "padraig", "third"), org::apache::cassandra::NotFoundException);
+}
