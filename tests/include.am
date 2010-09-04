@@ -16,4 +16,4 @@ tests_tests_SOURCES = \
 			      tests/util_functions_test.cc 
 
 tests_tests_LDADD= \
-  ${lib_LTLIBRARIES} ${LTLIBTHRIFT} ${LTLIBGTEST}
+  ${lib_LTLIBRARIES} ${LTLIBTHRIFT} ${LTLIBGTEST} ${BOOST_LIBS}
