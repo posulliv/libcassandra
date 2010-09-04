@@ -15,10 +15,10 @@
 #include <transport/TSocket.h>
 #include <transport/TTransportUtils.h>
 
-#include <libgenthrift/Cassandra.h>
+#include "libgenthrift/Cassandra.h"
 
-#include "cassandra.h"
-#include "cassandra_factory.h"
+#include "libcassandra/cassandra.h"
+#include "libcassandra/cassandra_factory.h"
 
 using namespace libcassandra;
 using namespace std;

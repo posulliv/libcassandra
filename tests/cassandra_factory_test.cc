@@ -33,7 +33,7 @@ TEST(CassandraFactory, ConsructorFromHostAndPort)
 
 TEST(CassandraFactory, CreateClientNoServer)
 {
-  const string url("localhost:9160");
+  const string url("localhost:9161");
   CassandraFactory cf(url);
   ASSERT_THROW(tr1::shared_ptr<Cassandra> client= cf.create(), apache::thrift::transport::TTransportException);
 }
@@ -43,5 +43,5 @@ TEST(CassandraFactory, CreateClientWithServer)
 {
   const string url("localhost:9160");
   CassandraFactory cf(url);
-  /* need to start up server on localhost now */
+  tr1::shared_ptr<Cassandra> client= cf.create();
 }

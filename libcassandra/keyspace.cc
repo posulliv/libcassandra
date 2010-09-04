@@ -16,11 +16,11 @@
 #include <transport/TSocket.h>
 #include <transport/TTransportUtils.h>
 
-#include <libgenthrift/Cassandra.h>
+#include "libgenthrift/Cassandra.h"
 
-#include "cassandra.h"
-#include "keyspace.h"
-#include "exception.h"
+#include "libcassandra/cassandra.h"
+#include "libcassandra/keyspace.h"
+#include "libcassandra/exception.h"
 
 using namespace libcassandra;
 using namespace std;

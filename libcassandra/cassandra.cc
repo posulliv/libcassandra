@@ -11,11 +11,11 @@
 #include <set>
 #include <sstream>
 
-#include <libgenthrift/Cassandra.h>
+#include "libgenthrift/Cassandra.h"
 
-#include "cassandra.h"
-#include "keyspace.h"
-#include "exception.h"
+#include "libcassandra/cassandra.h"
+#include "libcassandra/keyspace.h"
+#include "libcassandra/exception.h"
 
 using namespace std;
 using namespace org::apache::cassandra;
@@ -30,6 +30,22 @@ inline string toString(const T &tt)
   ss << tt;
   return ss.str();
 }
+
+
+Cassandra::Cassandra()
+  :
+    thrift_client(NULL),
+	host(),
+	port(0),
+	cluster_name(),
+	server_version(),
+	config_file(),
+	key_spaces(),
+	token_map(),
+	keyspace_map()
+{
+}
+
 
 Cassandra::Cassandra(CassandraClient *in_thrift_client,
                      const string &in_host,

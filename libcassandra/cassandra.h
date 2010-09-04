@@ -39,6 +39,7 @@ class Cassandra
 
 public:
 
+  Cassandra();
   Cassandra(org::apache::cassandra::CassandraClient *in_thrift_client,
             const std::string &in_host,
             int in_port);

@@ -10,8 +10,8 @@
 #include <string>
 #include <sstream>
 
-#include "cassandra_host.h"
-#include "util_functions.h"
+#include "libcassandra/cassandra_host.h"
+#include "libcassandra/util_functions.h"
 
 using namespace std;
 
