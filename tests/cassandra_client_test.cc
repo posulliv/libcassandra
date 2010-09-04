@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <iostream>
 #include <sstream>
 
 #include <protocol/TBinaryProtocol.h>
@@ -113,4 +114,17 @@ TEST(Cassandra, GetSpecificKeyspace)
   tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
   EXPECT_EQ(ks_name, ks->getName());
   EXPECT_STREQ(ks_name.c_str(), ks->getName().c_str());
+}
+
+
+TEST(Cassandra, GetTokenMap)
+{
+  const string host("localhost");
+  int port= 9160;
+  CassandraFactory cf(host, port);
+  tr1::shared_ptr<Cassandra> c(cf.create());
+  map<string, string> token_map= c->getTokenMap(false);
+  EXPECT_EQ(1, token_map.size());
+  token_map= c->getTokenMap(true);
+  EXPECT_EQ(1, token_map.size());
 }
