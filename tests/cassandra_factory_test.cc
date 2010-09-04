@@ -43,7 +43,7 @@ TEST(CassandraFactory, CreateClientNoServer)
 {
   const string url("localhost:9161");
   CassandraFactory cf(url);
-  ASSERT_THROW(tr1::shared_ptr<Cassandra> client= cf.create(), apache::thrift::transport::TTransportException);
+  ASSERT_THROW(cf.create(), apache::thrift::transport::TTransportException);
 }
 
 

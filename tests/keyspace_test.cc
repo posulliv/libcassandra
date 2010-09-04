@@ -43,3 +43,21 @@ TEST_F(KeyspaceTest, GetKeyspace)
   EXPECT_EQ(ks_name, ks->getName());
 }
 
+
+TEST_F(KeyspaceTest, InsertColumn)
+{
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  const string mock_data("this is mock data being inserted...");
+  ks->insertColumn("sarah", "Standard1", "third", mock_data);
+  string res= ks->getColumnValue("sarah", "Standard1", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+}
+
+
+TEST_F(KeyspaceTest, DeleteColumn)
+{
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  ks->removeColumn("sarah", "Standard1", "", "third");
+  ASSERT_THROW(ks->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+}
