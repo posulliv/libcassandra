@@ -28,7 +28,7 @@ public:
 
   Keyspace(Cassandra *in_client,
            const std::string &in_name,
-           const std::map< std::string, std::map<std::string, std::string> > &in_desc,
+		   const org::apache::cassandra::KsDef &ks_def,
            org::apache::cassandra::ConsistencyLevel in_level);
   ~Keyspace() {}
 
@@ -229,7 +229,7 @@ private:
 
   std::string name;
 
-  std::map< std::string, std::map<std::string, std::string> > keyspace_desc;
+  org::apache::cassandra::KsDef keyspace_desc;
 
   org::apache::cassandra::ConsistencyLevel level;
 

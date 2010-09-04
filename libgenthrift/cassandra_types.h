@@ -25,21 +25,71 @@ enum ConsistencyLevel {
   ANY = 6
 };
 
+enum IndexOperator {
+  EQ = 0,
+  GTE = 1,
+  GT = 2,
+  LTE = 3,
+  LT = 4
+};
+
+enum IndexType {
+  KEYS = 0
+};
+
+
+class Clock {
+ public:
+
+  static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
+  static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
+
+  Clock() : timestamp(0) {
+  }
+
+  virtual ~Clock() throw() {}
+
+  int64_t timestamp;
+
+  bool operator == (const Clock & rhs) const
+  {
+    if (!(timestamp == rhs.timestamp))
+      return false;
+    return true;
+  }
+  bool operator != (const Clock &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Clock & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Column__isset {
+  _Column__isset() : ttl(false) {}
+  bool ttl;
+} _Column__isset;
 
 class Column {
  public:
 
-  static const char* ascii_fingerprint; // = "A0ED90CE9B69D7A0FCE24E26CAECD2AF";
-  static const uint8_t binary_fingerprint[16]; // = {0xA0,0xED,0x90,0xCE,0x9B,0x69,0xD7,0xA0,0xFC,0xE2,0x4E,0x26,0xCA,0xEC,0xD2,0xAF};
+  static const char* ascii_fingerprint; // = "311FAD2042360258ECFB01FECDADC5A0";
+  static const uint8_t binary_fingerprint[16]; // = {0x31,0x1F,0xAD,0x20,0x42,0x36,0x02,0x58,0xEC,0xFB,0x01,0xFE,0xCD,0xAD,0xC5,0xA0};
 
-  Column() : name(""), value(""), timestamp(0) {
+  Column() : name(""), value(""), ttl(0) {
   }
 
   virtual ~Column() throw() {}
 
   std::string name;
   std::string value;
-  int64_t timestamp;
+  Clock clock;
+  int32_t ttl;
+
+  _Column__isset __isset;
 
   bool operator == (const Column & rhs) const
   {
@@ -47,7 +97,11 @@ class Column {
       return false;
     if (!(value == rhs.value))
       return false;
-    if (!(timestamp == rhs.timestamp))
+    if (!(clock == rhs.clock))
+      return false;
+    if (__isset.ttl != rhs.__isset.ttl)
+      return false;
+    else if (__isset.ttl && !(ttl == rhs.ttl))
       return false;
     return true;
   }
@@ -66,8 +120,8 @@ class Column {
 class SuperColumn {
  public:
 
-  static const char* ascii_fingerprint; // = "12D6ECAD8A5BF1EF6D95F38F15B05F96";
-  static const uint8_t binary_fingerprint[16]; // = {0x12,0xD6,0xEC,0xAD,0x8A,0x5B,0xF1,0xEF,0x6D,0x95,0xF3,0x8F,0x15,0xB0,0x5F,0x96};
+  static const char* ascii_fingerprint; // = "39CA009A0208AD0DF33E9D8A13CFF871";
+  static const uint8_t binary_fingerprint[16]; // = {0x39,0xCA,0x00,0x9A,0x02,0x08,0xAD,0x0D,0xF3,0x3E,0x9D,0x8A,0x13,0xCF,0xF8,0x71};
 
   SuperColumn() : name("") {
   }
@@ -105,8 +159,8 @@ typedef struct _ColumnOrSuperColumn__isset {
 class ColumnOrSuperColumn {
  public:
 
-  static const char* ascii_fingerprint; // = "7206AF0D50A12423508A1B450D4076B8";
-  static const uint8_t binary_fingerprint[16]; // = {0x72,0x06,0xAF,0x0D,0x50,0xA1,0x24,0x23,0x50,0x8A,0x1B,0x45,0x0D,0x40,0x76,0xB8};
+  static const char* ascii_fingerprint; // = "E80F68F70D950C49C938C8F1123596CE";
+  static const uint8_t binary_fingerprint[16]; // = {0xE8,0x0F,0x68,0xF7,0x0D,0x95,0x0C,0x49,0xC9,0x38,0xC8,0xF1,0x12,0x35,0x96,0xCE};
 
   ColumnOrSuperColumn() {
   }
@@ -493,6 +547,80 @@ class SlicePredicate {
 
 };
 
+
+class IndexExpression {
+ public:
+
+  static const char* ascii_fingerprint; // = "D9F4CFE2F293A8B1052FD3031DD2C847";
+  static const uint8_t binary_fingerprint[16]; // = {0xD9,0xF4,0xCF,0xE2,0xF2,0x93,0xA8,0xB1,0x05,0x2F,0xD3,0x03,0x1D,0xD2,0xC8,0x47};
+
+  IndexExpression() : column_name(""), value("") {
+  }
+
+  virtual ~IndexExpression() throw() {}
+
+  std::string column_name;
+  IndexOperator op;
+  std::string value;
+
+  bool operator == (const IndexExpression & rhs) const
+  {
+    if (!(column_name == rhs.column_name))
+      return false;
+    if (!(op == rhs.op))
+      return false;
+    if (!(value == rhs.value))
+      return false;
+    return true;
+  }
+  bool operator != (const IndexExpression &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IndexExpression & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IndexClause {
+ public:
+
+  static const char* ascii_fingerprint; // = "9B551B9AB86120B0EEA9005C77FD3C1F";
+  static const uint8_t binary_fingerprint[16]; // = {0x9B,0x55,0x1B,0x9A,0xB8,0x61,0x20,0xB0,0xEE,0xA9,0x00,0x5C,0x77,0xFD,0x3C,0x1F};
+
+  IndexClause() : start_key(""), count(100) {
+  }
+
+  virtual ~IndexClause() throw() {}
+
+  std::vector<IndexExpression>  expressions;
+  std::string start_key;
+  int32_t count;
+
+  bool operator == (const IndexClause & rhs) const
+  {
+    if (!(expressions == rhs.expressions))
+      return false;
+    if (!(start_key == rhs.start_key))
+      return false;
+    if (!(count == rhs.count))
+      return false;
+    return true;
+  }
+  bool operator != (const IndexClause &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IndexClause & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
 typedef struct _KeyRange__isset {
   _KeyRange__isset() : start_key(false), end_key(false), start_token(false), end_token(false) {}
   bool start_key;
@@ -557,8 +685,8 @@ class KeyRange {
 class KeySlice {
  public:
 
-  static const char* ascii_fingerprint; // = "6B9E3EBD049E17F183128B5A0F9D0AA1";
-  static const uint8_t binary_fingerprint[16]; // = {0x6B,0x9E,0x3E,0xBD,0x04,0x9E,0x17,0xF1,0x83,0x12,0x8B,0x5A,0x0F,0x9D,0x0A,0xA1};
+  static const char* ascii_fingerprint; // = "2AA4A482655A8D3B33734CC19F3F3515";
+  static const uint8_t binary_fingerprint[16]; // = {0x2A,0xA4,0xA4,0x82,0x65,0x5A,0x8D,0x3B,0x33,0x73,0x4C,0xC1,0x9F,0x3F,0x35,0x15};
 
   KeySlice() : key("") {
   }
@@ -587,6 +715,40 @@ class KeySlice {
 
 };
 
+
+class KeyCount {
+ public:
+
+  static const char* ascii_fingerprint; // = "EEBC915CE44901401D881E6091423036";
+  static const uint8_t binary_fingerprint[16]; // = {0xEE,0xBC,0x91,0x5C,0xE4,0x49,0x01,0x40,0x1D,0x88,0x1E,0x60,0x91,0x42,0x30,0x36};
+
+  KeyCount() : key(""), count(0) {
+  }
+
+  virtual ~KeyCount() throw() {}
+
+  std::string key;
+  int32_t count;
+
+  bool operator == (const KeyCount & rhs) const
+  {
+    if (!(key == rhs.key))
+      return false;
+    if (!(count == rhs.count))
+      return false;
+    return true;
+  }
+  bool operator != (const KeyCount &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const KeyCount & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
 typedef struct _Deletion__isset {
   _Deletion__isset() : super_column(false), predicate(false) {}
   bool super_column;
@@ -596,15 +758,15 @@ typedef struct _Deletion__isset {
 class Deletion {
  public:
 
-  static const char* ascii_fingerprint; // = "1E4E5C4E0D45BE5064D14AFD23096B8B";
-  static const uint8_t binary_fingerprint[16]; // = {0x1E,0x4E,0x5C,0x4E,0x0D,0x45,0xBE,0x50,0x64,0xD1,0x4A,0xFD,0x23,0x09,0x6B,0x8B};
+  static const char* ascii_fingerprint; // = "0CAEBC752C2855B1AB79CBB689947DF2";
+  static const uint8_t binary_fingerprint[16]; // = {0x0C,0xAE,0xBC,0x75,0x2C,0x28,0x55,0xB1,0xAB,0x79,0xCB,0xB6,0x89,0x94,0x7D,0xF2};
 
-  Deletion() : timestamp(0), super_column("") {
+  Deletion() : super_column("") {
   }
 
   virtual ~Deletion() throw() {}
 
-  int64_t timestamp;
+  Clock clock;
   std::string super_column;
   SlicePredicate predicate;
 
@@ -612,7 +774,7 @@ class Deletion {
 
   bool operator == (const Deletion & rhs) const
   {
-    if (!(timestamp == rhs.timestamp))
+    if (!(clock == rhs.clock))
       return false;
     if (__isset.super_column != rhs.__isset.super_column)
       return false;
@@ -644,8 +806,8 @@ typedef struct _Mutation__isset {
 class Mutation {
  public:
 
-  static const char* ascii_fingerprint; // = "D6D4A7E764618937E5BB0CC6336115E1";
-  static const uint8_t binary_fingerprint[16]; // = {0xD6,0xD4,0xA7,0xE7,0x64,0x61,0x89,0x37,0xE5,0xBB,0x0C,0xC6,0x33,0x61,0x15,0xE1};
+  static const char* ascii_fingerprint; // = "54FF89DDBC55020F151B9654B1D21FC0";
+  static const uint8_t binary_fingerprint[16]; // = {0x54,0xFF,0x89,0xDD,0xBC,0x55,0x02,0x0F,0x15,0x1B,0x96,0x54,0xB1,0xD2,0x1F,0xC0};
 
   Mutation() {
   }
@@ -742,6 +904,225 @@ class AuthenticationRequest {
   }
 
   bool operator < (const AuthenticationRequest & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ColumnDef__isset {
+  _ColumnDef__isset() : index_type(false), index_name(false) {}
+  bool index_type;
+  bool index_name;
+} _ColumnDef__isset;
+
+class ColumnDef {
+ public:
+
+  static const char* ascii_fingerprint; // = "A5AC27AF2178A2927C057F23978619E4";
+  static const uint8_t binary_fingerprint[16]; // = {0xA5,0xAC,0x27,0xAF,0x21,0x78,0xA2,0x92,0x7C,0x05,0x7F,0x23,0x97,0x86,0x19,0xE4};
+
+  ColumnDef() : name(""), validation_class(""), index_name("") {
+  }
+
+  virtual ~ColumnDef() throw() {}
+
+  std::string name;
+  std::string validation_class;
+  IndexType index_type;
+  std::string index_name;
+
+  _ColumnDef__isset __isset;
+
+  bool operator == (const ColumnDef & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    if (!(validation_class == rhs.validation_class))
+      return false;
+    if (__isset.index_type != rhs.__isset.index_type)
+      return false;
+    else if (__isset.index_type && !(index_type == rhs.index_type))
+      return false;
+    if (__isset.index_name != rhs.__isset.index_name)
+      return false;
+    else if (__isset.index_name && !(index_name == rhs.index_name))
+      return false;
+    return true;
+  }
+  bool operator != (const ColumnDef &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ColumnDef & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _CfDef__isset {
+  _CfDef__isset() : column_type(false), clock_type(false), comparator_type(false), subcomparator_type(false), reconciler(false), comment(false), row_cache_size(false), preload_row_cache(false), key_cache_size(false), read_repair_chance(false), column_metadata(false), gc_grace_seconds(false), default_validation_class(false) {}
+  bool column_type;
+  bool clock_type;
+  bool comparator_type;
+  bool subcomparator_type;
+  bool reconciler;
+  bool comment;
+  bool row_cache_size;
+  bool preload_row_cache;
+  bool key_cache_size;
+  bool read_repair_chance;
+  bool column_metadata;
+  bool gc_grace_seconds;
+  bool default_validation_class;
+} _CfDef__isset;
+
+class CfDef {
+ public:
+
+  static const char* ascii_fingerprint; // = "BCF57B143D92F351B7A083FCD55899EF";
+  static const uint8_t binary_fingerprint[16]; // = {0xBC,0xF5,0x7B,0x14,0x3D,0x92,0xF3,0x51,0xB7,0xA0,0x83,0xFC,0xD5,0x58,0x99,0xEF};
+
+  CfDef() : keyspace(""), name(""), column_type("Standard"), clock_type("Timestamp"), comparator_type("BytesType"), subcomparator_type(""), reconciler(""), comment(""), row_cache_size(0), preload_row_cache(false), key_cache_size(200000), read_repair_chance(1), gc_grace_seconds(0), default_validation_class("") {
+  }
+
+  virtual ~CfDef() throw() {}
+
+  std::string keyspace;
+  std::string name;
+  std::string column_type;
+  std::string clock_type;
+  std::string comparator_type;
+  std::string subcomparator_type;
+  std::string reconciler;
+  std::string comment;
+  double row_cache_size;
+  bool preload_row_cache;
+  double key_cache_size;
+  double read_repair_chance;
+  std::vector<ColumnDef>  column_metadata;
+  int32_t gc_grace_seconds;
+  std::string default_validation_class;
+
+  _CfDef__isset __isset;
+
+  bool operator == (const CfDef & rhs) const
+  {
+    if (!(keyspace == rhs.keyspace))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    if (__isset.column_type != rhs.__isset.column_type)
+      return false;
+    else if (__isset.column_type && !(column_type == rhs.column_type))
+      return false;
+    if (__isset.clock_type != rhs.__isset.clock_type)
+      return false;
+    else if (__isset.clock_type && !(clock_type == rhs.clock_type))
+      return false;
+    if (__isset.comparator_type != rhs.__isset.comparator_type)
+      return false;
+    else if (__isset.comparator_type && !(comparator_type == rhs.comparator_type))
+      return false;
+    if (__isset.subcomparator_type != rhs.__isset.subcomparator_type)
+      return false;
+    else if (__isset.subcomparator_type && !(subcomparator_type == rhs.subcomparator_type))
+      return false;
+    if (__isset.reconciler != rhs.__isset.reconciler)
+      return false;
+    else if (__isset.reconciler && !(reconciler == rhs.reconciler))
+      return false;
+    if (__isset.comment != rhs.__isset.comment)
+      return false;
+    else if (__isset.comment && !(comment == rhs.comment))
+      return false;
+    if (__isset.row_cache_size != rhs.__isset.row_cache_size)
+      return false;
+    else if (__isset.row_cache_size && !(row_cache_size == rhs.row_cache_size))
+      return false;
+    if (__isset.preload_row_cache != rhs.__isset.preload_row_cache)
+      return false;
+    else if (__isset.preload_row_cache && !(preload_row_cache == rhs.preload_row_cache))
+      return false;
+    if (__isset.key_cache_size != rhs.__isset.key_cache_size)
+      return false;
+    else if (__isset.key_cache_size && !(key_cache_size == rhs.key_cache_size))
+      return false;
+    if (__isset.read_repair_chance != rhs.__isset.read_repair_chance)
+      return false;
+    else if (__isset.read_repair_chance && !(read_repair_chance == rhs.read_repair_chance))
+      return false;
+    if (__isset.column_metadata != rhs.__isset.column_metadata)
+      return false;
+    else if (__isset.column_metadata && !(column_metadata == rhs.column_metadata))
+      return false;
+    if (__isset.gc_grace_seconds != rhs.__isset.gc_grace_seconds)
+      return false;
+    else if (__isset.gc_grace_seconds && !(gc_grace_seconds == rhs.gc_grace_seconds))
+      return false;
+    if (__isset.default_validation_class != rhs.__isset.default_validation_class)
+      return false;
+    else if (__isset.default_validation_class && !(default_validation_class == rhs.default_validation_class))
+      return false;
+    return true;
+  }
+  bool operator != (const CfDef &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const CfDef & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _KsDef__isset {
+  _KsDef__isset() : strategy_options(false) {}
+  bool strategy_options;
+} _KsDef__isset;
+
+class KsDef {
+ public:
+
+  static const char* ascii_fingerprint; // = "A1A77A5764A68AB46E18C58408E1A6D8";
+  static const uint8_t binary_fingerprint[16]; // = {0xA1,0xA7,0x7A,0x57,0x64,0xA6,0x8A,0xB4,0x6E,0x18,0xC5,0x84,0x08,0xE1,0xA6,0xD8};
+
+  KsDef() : name(""), strategy_class(""), replication_factor(0) {
+  }
+
+  virtual ~KsDef() throw() {}
+
+  std::string name;
+  std::string strategy_class;
+  std::map<std::string, std::string>  strategy_options;
+  int32_t replication_factor;
+  std::vector<CfDef>  cf_defs;
+
+  _KsDef__isset __isset;
+
+  bool operator == (const KsDef & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    if (!(strategy_class == rhs.strategy_class))
+      return false;
+    if (__isset.strategy_options != rhs.__isset.strategy_options)
+      return false;
+    else if (__isset.strategy_options && !(strategy_options == rhs.strategy_options))
+      return false;
+    if (!(replication_factor == rhs.replication_factor))
+      return false;
+    if (!(cf_defs == rhs.cf_defs))
+      return false;
+    return true;
+  }
+  bool operator != (const KsDef &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const KsDef & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;

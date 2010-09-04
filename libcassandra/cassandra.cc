@@ -77,34 +77,39 @@ CassandraClient *Cassandra::getCassandra()
 
 set<string> Cassandra::getKeyspaces()
 {
+  set<string> keyspace_names;
   if (key_spaces.empty())
   {
     thrift_client->describe_keyspaces(key_spaces);
+	for (vector<KsDef>::iterator it= key_spaces.begin();
+		 it != key_spaces.end();
+		 ++it)
+	{
+	  keyspace_names.insert((*it).name);
+	}
   }
-  return key_spaces;
+  return keyspace_names;
 }
 
 
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string &name)
+tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const KsDef &ks_def)
 {
-  return getKeyspace(name, DCQUORUM);
+  return getKeyspace(ks_def, DCQUORUM);
 }
 
 
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string &name,
+tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const KsDef &ks_def,
                                                  ConsistencyLevel level)
 {
-  string keymap_name= buildKeyspaceMapName(name, level);
+  string keymap_name= buildKeyspaceMapName(ks_def.name, level);
   map<string, tr1::shared_ptr<Keyspace> >::iterator key_it= keyspace_map.find(keymap_name);
   if (key_it == keyspace_map.end())
   {
     getKeyspaces();
-    set<string>::iterator it= key_spaces.find(name);
+    vector<KsDef>::iterator it= find(key_spaces.begin(), key_spaces.end(), ks_def);
     if (it != key_spaces.end())
     {
-      map< string, map<string, string> > keyspace_desc;
-      thrift_client->describe_keyspace(keyspace_desc, name);
-      tr1::shared_ptr<Keyspace> ret(new Keyspace(this, name, keyspace_desc, level));
+      tr1::shared_ptr<Keyspace> ret(new Keyspace(this, ks_def, level));
       keyspace_map[keymap_name]= ret;
     }
     else

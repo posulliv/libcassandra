@@ -65,12 +65,13 @@ public:
   /**
    * @return the keyspace with the given name.
    */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const org::apache::cassandra::KsDef &ks_def);
 
   /**
    * @return the keyspace with the given name at the given consistency level.
    */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel level);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const org::apache::cassandra::KsDef &ks_def, 
+											 org::apache::cassandra::ConsistencyLevel level);
 
   /**
    * Remove the given keyspace.
@@ -126,7 +127,7 @@ private:
   std::string cluster_name;
   std::string server_version;
   std::string config_file;
-  std::set<std::string> key_spaces;
+  std::vector<org::apache::cassandra::KsDef> key_spaces;
   std::map<std::string, std::string> token_map;
   std::map<std::string, std::tr1::shared_ptr<Keyspace> > keyspace_map;
 
