@@ -26,9 +26,9 @@ protected:
   {
     const string host("localhost");
     int port= 9160;
-	cf= tr1::shared_ptr<CassandraFactory>(new CassandraFactory(host, port));
-	c= tr1::shared_ptr<Cassandra>(cf->create());
-	ks_name.assign("Keyspace1");
+    cf= tr1::shared_ptr<CassandraFactory>(new CassandraFactory(host, port));
+    c= tr1::shared_ptr<Cassandra>(cf->create());
+    ks_name.assign("Keyspace1");
   }
 
   tr1::shared_ptr<CassandraFactory> cf;
