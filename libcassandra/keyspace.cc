@@ -78,8 +78,6 @@ void Keyspace::insertColumn(const string &key,
 void Keyspace::remove(const string &key,
                       const ColumnPath &col_path)
 {
-  /* validate the column path */
-  validateColumnPath(col_path);
   client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
 }
 
