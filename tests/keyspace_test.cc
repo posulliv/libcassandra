@@ -63,6 +63,19 @@ TEST_F(KeyspaceTest, DeleteColumn)
 }
 
 
+TEST_F(KeyspaceTest, DeleteEntireRow)
+{
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  const string mock_data("this is mock data being inserted...");
+  ks->insertColumn("sarah", "Standard1", "third", mock_data);
+  string res= ks->getColumnValue("sarah", "Standard1", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+  ks->remove("sarah", "Standard1", "", "");
+  ASSERT_THROW(ks->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+}
+
+
 TEST_F(KeyspaceTest, InsertSuperColumn)
 {
   tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
