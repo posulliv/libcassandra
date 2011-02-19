@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <iostream>
 #include <sstream>
 
 #include <protocol/TBinaryProtocol.h>
@@ -19,6 +20,8 @@
 
 #include <libgenthrift/Cassandra.h>
 #include <libcassandra/cassandra.h>
+#include <libcassandra/cassandra_factory.h>
+#include <libcassandra/keyspace.h>
 
 using namespace std;
 using namespace libcassandra;
@@ -98,4 +101,30 @@ TEST(Cassandra, GetKeyspaces)
   set<string> keyspaces= c.getKeyspaces();
   /* we assume the test server only has 2 keyspaces: system and default */
   EXPECT_EQ(2, keyspaces.size());
+}
+
+
+TEST(Cassandra, GetSpecificKeyspace)
+{
+  const string host("localhost");
+  int port= 9160;
+  CassandraFactory cf(host, port);
+  tr1::shared_ptr<Cassandra> c(cf.create());
+  const string ks_name("Keyspace1");
+  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
+  EXPECT_EQ(ks_name, ks->getName());
+  EXPECT_STREQ(ks_name.c_str(), ks->getName().c_str());
+}
+
+
+TEST(Cassandra, GetTokenMap)
+{
+  const string host("localhost");
+  int port= 9160;
+  CassandraFactory cf(host, port);
+  tr1::shared_ptr<Cassandra> c(cf.create());
+  map<string, string> token_map= c->getTokenMap(false);
+  EXPECT_EQ(1, token_map.size());
+  token_map= c->getTokenMap(true);
+  EXPECT_EQ(1, token_map.size());
 }

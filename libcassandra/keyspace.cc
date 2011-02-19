@@ -9,6 +9,7 @@
 
 #include <time.h>
 
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -77,8 +78,6 @@ void Keyspace::insertColumn(const string &key,
 void Keyspace::remove(const string &key,
                       const ColumnPath &col_path)
 {
-  /* validate the column path */
-  validateColumnPath(col_path);
   client->getCassandra()->remove(name, key, col_path, createTimestamp(), level);
 }
 
@@ -92,7 +91,7 @@ void Keyspace::remove(const string &key,
   col_path.column_family.assign(column_family);
   if (! super_column_name.empty()) 
   {
-    col_path.column.assign(super_column_name);
+    col_path.super_column.assign(super_column_name);
     col_path.__isset.super_column= true;
   }
   if (! column_name.empty()) 
@@ -357,7 +356,7 @@ void Keyspace::validateColumnPath(const ColumnPath &col_path)
   map<string, string> cf_define= keyspace_desc[col_path.column_family];
   if (cf_define.empty())
   {
-    /* throw an exception */
+	/* throw an exception */
     throw(InvalidRequestException());
   }
   string type= cf_define["Type"];

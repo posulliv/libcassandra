@@ -1,3 +1,11 @@
+/*
+ * LibCassandra
+ * Copyright (C) 2010 Padraig O'Sullivan
+ * All rights reserved.
+ *
+ * Use and distribution licensed under the BSD license. See
+ * the COPYING file in the parent directory for full text.
+ */
 
 #include <string>
 
@@ -35,7 +43,7 @@ TEST(CassandraFactory, CreateClientNoServer)
 {
   const string url("localhost:9161");
   CassandraFactory cf(url);
-  ASSERT_THROW(tr1::shared_ptr<Cassandra> client= cf.create(), apache::thrift::transport::TTransportException);
+  ASSERT_THROW(cf.create(), apache::thrift::transport::TTransportException);
 }
 
 
