@@ -11,6 +11,7 @@ nobase_include_HEADERS+= \
 			 libcassandra/cassandra_host.h \
 			 libcassandra/exception.h \
 			 libcassandra/keyspace.h \
+			 libcassandra/keyspace_definition.h \
 			 libcassandra/keyspace_factory.h \
 			 libcassandra/util_functions.h
 
