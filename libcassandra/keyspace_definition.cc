@@ -26,25 +26,25 @@ KeyspaceDefinition::KeyspaceDefinition()
 {}
 
 
-string KeyspaceDefintion::getName() const
+string KeyspaceDefinition::getName() const
 {
   return name;
 }
 
 
-string KeyspaceDefintion::getStrategyClass() const
+string KeyspaceDefinition::getStrategyClass() const
 {
   return strategy_class;
 }
 
 
-map<string, string> KeyspaceDefintion::getStrategyOptions() const
+map<string, string> KeyspaceDefinition::getStrategyOptions() const
 {
   return strategy_options;
 }
 
 
-int32_t KeyspaceDefintion::getReplicationFactor() const
+int32_t KeyspaceDefinition::getReplicationFactor() const
 {
   return replication_factor;
 }

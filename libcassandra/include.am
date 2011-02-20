@@ -9,6 +9,7 @@ nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
 			 libcassandra/cassandra_factory.h \
 			 libcassandra/cassandra_host.h \
+			 libcassandra/column_family_definition.h \
 			 libcassandra/exception.h \
 			 libcassandra/keyspace.h \
 			 libcassandra/keyspace_definition.h \
