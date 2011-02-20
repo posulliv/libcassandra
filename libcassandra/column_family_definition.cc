@@ -106,9 +106,21 @@ string ColumnFamilyDefinition::getName() const
 }
 
 
+void ColumnFamilyDefinition::setName(const string& cf_name)
+{
+  name.assign(cf_name);
+}
+
+
 string ColumnFamilyDefinition::getKeyspaceName() const
 {
   return keyspace_name;
+}
+
+
+void ColumnFamilyDefinition::setKeyspaceName(const string& ks_name)
+{
+  keyspace_name.assign(ks_name);
 }
 
 
@@ -118,9 +130,33 @@ string ColumnFamilyDefinition::getColumnType() const
 }
 
 
+void ColumnFamilyDefinition::setColumnType(const string& col_type)
+{
+  column_type.assign(col_type);
+}
+
+
+bool ColumnFamilyDefinition::isColumnTypeSet() const
+{
+  return (! column_type.empty());
+}
+
+
 string ColumnFamilyDefinition::getComparatorType() const
 {
   return comparator_type;
+}
+
+
+void ColumnFamilyDefinition::setComparatorType(const string& comp_type)
+{
+  comparator_type.assign(comp_type);
+}
+
+
+bool ColumnFamilyDefinition::isComparatorTypeSet() const
+{
+  return (! comparator_type.empty());
 }
 
 
@@ -130,9 +166,33 @@ string ColumnFamilyDefinition::getSubComparatorType() const
 }
 
 
+void ColumnFamilyDefinition::setSubComparatorType(const string& sub_comp_type)
+{
+  sub_comparator_type.assign(sub_comp_type);
+}
+
+
+bool ColumnFamilyDefinition::isSubComparatorTypeSet() const
+{
+  return (! sub_comparator_type.empty());
+}
+
+
 string ColumnFamilyDefinition::getComment() const
 {
   return comment;
+}
+
+
+void ColumnFamilyDefinition::setComment(const string& comm)
+{
+  comment.assign(comm);
+}
+
+
+bool ColumnFamilyDefinition::isCommentSet() const
+{
+  return (! comment.empty());
 }
 
 
@@ -142,9 +202,21 @@ double ColumnFamilyDefinition::getRowCacheSize() const
 }
 
 
+void ColumnFamilyDefinition::setRowCacheSize(double size)
+{
+  row_cache_size= size;
+}
+
+
 int32_t ColumnFamilyDefinition::getRowCacheSavePeriod() const
 {
   return row_cache_save_period_in_seconds;
+}
+
+
+void ColumnFamilyDefinition::setRowCacheSavePeriod(int32_t save_period)
+{
+  row_cache_save_period_in_seconds= save_period;
 }
 
 
@@ -154,9 +226,21 @@ double ColumnFamilyDefinition::getKeyCacheSize() const
 }
 
 
+void ColumnFamilyDefinition::setKeyCacheSize(double size)
+{
+  key_cache_size= size;
+}
+
+
 double ColumnFamilyDefinition::getReadRepairChance() const
 {
   return read_repair_chance;
+}
+
+
+void ColumnFamilyDefinition::setReadRepairChance(double chance)
+{
+  read_repair_chance= chance;
 }
 
 
@@ -166,9 +250,21 @@ int32_t ColumnFamilyDefinition::getGcGraceSeconds() const
 }
 
 
+void ColumnFamilyDefinition::setGcGraceSeconds(int32_t gc_secs)
+{
+  gc_grace_seconds= gc_secs;
+}
+
+
 string ColumnFamilyDefinition::getDefaultValidationClass() const
 {
   return default_validation_class;
+}
+
+
+void ColumnFamilyDefinition::setDefaultValidationClass(const string& class_name)
+{
+  default_validation_class.assign(class_name);
 }
 
 
@@ -178,9 +274,21 @@ int32_t ColumnFamilyDefinition::getId() const
 }
 
 
+void ColumnFamilyDefinition::setId(int32_t new_id)
+{
+  id= new_id;
+}
+
+
 int32_t ColumnFamilyDefinition::getMaxCompactionThreshold() const
 {
   return max_compaction_threshold;
+}
+
+
+void ColumnFamilyDefinition::setMaxCompactionThreshold(int32_t threshold)
+{
+  max_compaction_threshold= threshold;
 }
 
 
@@ -190,9 +298,21 @@ int32_t ColumnFamilyDefinition::getMinCompactionThreshold() const
 }
 
 
+void ColumnFamilyDefinition::setMinCompactionThreshold(int32_t threshold)
+{
+  min_compaction_threshold= threshold;
+}
+
+
 int32_t ColumnFamilyDefinition::getMemtableFlushAfterMins() const
 {
   return memtable_flush_after_mins;
+}
+
+
+void ColumnFamilyDefinition::setMemtableFlushAfterMins(int32_t flush)
+{
+  memtable_flush_after_mins= flush;
 }
 
 
@@ -202,7 +322,20 @@ double ColumnFamilyDefinition::getMemtableOperationsInMillions() const
 }
 
 
+void ColumnFamilyDefinition::setMemtableOperationsInMillions(double ops)
+{
+  memtable_operations_in_millions= ops;
+}
+
+
 int32_t ColumnFamilyDefinition::getMemtableThroughputInMb() const
 {
   return memtable_throughput_in_mb;
 }
+
+
+void ColumnFamilyDefinition::setMemtableThroughputInMb(int32_t throughput)
+{
+  memtable_throughput_in_mb= throughput;
+}
+

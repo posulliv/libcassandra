@@ -56,90 +56,146 @@ public:
    */
   std::string getName() const;
 
+  void setName(const std::string& cf_name);
+
   /**
    * @return keyspace name
    */
   std::string getKeyspaceName() const;
+
+  void setKeyspaceName(const std::string& ks_name);
 
   /**
    * @return column type
    */
   std::string getColumnType() const;
 
+  void setColumnType(const std::string& col_type);
+
+  /**
+   * @return true if column type is set; false otherwise
+   */
+  bool isColumnTypeSet() const;
+
   /**
    * @return comparator type
    */
   std::string getComparatorType() const;
+
+  void setComparatorType(const std::string& comp_type);
+
+  /**
+   * @return true if comparator type is set; false otherwise
+   */
+  bool isComparatorTypeSet() const;
 
   /**
    * @return sub-comparator type
    */
   std::string getSubComparatorType() const;
 
+  void setSubComparatorType(const std::string& sub_comp_type);
+
+  /**
+   * @return true if sub comparator type is set; false otherwise
+   */
+  bool isSubComparatorTypeSet() const;
+
   /**
    * @return comment
    */
   std::string getComment() const;
+
+  void setComment(const std::string& comm);
+
+  /**
+   * @return true if comment is set; false otherwise
+   */
+  bool isCommentSet() const;
 
   /**
    * @return row cache size
    */
   double getRowCacheSize() const;
 
+  void setRowCacheSize(double size);
+
   /**
    * @return row cache save period in seconds
    */
   int32_t getRowCacheSavePeriod() const;
+
+  void setRowCacheSavePeriod(int32_t save_period);
 
   /**
    * @return key cache size
    */
   double getKeyCacheSize() const;
 
+  void setKeyCacheSize(double size);
+
   /**
    * @return read repair chance
    */
   double getReadRepairChance() const;
+
+  void setReadRepairChance(double chance);
 
   /**
    * @return garbage collection grace seconds
    */
   int32_t getGcGraceSeconds() const;
 
+  void setGcGraceSeconds(int32_t gc_secs);
+
   /**
    * @return default validation class
    */
   std::string getDefaultValidationClass() const;
+
+  void setDefaultValidationClass(const std::string& class_name);
 
   /**
    * @return column family ID
    */
   int32_t getId() const;
 
+  void setId(int32_t new_id);
+
   /**
    * @return max compaction threshold
    */
   int32_t getMaxCompactionThreshold() const;
+
+  void setMaxCompactionThreshold(int32_t threshold);
 
   /**
    * @return min compaction threshold
    */
   int32_t getMinCompactionThreshold() const;
 
+  void setMinCompactionThreshold(int32_t threshold);
+
   /**
    * @return memtable flush after mins
    */
   int32_t getMemtableFlushAfterMins() const;
+
+  void setMemtableFlushAfterMins(int32_t flush);
 
   /**
    * @return memtable operations in millions
    */
   double getMemtableOperationsInMillions() const;
 
+  void setMemtableOperationsInMillions(double ops);
+
   /**
    * @return memtable throughput in megabytes
    */
   int32_t getMemtableThroughputInMb() const;
+
+  void setMemtableThroughputInMb(int32_t throughput);
 
 private:
 
