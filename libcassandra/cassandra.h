@@ -67,17 +67,263 @@ public:
   /**
    * @return the keyspace with the given name.
    */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string& name);
 
   /**
    * @return the keyspace with the given name at the given consistency level.
    */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel::type level);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string& name, org::apache::cassandra::ConsistencyLevel::type level);
 
   /**
    * Remove the given keyspace.
    */
   void removeKeyspace(std::tr1::shared_ptr<Keyspace> k);
+
+  /**
+   * Insert a column, possibly inside a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   * @param[in] level consistency level
+   */
+  void insertColumn(const std::string& key,
+                    const std::string& column_family,
+                    const std::string& super_column_name,
+                    const std::string& column_name,
+                    const std::string& value,
+                    org::apache::cassandra::ConsistencyLevel::type level);
+
+  /**
+   * Insert a column, possibly inside a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
+  void insertColumn(const std::string& key,
+                    const std::string& column_family,
+                    const std::string& super_column_name,
+                    const std::string& column_name,
+                    const std::string& value);
+
+  /**
+   * Insert a column, directly in a columnfamily
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
+  void insertColumn(const std::string& key,
+                    const std::string& column_family,
+                    const std::string& column_name,
+                    const std::string& value);
+
+  /**
+   * Removes all the columns that match the given column path
+   *
+   * @param[in] key the column or super column key
+   * @param[in] col_path the path to the column or super column
+   * @param[in] level consistency level
+   */
+  void remove(const std::string& key,
+              const org::apache::cassandra::ColumnPath& col_path,
+              org::apache::cassandra::ConsistencyLevel::type level);
+
+  /**
+   * Removes all the columns that match the given column path
+   *
+   * @param[in] key the column or super column key
+   * @param[in] col_path the path to the column or super column
+   */
+  void remove(const std::string& key,
+              const org::apache::cassandra::ColumnPath& col_path);
+
+  /**
+   * Removes all the columns that match the given arguments
+   * Can remove all under a column family, an individual column or supercolumn under a column family, or an individual column under a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   */
+  void remove(const std::string& key,
+              const std::string& column_family,
+              const std::string& super_column_name,
+              const std::string& column_name);
+
+  /**
+   * Remove a column, possibly inside a supercolumn
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   */
+  void removeColumn(const std::string& key,
+                    const std::string& column_family,
+                    const std::string& super_column_name,
+                    const std::string& column_name);
+
+
+  /**
+   * Remove a super column and all columns under it
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name
+   */
+  void removeSuperColumn(const std::string& key,
+                         const std::string& column_family,
+                         const std::string& super_column_name);
+
+  /**
+   * Rertieve a column.
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   * @param[in] level consistency level
+   * @return a column
+   */
+  org::apache::cassandra::Column getColumn(const std::string& key,
+                                           const std::string& column_family,
+                                           const std::string& super_column_name,
+                                           const std::string& column_name,
+                                           org::apache::cassandra::ConsistencyLevel::type level);
+
+  /**
+   * Rertieve a column.
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   * @return a column
+   */
+  org::apache::cassandra::Column getColumn(const std::string& key,
+                                           const std::string& column_family,
+                                           const std::string& super_column_name,
+                                           const std::string& column_name);
+
+  /**
+   * Retrieve a column
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name (optional)
+   * @return a column
+   */
+  org::apache::cassandra::Column getColumn(const std::string& key,
+                                           const std::string& column_family,
+                                           const std::string& column_name);
+
+  /**
+   * Retrieve a column value
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] super_column_name the super column name (optional)
+   * @param[in] column_name the column name (optional)
+   * @return the value for the column that corresponds to the given parameters
+   */
+  std::string getColumnValue(const std::string& key,
+                             const std::string& column_family,
+                             const std::string& super_column_name,
+                             const std::string& column_name);
+
+  /**
+   * Retrieve a column value
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name (optional)
+   * @return the value for the column that corresponds to the given parameters
+   */
+  std::string getColumnValue(const std::string& key,
+                             const std::string& column_family,
+                             const std::string& column_name);
+
+  org::apache::cassandra::SuperColumn getSuperColumn(const std::string& key,
+                                                     const std::string& column_family,
+                                                     const std::string& super_column_name,
+                                                     org::apache::cassandra::ConsistencyLevel::type level);
+
+  org::apache::cassandra::SuperColumn getSuperColumn(const std::string& key,
+                                                     const std::string& column_family,
+                                                     const std::string& super_column_name);
+
+  std::vector<org::apache::cassandra::Column> getSliceNames(const std::string& key,
+                                                            const org::apache::cassandra::ColumnParent& col_parent,
+                                                            org::apache::cassandra::SlicePredicate& pred,
+                                                            org::apache::cassandra::ConsistencyLevel::type level);
+
+  std::vector<org::apache::cassandra::Column> getSliceNames(const std::string& key,
+                                                            const org::apache::cassandra::ColumnParent& col_parent,
+                                                            org::apache::cassandra::SlicePredicate& pred);
+
+  std::vector<org::apache::cassandra::Column> getSliceRange(const std::string& key,
+                                                            const org::apache::cassandra::ColumnParent& col_parent,
+                                                            org::apache::cassandra::SlicePredicate& pred,
+                                                            org::apache::cassandra::ConsistencyLevel::type level);
+
+  std::vector<org::apache::cassandra::Column> getSliceRange(const std::string& key,
+                                                            const org::apache::cassandra::ColumnParent& col_parent,
+                                                            org::apache::cassandra::SlicePredicate& pred);
+
+  std::map<std::string, std::vector<org::apache::cassandra::Column> >
+  getRangeSlice(const org::apache::cassandra::ColumnParent& col_parent,
+                const org::apache::cassandra::SlicePredicate& pred,
+                const std::string& start,
+                const std::string& finish,
+                const int32_t row_count,
+                org::apache::cassandra::ConsistencyLevel::type level);
+
+  std::map<std::string, std::vector<org::apache::cassandra::Column> >
+  getRangeSlice(const org::apache::cassandra::ColumnParent& col_parent,
+                const org::apache::cassandra::SlicePredicate& pred,
+                const std::string& start,
+                const std::string& finish,
+                const int32_t row_count);
+
+  std::map<std::string, std::vector<org::apache::cassandra::SuperColumn> >
+  getSuperRangeSlice(const org::apache::cassandra::ColumnParent& col_parent,
+                     const org::apache::cassandra::SlicePredicate& pred,
+                     const std::string& start,
+                     const std::string& finish,
+                     const int32_t count,
+                     org::apache::cassandra::ConsistencyLevel::type level);
+
+  std::map<std::string, std::vector<org::apache::cassandra::SuperColumn> >
+  getSuperRangeSlice(const org::apache::cassandra::ColumnParent& col_parent,
+                     const org::apache::cassandra::SlicePredicate& pred,
+                     const std::string& start,
+                     const std::string& finish,
+                     const int32_t count);
+
+
+  /**
+   * @return number of columns in a row or super column
+   */
+  int32_t getCount(const std::string& key,
+                   const org::apache::cassandra::ColumnParent& col_parent,
+                   const org::apache::cassandra::SlicePredicate& pred,
+                   org::apache::cassandra::ConsistencyLevel::type level);
+
+  /**
+   * @return number of columns in a row or super column
+   */
+  int32_t getCount(const std::string& key,
+                   const org::apache::cassandra::ColumnParent& col_parent,
+                   const org::apache::cassandra::SlicePredicate& pred);
+
 
   /**
    * @return the target server cluster name.
@@ -107,6 +353,11 @@ public:
 private:
 
   /**
+   * @return a timestamp in micro-seconds
+   */
+  int64_t createTimestamp();
+
+  /**
    * Creates a unique map name for the keyspace and its consistency level
    */
   std::string buildKeyspaceMapName(std::string keyspace, int level);
@@ -116,6 +367,13 @@ private:
    * @return true if found; false otherwise
    */
   bool findKeyspace(const std::string& name);
+
+  std::vector<org::apache::cassandra::Column>
+  getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
+
+  std::vector<org::apache::cassandra::SuperColumn>
+  getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
+
 
   org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;

@@ -32,9 +32,9 @@ public:
    * @return a shared ptr which points to a Keyspace class
    */
   std::tr1::shared_ptr<Keyspace> create(Cassandra *client,
-                                        const std::string &name,
-                                        const std::map< std::string, std::map<std::string, std::string> > &descrip,
-                                        org::apache::cassandra::ConsistencyLevel level);
+                                        const std::string& name,
+                                        const KeyspaceDefinition& def,
+                                        org::apache::cassandra::ConsistencyLevel::type level);
 
 };
 
