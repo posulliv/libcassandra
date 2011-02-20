@@ -33,13 +33,13 @@ using namespace boost;
 
 
 Keyspace::Keyspace(Cassandra *in_client,
-                   const string &in_name,
-                   const map< string, map<string, string> > &in_desc,
-                   ConsistencyLevel in_level)
+                   const string& in_name,
+                   const KeyspaceDefinition& in_desc,
+                   ConsistencyLevel::type in_level)
   :
     client(in_client),
     name(in_name),
-    keyspace_desc(in_desc),
+    keyspace_def(in_desc),
     level(in_level)
 {}
 
@@ -337,9 +337,9 @@ ConsistencyLevel Keyspace::getConsistencyLevel() const
 }
 
 
-map< string, map<string, string> > Keyspace::getDescription()
+map< string, map<string, string> > Keyspace::getDefinition()
 {
-  return keyspace_desc;
+  return keyspace_def;
 }
 
 

@@ -16,6 +16,8 @@
 
 #include "libgenthrift/cassandra_types.h"
 
+#include "libcassandra/keyspace_definition.h"
+
 namespace libcassandra
 {
 
@@ -28,8 +30,8 @@ public:
 
   Keyspace(Cassandra *in_client,
            const std::string &in_name,
-           const std::map< std::string, std::map<std::string, std::string> > &in_desc,
-           org::apache::cassandra::ConsistencyLevel in_level);
+           const KeyspaceDefinition& in_desc,
+           org::apache::cassandra::ConsistencyLevel::type in_level);
   ~Keyspace() {}
 
   /**
@@ -201,12 +203,12 @@ public:
   /**
    * @return the consistency level for this keyspace
    */
-  org::apache::cassandra::ConsistencyLevel getConsistencyLevel() const;
+  org::apache::cassandra::ConsistencyLevel::type getConsistencyLevel() const;
 
   /**
-   * @return the keyspace description
+   * @return the keyspace definition 
    */
-  std::map< std::string, std::map<std::string, std::string> > getDescription();
+  KeyspaceDefinition getDefinition();
 
 private:
 
@@ -229,9 +231,9 @@ private:
 
   std::string name;
 
-  std::map< std::string, std::map<std::string, std::string> > keyspace_desc;
+  KeyspaceDefinition keyspace_def;
 
-  org::apache::cassandra::ConsistencyLevel level;
+  org::apache::cassandra::ConsistencyLevel::type level;
 
 };
 

@@ -90,17 +90,6 @@ public:
   std::string getServerVersion();
 
   /**
-   * @return the configuration file.
-   */
-  std::string getConfigFile();
-
-  /**
-   * @param[in] fresh whether to refresh the token map or not
-   * @return a map of the tokens in this cluster
-   */
-  std::map<std::string, std::string> getTokenMap(bool fresh);
-
-  /**
    * @return a string property from the server
    */
   void getStringProperty(std::string &return_val, const std::string &property);
@@ -121,6 +110,12 @@ private:
    * Creates a unique map name for the keyspace and its consistency level
    */
   std::string buildKeyspaceMapName(std::string keyspace, int level);
+
+  /**
+   * Finds the given keyspace in the list of keyspace definitions
+   * @return true if found; false otherwise
+   */
+  bool findKeyspace(const std::string& name);
 
   org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;
