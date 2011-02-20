@@ -208,6 +208,12 @@ void ColumnFamilyDefinition::setRowCacheSize(double size)
 }
 
 
+bool ColumnFamilyDefinition::isRowCacheSizeSet() const
+{
+  return (row_cache_size > 0 ? true : false);
+}
+
+
 int32_t ColumnFamilyDefinition::getRowCacheSavePeriod() const
 {
   return row_cache_save_period_in_seconds;
@@ -217,6 +223,12 @@ int32_t ColumnFamilyDefinition::getRowCacheSavePeriod() const
 void ColumnFamilyDefinition::setRowCacheSavePeriod(int32_t save_period)
 {
   row_cache_save_period_in_seconds= save_period;
+}
+
+
+bool ColumnFamilyDefinition::isRowCacheSavePeriodSet() const
+{
+  return (row_cache_save_period_in_seconds > 0 ? true : false);
 }
 
 
@@ -232,6 +244,12 @@ void ColumnFamilyDefinition::setKeyCacheSize(double size)
 }
 
 
+bool ColumnFamilyDefinition::isKeyCacheSizeSet() const
+{
+  return (key_cache_size > 0 ? true : false);
+}
+
+
 double ColumnFamilyDefinition::getReadRepairChance() const
 {
   return read_repair_chance;
@@ -241,6 +259,12 @@ double ColumnFamilyDefinition::getReadRepairChance() const
 void ColumnFamilyDefinition::setReadRepairChance(double chance)
 {
   read_repair_chance= chance;
+}
+
+
+bool ColumnFamilyDefinition::isReadRepairChanceSet() const
+{
+  return (read_repair_chance > 0 ? true : false);
 }
 
 
@@ -256,6 +280,12 @@ void ColumnFamilyDefinition::setGcGraceSeconds(int32_t gc_secs)
 }
 
 
+bool ColumnFamilyDefinition::isGcGraceSecondsSet() const
+{
+  return (gc_grace_seconds > 0 ? true : false);
+}
+
+
 string ColumnFamilyDefinition::getDefaultValidationClass() const
 {
   return default_validation_class;
@@ -265,6 +295,12 @@ string ColumnFamilyDefinition::getDefaultValidationClass() const
 void ColumnFamilyDefinition::setDefaultValidationClass(const string& class_name)
 {
   default_validation_class.assign(class_name);
+}
+
+
+bool ColumnFamilyDefinition::isDefaultValidationClassSet() const
+{
+  return (! default_validation_class.empty());
 }
 
 
@@ -280,6 +316,12 @@ void ColumnFamilyDefinition::setId(int32_t new_id)
 }
 
 
+bool ColumnFamilyDefinition::isIdSet() const
+{
+  return (id > 0 ? true : false);
+}
+
+
 int32_t ColumnFamilyDefinition::getMaxCompactionThreshold() const
 {
   return max_compaction_threshold;
@@ -289,6 +331,12 @@ int32_t ColumnFamilyDefinition::getMaxCompactionThreshold() const
 void ColumnFamilyDefinition::setMaxCompactionThreshold(int32_t threshold)
 {
   max_compaction_threshold= threshold;
+}
+
+
+bool ColumnFamilyDefinition::isMaxCompactionThresholdSet() const
+{
+  return (max_compaction_threshold > 0 ? true : false);
 }
 
 
@@ -304,6 +352,12 @@ void ColumnFamilyDefinition::setMinCompactionThreshold(int32_t threshold)
 }
 
 
+bool ColumnFamilyDefinition::isMinCompactionThresholdSet() const
+{
+  return (min_compaction_threshold > 0 ? true : false);
+}
+
+
 int32_t ColumnFamilyDefinition::getMemtableFlushAfterMins() const
 {
   return memtable_flush_after_mins;
@@ -313,6 +367,12 @@ int32_t ColumnFamilyDefinition::getMemtableFlushAfterMins() const
 void ColumnFamilyDefinition::setMemtableFlushAfterMins(int32_t flush)
 {
   memtable_flush_after_mins= flush;
+}
+
+
+bool ColumnFamilyDefinition::isMemtableFlushAfterMinsSet() const
+{
+  return (memtable_flush_after_mins > 0 ? true : false);
 }
 
 
@@ -328,6 +388,12 @@ void ColumnFamilyDefinition::setMemtableOperationsInMillions(double ops)
 }
 
 
+bool ColumnFamilyDefinition::isMemtableOperationsInMillionsSet() const
+{
+  return (memtable_operations_in_millions > 0 ? true : false);
+}
+
+
 int32_t ColumnFamilyDefinition::getMemtableThroughputInMb() const
 {
   return memtable_throughput_in_mb;
@@ -337,5 +403,11 @@ int32_t ColumnFamilyDefinition::getMemtableThroughputInMb() const
 void ColumnFamilyDefinition::setMemtableThroughputInMb(int32_t throughput)
 {
   memtable_throughput_in_mb= throughput;
+}
+
+
+bool ColumnFamilyDefinition::isMemtableThroughputInMbSet() const
+{
+  return (memtable_throughput_in_mb > 0 ? true : false);
 }
 

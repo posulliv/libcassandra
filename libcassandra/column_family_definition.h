@@ -121,11 +121,21 @@ public:
   void setRowCacheSize(double size);
 
   /**
+   * @return true if row cache size is > 0; false otherwise
+   */
+  bool isRowCacheSizeSet() const;
+
+  /**
    * @return row cache save period in seconds
    */
   int32_t getRowCacheSavePeriod() const;
 
   void setRowCacheSavePeriod(int32_t save_period);
+
+  /**
+   * @return true if row cache save period is > 0; false otherwise
+   */
+  bool isRowCacheSavePeriodSet() const;
 
   /**
    * @return key cache size
@@ -135,11 +145,21 @@ public:
   void setKeyCacheSize(double size);
 
   /**
+   * @return true if key cache size is > 0; false otherwise
+   */
+  bool isKeyCacheSizeSet() const;
+
+  /**
    * @return read repair chance
    */
   double getReadRepairChance() const;
 
   void setReadRepairChance(double chance);
+
+  /**
+   * @return true if read repair chance > 0; false otherwise
+   */
+  bool isReadRepairChanceSet() const;
 
   /**
    * @return garbage collection grace seconds
@@ -149,11 +169,21 @@ public:
   void setGcGraceSeconds(int32_t gc_secs);
 
   /**
+   * @return true if gc grace seconds > 0; false otherwise
+   */
+  bool isGcGraceSecondsSet() const;
+
+  /**
    * @return default validation class
    */
   std::string getDefaultValidationClass() const;
 
   void setDefaultValidationClass(const std::string& class_name);
+
+  /**
+   * @return true if default validation class is set; false otherwise
+   */
+  bool isDefaultValidationClassSet() const;
 
   /**
    * @return column family ID
@@ -163,11 +193,21 @@ public:
   void setId(int32_t new_id);
 
   /**
+   * @return true if id > 0; false otherwise
+   */
+  bool isIdSet() const;
+
+  /**
    * @return max compaction threshold
    */
   int32_t getMaxCompactionThreshold() const;
 
   void setMaxCompactionThreshold(int32_t threshold);
+
+  /**
+   * @return true if max compaction threshold > 0; false otherwise
+   */
+  bool isMaxCompactionThresholdSet() const;
 
   /**
    * @return min compaction threshold
@@ -177,11 +217,21 @@ public:
   void setMinCompactionThreshold(int32_t threshold);
 
   /**
+   * @return true if min compaction threshold > 0; false otherwise
+   */
+  bool isMinCompactionThresholdSet() const;
+
+  /**
    * @return memtable flush after mins
    */
   int32_t getMemtableFlushAfterMins() const;
 
   void setMemtableFlushAfterMins(int32_t flush);
+
+  /**
+   * @return true if memtable flush mins > 0; false otherwise
+   */
+  bool isMemtableFlushAfterMinsSet() const;
 
   /**
    * @return memtable operations in millions
@@ -191,11 +241,21 @@ public:
   void setMemtableOperationsInMillions(double ops);
 
   /**
+   * @return true if memtable ops > 0; false otherwise
+   */
+  bool isMemtableOperationsInMillionsSet() const;
+
+  /**
    * @return memtable throughput in megabytes
    */
   int32_t getMemtableThroughputInMb() const;
 
   void setMemtableThroughputInMb(int32_t throughput);
+
+  /**
+   * @return true if memtable throughput > 0; false otherwise
+   */
+  bool isMemtableThroughputInMbSet() const;
 
 private:
 

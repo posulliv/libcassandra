@@ -83,6 +83,11 @@ CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
     thrift_cf_def.comment.assign(cf_def.getComment());
     thrift_cf_def.__isset.comment= true;
   }
+  if (cf_def.isRowCacheSizeSet())
+  {
+    thrift_cf_def.row_cache_size= cf_def.getRowCacheSize();
+    thrift_cf_def.__isset.row_cache_size= true;
+  }
   return thrift_cf_def;
 }
 
