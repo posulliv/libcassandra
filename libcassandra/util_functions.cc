@@ -14,6 +14,7 @@
 #include "libcassandra/util_functions.h"
 
 using namespace std;
+using namespace org::apache::cassandra;
 
 namespace libcassandra
 {
@@ -40,6 +41,25 @@ string parseHostFromURL(const string &url)
     return url;
   }
   return url.substr(0, pos);
+}
+
+
+KsDef createKsDefObject(const KeyspaceDefinition& ks_def)
+{
+  KsDef thrift_ks_def;
+  thrift_ks_def.name.assign(ks_def.getName());
+  thrift_ks_def.strategy_class.assign(ks_def.getStrategyClass());
+  return thrift_ks_def;
+}
+
+
+CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
+{
+  CfDef thrift_cf_def;
+  thrift_cf_def.keyspace.assign(cf_def.getKeyspaceName());
+  thrift_cf_def.name.assign(cf_def.getName());
+  thrift_cf_def.column_type.assign(cf_def.getColumnType());
+  return thrift_cf_def;
 }
 
 } /* end namespace libcassandra */

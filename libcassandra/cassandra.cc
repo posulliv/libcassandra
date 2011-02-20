@@ -19,6 +19,7 @@
 #include "libcassandra/exception.h"
 #include "libcassandra/keyspace.h"
 #include "libcassandra/keyspace_definition.h"
+#include "libcassandra/util_functions.h"
 
 using namespace std;
 using namespace org::apache::cassandra;
@@ -521,10 +522,7 @@ tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name,
 string Cassandra::createColumnFamily(const ColumnFamilyDefinition& cf_def)
 {
   string schema_id;
-  CfDef thrift_cf_def;
-  thrift_cf_def.keyspace.assign(cf_def.getKeyspaceName());
-  thrift_cf_def.name.assign(cf_def.getName());
-  thrift_cf_def.column_type.assign(cf_def.getColumnType());
+  CfDef thrift_cf_def= createCfDefObject(cf_def);
   thrift_client->system_add_column_family(schema_id, thrift_cf_def);
   return schema_id;
 }
@@ -541,9 +539,7 @@ string Cassandra::dropColumnFamily(const string& cf_name)
 string Cassandra::createKeyspace(const KeyspaceDefinition& ks_def)
 {
   string ret;
-  KsDef thrift_ks_def;
-  thrift_ks_def.name.assign(ks_def.getName());
-  thrift_ks_def.strategy_class.assign(ks_def.getStrategyClass());
+  KsDef thrift_ks_def= createKsDefObject(ks_def);
   thrift_client->system_add_keyspace(ret, thrift_ks_def);
   return ret;
 }
@@ -553,14 +549,10 @@ string Cassandra::dropKeyspace(const string& ks_name)
 {
   string ret;
   thrift_client->system_drop_keyspace(ret, ks_name);
-  return ret;
-}
-
-
-void Cassandra::removeKeyspace(tr1::shared_ptr<Keyspace> k)
-{
-  string keymap_name= buildKeyspaceMapName(k->getName(), k->getConsistencyLevel());
+  /* TODO - keyspace map concept can probably be retired */
+  string keymap_name= buildKeyspaceMapName(ks_name, ConsistencyLevel::LOCAL_QUORUM);
   keyspace_map.erase(keymap_name);
+  return ret;
 }
 
 

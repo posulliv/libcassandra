@@ -75,11 +75,6 @@ public:
   std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string& name, org::apache::cassandra::ConsistencyLevel::type level);
 
   /**
-   * Remove the given keyspace.
-   */
-  void removeKeyspace(std::tr1::shared_ptr<Keyspace> k);
-
-  /**
    * Insert a column, possibly inside a supercolumn
    *
    * @param[in] key the column key
