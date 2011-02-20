@@ -61,7 +61,7 @@ TEST(Cassandra, ConsructorFromHostAndPort)
   const string host("localhost");
   int port= 9160;
   boost::shared_ptr<TTransport> socket(new TSocket(host, port));
-  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
   boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new CassandraClient(protocol);
   transport->open();
@@ -78,12 +78,12 @@ TEST(Cassandra, GetServerVersion)
   const string host("localhost");
   int port= 9160;
   boost::shared_ptr<TTransport> socket(new TSocket(host, port));
-  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
   boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new CassandraClient(protocol);
   transport->open();
   Cassandra c(client, host, port);
-  const string version("2.2.0");
+  const string version("19.4.0");
   EXPECT_EQ(version, c.getServerVersion());
   EXPECT_STREQ(version.c_str(), c.getServerVersion().c_str());
 }
@@ -94,7 +94,7 @@ TEST(Cassandra, GetClusterName)
   const string host("localhost");
   int port= 9160;
   boost::shared_ptr<TTransport> socket(new TSocket(host, port));
-  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
   boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new CassandraClient(protocol);
   transport->open();
@@ -110,7 +110,7 @@ TEST(Cassandra, GetKeyspaces)
   const string host("localhost");
   int port= 9160;
   boost::shared_ptr<TTransport> socket(new TSocket(host, port));
-  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
   boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CassandraClient *client= new CassandraClient(protocol);
   transport->open();
@@ -127,7 +127,7 @@ TEST(Cassandra, GetSpecificKeyspace)
   int port= 9160;
   CassandraFactory cf(host, port);
   tr1::shared_ptr<Cassandra> c(cf.create());
-  const string ks_name("Keyspace1");
+  const string ks_name("system");
   tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
   EXPECT_EQ(ks_name, ks->getName());
   EXPECT_STREQ(ks_name.c_str(), ks->getName().c_str());
