@@ -29,7 +29,7 @@ ColumnDefinition::ColumnDefinition()
 
 ColumnDefinition::ColumnDefinition(const string& in_name,
                                    const string& in_validation_class,
-                                   const IndexType in_index_type,
+                                   const IndexType::type in_index_type,
                                    const string& in_index_name)
   :
     name(in_name),
@@ -51,7 +51,7 @@ string ColumnDefinition::getValidationClass() const
 }
 
 
-IndexType ColumnDefinition::getIndexType() const
+IndexType::type ColumnDefinition::getIndexType() const
 {
   return index_type;
 }

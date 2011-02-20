@@ -29,7 +29,7 @@ public:
   ColumnDefinition();
   ColumnDefinition(const std::string& in_name,
                    const std::string& in_validation_class,
-                   const org::apache::cassandra::IndexType in_index_type,
+                   const org::apache::cassandra::IndexType::type in_index_type,
                    const std::string& in_index_name);
   ~ColumnDefinition() {}
 
@@ -46,7 +46,7 @@ public:
   /**
    * @return the index type for this column
    */
-  org::apache::cassandra::IndexType getIndexType() const;
+  org::apache::cassandra::IndexType::type getIndexType() const;
 
   /**
    * @return index name
@@ -59,7 +59,7 @@ private:
 
   std::string validation_class;
 
-  org::apache::cassandra::IndexType index_type;
+  org::apache::cassandra::IndexType::type index_type;
 
   std::string index_name;
 

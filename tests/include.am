@@ -13,7 +13,6 @@ tests_tests_SOURCES = \
 			      tests/cassandra_client_test.cc \
 			      tests/cassandra_factory_test.cc \
 			      tests/cassandra_host_test.cc \
-			      tests/keyspace_test.cc \
 			      tests/main.cc \
 			      tests/util_functions_test.cc 
 

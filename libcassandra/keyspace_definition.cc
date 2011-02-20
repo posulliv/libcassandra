@@ -12,7 +12,7 @@
 #include <map>
 
 #include "libcassandra/keyspace_definition.h"
-#include "libcassandra/column_family_defintion.h"
+#include "libcassandra/column_family_definition.h"
 
 using namespace libcassandra;
 using namespace std;
@@ -33,7 +33,7 @@ KeyspaceDefinition::KeyspaceDefinition(const string& in_name,
                                        const string& in_strategy_class,
                                        const map<string, string>& in_strategy_options,
                                        const int32_t in_replication_factor,
-                                       const vector<CfDef>& in_cf_defs)
+                                       vector<CfDef>& in_cf_defs)
   :
     name(in_name),
     strategy_class(in_strategy_class),

@@ -53,7 +53,7 @@ ColumnFamilyDefinition::ColumnFamilyDefinition(const string& in_keyspace_name,
                                                const double in_row_cache_size,
                                                const double in_key_cache_size,
                                                const double in_read_repair_chance,
-                                               const vector<ColumnDef>& in_column_metadata,
+                                               vector<ColumnDef>& in_column_metadata,
                                                const int32_t in_gc_grace_seconds,
                                                const string& in_default_validation_class,
                                                const int32_t in_id,
@@ -190,19 +190,19 @@ int32_t ColumnFamilyDefinition::getMinCompactionThreshold() const
 }
 
 
-int32_t ColumnFamilyDefinition::getMemTableFlushAfterMins() const
+int32_t ColumnFamilyDefinition::getMemtableFlushAfterMins() const
 {
   return memtable_flush_after_mins;
 }
 
 
-double ColumnFamilyDefinition::getMemTableOperationsInMillions() const
+double ColumnFamilyDefinition::getMemtableOperationsInMillions() const
 {
   return memtable_operations_in_millions;
 }
 
 
-int32_t ColumnFamilyDefinition::getMemTableThroughputInMb() const
+int32_t ColumnFamilyDefinition::getMemtableThroughputInMb() const
 {
   return memtable_throughput_in_mb;
 }

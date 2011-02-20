@@ -22,6 +22,7 @@
 #include <libcassandra/cassandra.h>
 #include <libcassandra/cassandra_factory.h>
 #include <libcassandra/keyspace.h>
+#include <libcassandra/keyspace_definition.h>
 
 using namespace std;
 using namespace libcassandra;
@@ -30,6 +31,22 @@ using namespace apache::thrift::protocol;
 using namespace apache::thrift::transport;
 using namespace org::apache::cassandra;
 using namespace boost;
+
+
+class ClientTest : public testing::Test
+{
+protected:
+  virtual void SetUp()
+  {
+    const string host("localhost");
+    int port= 9160;
+    cf= tr1::shared_ptr<CassandraFactory>(new CassandraFactory(host, port));
+    c= tr1::shared_ptr<Cassandra>(cf->create());
+  }
+
+  tr1::shared_ptr<CassandraFactory> cf;
+  tr1::shared_ptr<Cassandra> c;
+};
 
 
 TEST(Cassandra, DefaultConstructor)
@@ -98,7 +115,7 @@ TEST(Cassandra, GetKeyspaces)
   CassandraClient *client= new CassandraClient(protocol);
   transport->open();
   Cassandra c(client, host, port);
-  set<string> keyspaces= c.getKeyspaces();
+  vector<KeyspaceDefinition> keyspaces= c.getKeyspaces();
   /* we assume the test server only has 2 keyspaces: system and default */
   EXPECT_EQ(2, keyspaces.size());
 }
@@ -117,14 +134,47 @@ TEST(Cassandra, GetSpecificKeyspace)
 }
 
 
-TEST(Cassandra, GetTokenMap)
+TEST_F(ClientTest, InsertColumn)
 {
-  const string host("localhost");
-  int port= 9160;
-  CassandraFactory cf(host, port);
-  tr1::shared_ptr<Cassandra> c(cf.create());
-  map<string, string> token_map= c->getTokenMap(false);
-  EXPECT_EQ(1, token_map.size());
-  token_map= c->getTokenMap(true);
-  EXPECT_EQ(1, token_map.size());
+  const string mock_data("this is mock data being inserted...");
+  c->insertColumn("sarah", "Standard1", "third", mock_data);
+  string res= c->getColumnValue("sarah", "Standard1", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+}
+
+
+TEST_F(ClientTest, DeleteColumn)
+{
+  c->removeColumn("sarah", "Standard1", "", "third");
+  ASSERT_THROW(c->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+}
+
+
+TEST_F(ClientTest, DeleteEntireRow)
+{
+  const string mock_data("this is mock data being inserted...");
+  c->insertColumn("sarah", "Standard1", "third", mock_data);
+  string res= c->getColumnValue("sarah", "Standard1", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+  c->remove("sarah", "Standard1", "", "");
+  ASSERT_THROW(c->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+}
+
+
+TEST_F(ClientTest, InsertSuperColumn)
+{
+  const string mock_data("this is mock data being inserted...");
+  c->insertColumn("teeny", "Super1", "padraig", "third", mock_data);
+  string res= c->getColumnValue("teeny", "Super1", "padraig", "third");
+  EXPECT_EQ(mock_data, res);
+  EXPECT_STREQ(mock_data.c_str(), res.c_str());
+}
+
+
+TEST_F(ClientTest, DeleteSuperColumn)
+{
+  c->removeSuperColumn("teeny", "Super1", "padraig");
+  ASSERT_THROW(c->getColumnValue("teeny", "Super1", "padraig", "third"), org::apache::cassandra::NotFoundException);
 }
