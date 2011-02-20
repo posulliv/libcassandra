@@ -18,6 +18,8 @@
 
 #include "libgenthrift/cassandra_types.h"
 
+#include "libcassandra/keyspace_definition.h"
+
 namespace org
 {
 namespace apache
@@ -58,9 +60,9 @@ public:
   org::apache::cassandra::CassandraClient *getCassandra();
 
   /**
-   * @return all the keyspace names.
+   * @return all the keyspace definitions.
    */
-  std::set<std::string> getKeyspaces();
+  std::vector<KeyspaceDefinition> getKeyspaces();
 
   /**
    * @return the keyspace with the given name.
@@ -70,7 +72,7 @@ public:
   /**
    * @return the keyspace with the given name at the given consistency level.
    */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel level);
+  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string &name, org::apache::cassandra::ConsistencyLevel::type level);
 
   /**
    * Remove the given keyspace.
@@ -126,7 +128,7 @@ private:
   std::string cluster_name;
   std::string server_version;
   std::string config_file;
-  std::set<std::string> key_spaces;
+  std::vector<KeyspaceDefinition> key_spaces;
   std::map<std::string, std::string> token_map;
   std::map<std::string, std::tr1::shared_ptr<Keyspace> > keyspace_map;
 

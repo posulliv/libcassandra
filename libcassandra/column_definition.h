@@ -27,6 +27,10 @@ class ColumnDefinition
 public:
 
   ColumnDefinition();
+  ColumnDefinition(const std::string& in_name,
+                   const std::string& in_validation_class,
+                   const org::apache::cassandra::IndexType in_index_type,
+                   const std::string& in_index_name);
   ~ColumnDefinition() {}
 
   /**

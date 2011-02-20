@@ -27,6 +27,18 @@ ColumnDefinition::ColumnDefinition()
 {}
 
 
+ColumnDefinition::ColumnDefinition(const string& in_name,
+                                   const string& in_validation_class,
+                                   const IndexType in_index_type,
+                                   const string& in_index_name)
+  :
+    name(in_name),
+    validation_class(in_validation_class),
+    index_type(in_index_type),
+    index_name(in_index_name)
+{}
+
+
 string ColumnDefinition::getName() const
 {
   return name;

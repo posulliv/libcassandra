@@ -14,8 +14,9 @@
 #include "libgenthrift/Cassandra.h"
 
 #include "libcassandra/cassandra.h"
-#include "libcassandra/keyspace.h"
 #include "libcassandra/exception.h"
+#include "libcassandra/keyspace.h"
+#include "libcassandra/keyspace_definition.h"
 
 using namespace std;
 using namespace org::apache::cassandra;
@@ -75,24 +76,37 @@ CassandraClient *Cassandra::getCassandra()
 }
 
 
-set<string> Cassandra::getKeyspaces()
+vector<KeyspaceDefinition> Cassandra::getKeyspaces()
 {
   if (key_spaces.empty())
   {
-    thrift_client->describe_keyspaces(key_spaces);
+    vector<KsDef> thrift_ks_defs;
+    thrift_client->describe_keyspaces(thrift_ks_defs);
+    for (vector<KsDef>::iterator it= thrift_ks_defs.begin();
+         it != thrift_ks_defs.end();
+         ++it)
+    {
+      KsDef thrift_entry= *it;
+      KeyspaceDefinition entry(thrift_entry.name,
+                               thrift_entry.strategy_class,
+                               thrift_entry.strategy_options,
+                               thrift_entry.replication_factor,
+                               thrift_entry.cf_defs);
+      key_spaces.push_back(entry);
+    }
   }
   return key_spaces;
 }
 
 
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string &name)
+tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name)
 {
-  return getKeyspace(name, DCQUORUM);
+  return getKeyspace(name, ConsistencyLevel::LOCAL_QUORUM);
 }
 
 
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string &name,
-                                                 ConsistencyLevel level)
+tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name,
+                                                 ConsistencyLevel::type level)
 {
   string keymap_name= buildKeyspaceMapName(name, level);
   map<string, tr1::shared_ptr<Keyspace> >::iterator key_it= keyspace_map.find(keymap_name);
@@ -102,8 +116,7 @@ tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string &name,
     set<string>::iterator it= key_spaces.find(name);
     if (it != key_spaces.end())
     {
-      map< string, map<string, string> > keyspace_desc;
-      thrift_client->describe_keyspace(keyspace_desc, name);
+      KsDef ks_def= thrift_client->describe_keyspace(name);
       tr1::shared_ptr<Keyspace> ret(new Keyspace(this, name, keyspace_desc, level));
       keyspace_map[keymap_name]= ret;
     }

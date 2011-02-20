@@ -16,6 +16,8 @@
 
 #include "libgenthrift/cassandra_types.h"
 
+#include "libcassandra/column_family_definition.h"
+
 namespace libcassandra
 {
 
@@ -27,6 +29,11 @@ class KeyspaceDefinition
 public:
 
   KeyspaceDefinition();
+  KeyspaceDefinition(const std::string& in_name,
+                     const std::string& in_strategy_class,
+                     const std::map<std::string, std::string>& in_strategy_options,
+                     const int32_t in_replication_factor,
+                     const std::vector<org::apache::cassandra::CfDef>& in_cf_defs);
   ~KeyspaceDefinition() {}
 
   /**
@@ -58,6 +65,8 @@ private:
   std::map<std::string, std::string> strategy_options;
 
   int32_t replication_factor;
+
+  std::vector<ColumnFamilyDefinition> col_family_defs;
 
 };
 
