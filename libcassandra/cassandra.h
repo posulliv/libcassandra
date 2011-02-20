@@ -324,6 +324,20 @@ public:
                    const org::apache::cassandra::ColumnParent& col_parent,
                    const org::apache::cassandra::SlicePredicate& pred);
 
+  /**
+   * Create a column family
+   * @param[in] cf_def object representing defintion for column family to create
+   * @return the schema ID for the column family created
+   */
+  std::string createColumnFamily(const ColumnFamilyDefinition& cf_def);
+
+  /**
+   * drop a column family
+   * @param[in] cf_name the name of the column family to drop
+   * @return the schema ID for the column family dropped
+   */
+  std::string dropColumnFamily(const std::string& cf_name);
+
 
   /**
    * @return the target server cluster name.

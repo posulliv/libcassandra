@@ -518,6 +518,26 @@ tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name,
 }
 
 
+string Cassandra::createColumnFamily(const ColumnFamilyDefinition& cf_def)
+{
+  string schema_id;
+  CfDef thrift_cf_def;
+  thrift_cf_def.keyspace.assign(cf_def.getKeyspaceName());
+  thrift_cf_def.name.assign(cf_def.getName());
+  thrift_cf_def.column_type.assign(cf_def.getColumnType());
+  thrift_client->system_add_column_family(schema_id, thrift_cf_def);
+  return schema_id;
+}
+
+
+string Cassandra::dropColumnFamily(const string& cf_name)
+{
+  string schema_id;
+  thrift_client->system_drop_column_family(schema_id, cf_name);
+  return schema_id;
+}
+
+
 void Cassandra::removeKeyspace(tr1::shared_ptr<Keyspace> k)
 {
   string keymap_name= buildKeyspaceMapName(k->getName(), k->getConsistencyLevel());
