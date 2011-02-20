@@ -327,6 +327,20 @@ public:
   /**
    * Create a column family
    * @param[in] cf_def object representing defintion for column family to create
+   * @return the schema ID for the keyspace created
+   */
+  std::string createKeyspace(const KeyspaceDefinition& ks_def);
+
+  /**
+   * drop a keyspace
+   * @param[in] ks_name the name of the keyspace to drop
+   * @return the schema ID for the keyspace dropped
+   */
+  std::string dropKeyspace(const std::string& ks_name);
+
+  /**
+   * Create a keyspace
+   * @param[in] ks_def object representing defintion for keyspace to create
    * @return the schema ID for the column family created
    */
   std::string createColumnFamily(const ColumnFamilyDefinition& cf_def);
@@ -337,6 +351,7 @@ public:
    * @return the schema ID for the column family dropped
    */
   std::string dropColumnFamily(const std::string& cf_name);
+
 
 
   /**
