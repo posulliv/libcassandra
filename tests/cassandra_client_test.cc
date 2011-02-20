@@ -21,6 +21,7 @@
 #include <libgenthrift/Cassandra.h>
 #include <libcassandra/cassandra.h>
 #include <libcassandra/cassandra_factory.h>
+#include <libcassandra/column_family_definition.h>
 #include <libcassandra/keyspace.h>
 #include <libcassandra/keyspace_definition.h>
 
@@ -137,8 +138,18 @@ TEST(Cassandra, GetSpecificKeyspace)
 TEST_F(ClientTest, InsertColumn)
 {
   const string mock_data("this is mock data being inserted...");
-  c->insertColumn("sarah", "Standard1", "third", mock_data);
-  string res= c->getColumnValue("sarah", "Standard1", "third");
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  ks_def.setReplicationFactor(1);
+  //c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("padraig");
+  cf_def.setKeyspaceName(ks_def.getName());
+  cout << "creating column family..." << endl;
+  c->createColumnFamily(cf_def);
+  cout << "getting to insert data ..." << endl;
+  c->insertColumn("sarah", "padraig", "third", mock_data);
+  string res= c->getColumnValue("sarah", "padraig", "third");
   EXPECT_EQ(mock_data, res);
   EXPECT_STREQ(mock_data.c_str(), res.c_str());
 }

@@ -23,10 +23,10 @@ ColumnFamilyDefinition::ColumnFamilyDefinition()
   :
     keyspace_name(),
     name(),
-    column_type(),
-    comparator_type(),
+    column_type("Standard"),
+    comparator_type("BytesType"),
     sub_comparator_type(),
-    comment(),
+    comment("what"),
     row_cache_size(0.0),
     key_cache_size(0.0),
     read_repair_chance(0.0),
@@ -409,5 +409,23 @@ void ColumnFamilyDefinition::setMemtableThroughputInMb(int32_t throughput)
 bool ColumnFamilyDefinition::isMemtableThroughputInMbSet() const
 {
   return (memtable_throughput_in_mb > 0 ? true : false);
+}
+
+
+vector<ColumnDefinition> ColumnFamilyDefinition::getColumnMetadata() const
+{
+  return column_metadata;
+}
+
+
+void ColumnFamilyDefinition::setColumnMetadata(vector<ColumnDefinition>& meta)
+{
+  column_metadata.clear();
+  for (vector<ColumnDefinition>::iterator it= meta.begin();
+       it != meta.end();
+       ++it)
+  {
+    column_metadata.push_back(*it);
+  }
 }
 

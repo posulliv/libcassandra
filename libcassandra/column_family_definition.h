@@ -257,6 +257,10 @@ public:
    */
   bool isMemtableThroughputInMbSet() const;
 
+  std::vector<ColumnDefinition> getColumnMetadata() const;
+
+  void setColumnMetadata(std::vector<ColumnDefinition>& meta);
+
 private:
 
   std::string keyspace_name;

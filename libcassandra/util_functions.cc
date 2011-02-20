@@ -49,6 +49,15 @@ KsDef createKsDefObject(const KeyspaceDefinition& ks_def)
   KsDef thrift_ks_def;
   thrift_ks_def.name.assign(ks_def.getName());
   thrift_ks_def.strategy_class.assign(ks_def.getStrategyClass());
+  vector<ColumnFamilyDefinition> cf_defs= ks_def.getColumnFamilies();
+  for (vector<ColumnFamilyDefinition>::iterator it= cf_defs.begin();
+       it != cf_defs.end();
+       ++it)
+  {
+    CfDef entry= createCfDefObject(*it);
+    thrift_ks_def.cf_defs.push_back(entry);
+  }
+  thrift_ks_def.replication_factor= ks_def.getReplicationFactor();
   return thrift_ks_def;
 }
 

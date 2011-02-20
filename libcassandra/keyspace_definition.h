@@ -41,20 +41,35 @@ public:
    */
   std::string getName() const;
 
+  void setName(const std::string& ks_name);
+
   /**
    * @return strategy class name for this keyspace
    */
   std::string getStrategyClass() const;
+
+  void setStrategyClass(const std::string& strat_class);
 
   /**
    * @return strategy options for this keyspace
    */
   std::map<std::string, std::string> getStrategyOptions() const;
 
+  void setStrategyOptions(const std::map<std::string, std::string>& opts);
+
   /**
    * @return replication factor for this keyspace
    */
   int32_t getReplicationFactor() const;
+
+  void setReplicationFactor(int32_t rep_factor);
+
+  /**
+   * @return the column families in this keyspace
+   */
+  std::vector<ColumnFamilyDefinition> getColumnFamilies() const;
+
+  void setColumnFamilies(std::vector<ColumnFamilyDefinition>& cfs);
 
 private:
 

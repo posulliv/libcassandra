@@ -22,9 +22,9 @@ using namespace org::apache::cassandra;
 KeyspaceDefinition::KeyspaceDefinition()
   :
     name(),
-    strategy_class(),
+    strategy_class("org.apache.cassandra.locator.NetworkTopologyStrategy"),
     strategy_options(),
-    replication_factor(),
+    replication_factor(1),
     col_family_defs()
 {}
 
@@ -77,9 +77,21 @@ string KeyspaceDefinition::getName() const
 }
 
 
+void KeyspaceDefinition::setName(const string& ks_name)
+{
+  name.assign(ks_name);
+}
+
+
 string KeyspaceDefinition::getStrategyClass() const
 {
   return strategy_class;
+}
+
+
+void KeyspaceDefinition::setStrategyClass(const string& strat_class)
+{
+  strategy_class.assign(strat_class);
 }
 
 
@@ -89,7 +101,38 @@ map<string, string> KeyspaceDefinition::getStrategyOptions() const
 }
 
 
+void KeyspaceDefinition::setStrategyOptions(const map<string, string>& opts)
+{
+  (void) opts;
+}
+
+
 int32_t KeyspaceDefinition::getReplicationFactor() const
 {
   return replication_factor;
 }
+
+
+void KeyspaceDefinition::setReplicationFactor(int32_t rep_factor)
+{
+  replication_factor= rep_factor;
+}
+
+
+vector<ColumnFamilyDefinition> KeyspaceDefinition::getColumnFamilies() const
+{
+  return col_family_defs;
+}
+
+
+void KeyspaceDefinition::setColumnFamilies(vector<ColumnFamilyDefinition>& cfs)
+{
+  col_family_defs.clear();
+  for (vector<ColumnFamilyDefinition>::iterator it= cfs.begin();
+       it != cfs.end();
+       ++it)
+  {
+    col_family_defs.push_back(*it);
+  }
+}
+
