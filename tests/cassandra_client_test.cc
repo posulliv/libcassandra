@@ -122,71 +122,97 @@ TEST(Cassandra, GetKeyspaces)
 }
 
 
-TEST(Cassandra, GetSpecificKeyspace)
-{
-  const string host("localhost");
-  int port= 9160;
-  CassandraFactory cf(host, port);
-  tr1::shared_ptr<Cassandra> c(cf.create());
-  const string ks_name("system");
-  tr1::shared_ptr<Keyspace> ks= c->getKeyspace(ks_name);
-  EXPECT_EQ(ks_name, ks->getName());
-  EXPECT_STREQ(ks_name.c_str(), ks->getName().c_str());
-}
-
-
 TEST_F(ClientTest, InsertColumn)
 {
   const string mock_data("this is mock data being inserted...");
   KeyspaceDefinition ks_def;
   ks_def.setName("unittest");
-  ks_def.setReplicationFactor(1);
   c->createKeyspace(ks_def);
   ColumnFamilyDefinition cf_def;
   cf_def.setName("padraig");
   cf_def.setKeyspaceName(ks_def.getName());
-  cout << "creating column family..." << endl;
   c->setKeyspace(ks_def.getName());
   c->createColumnFamily(cf_def);
-  cout << "getting to insert data ..." << endl;
   c->insertColumn("sarah", "padraig", "third", mock_data);
   string res= c->getColumnValue("sarah", "padraig", "third");
   EXPECT_EQ(mock_data, res);
   EXPECT_STREQ(mock_data.c_str(), res.c_str());
+  c->dropColumnFamily("padraig");
+  c->dropKeyspace("unittest");
 }
 
 
 TEST_F(ClientTest, DeleteColumn)
 {
-  c->removeColumn("sarah", "Standard1", "", "third");
-  ASSERT_THROW(c->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("padraig");
+  cf_def.setKeyspaceName(ks_def.getName());
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
+  c->removeColumn("sarah", "padraig", "", "third");
+  ASSERT_THROW(c->getColumnValue("sarah", "padraig", "third"), org::apache::cassandra::NotFoundException);
+  c->dropColumnFamily("padraig");
+  c->dropKeyspace("unittest");
 }
 
 
 TEST_F(ClientTest, DeleteEntireRow)
 {
   const string mock_data("this is mock data being inserted...");
-  c->insertColumn("sarah", "Standard1", "third", mock_data);
-  string res= c->getColumnValue("sarah", "Standard1", "third");
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("padraig");
+  cf_def.setKeyspaceName(ks_def.getName());
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
+  c->insertColumn("sarah", "padraig", "third", mock_data);
+  string res= c->getColumnValue("sarah", "padraig", "third");
   EXPECT_EQ(mock_data, res);
   EXPECT_STREQ(mock_data.c_str(), res.c_str());
-  c->remove("sarah", "Standard1", "", "");
-  ASSERT_THROW(c->getColumnValue("sarah", "Standard1", "third"), org::apache::cassandra::NotFoundException);
+  c->remove("sarah", "padraig", "", "");
+  ASSERT_THROW(c->getColumnValue("sarah", "padraig", "third"), org::apache::cassandra::NotFoundException);
+  c->dropColumnFamily("padraig");
+  c->dropKeyspace("unittest");
 }
 
 
 TEST_F(ClientTest, InsertSuperColumn)
 {
   const string mock_data("this is mock data being inserted...");
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("Super1");
+  cf_def.setKeyspaceName(ks_def.getName());
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
   c->insertColumn("teeny", "Super1", "padraig", "third", mock_data);
   string res= c->getColumnValue("teeny", "Super1", "padraig", "third");
   EXPECT_EQ(mock_data, res);
   EXPECT_STREQ(mock_data.c_str(), res.c_str());
+  c->dropColumnFamily("Super1");
+  c->dropKeyspace("unittest");
 }
 
 
 TEST_F(ClientTest, DeleteSuperColumn)
 {
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("Super1");
+  cf_def.setKeyspaceName(ks_def.getName());
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
   c->removeSuperColumn("teeny", "Super1", "padraig");
   ASSERT_THROW(c->getColumnValue("teeny", "Super1", "padraig", "third"), org::apache::cassandra::NotFoundException);
+  c->dropColumnFamily("Super1");
+  c->dropKeyspace("unittest");
 }

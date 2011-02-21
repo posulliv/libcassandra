@@ -147,7 +147,7 @@ void Cassandra::insertColumn(const string& key,
                              const string& column_name,
                              const string& value)
 {
-  insertColumn(key, column_family, super_column_name, column_name, value, ConsistencyLevel::LOCAL_QUORUM);
+  insertColumn(key, column_family, super_column_name, column_name, value, ConsistencyLevel::QUORUM);
 }
 
 
@@ -156,7 +156,7 @@ void Cassandra::insertColumn(const string& key,
                              const string& column_name,
                              const string& value)
 {
-  insertColumn(key, column_family, "", column_name, value, ConsistencyLevel::LOCAL_QUORUM);
+  insertColumn(key, column_family, "", column_name, value, ConsistencyLevel::QUORUM);
 }
 
 
@@ -171,7 +171,7 @@ void Cassandra::remove(const string &key,
 void Cassandra::remove(const string &key,
                       const ColumnPath &col_path)
 {
-  thrift_client->remove(key, col_path, createTimestamp(), ConsistencyLevel::LOCAL_QUORUM);
+  thrift_client->remove(key, col_path, createTimestamp(), ConsistencyLevel::QUORUM);
 }
 
 
@@ -245,14 +245,14 @@ Column Cassandra::getColumn(const string& key,
                             const string& super_column_name,
                             const string& column_name)
 {
-  return getColumn(key, column_family, super_column_name, column_name, ConsistencyLevel::LOCAL_QUORUM);
+  return getColumn(key, column_family, super_column_name, column_name, ConsistencyLevel::QUORUM);
 }
 
 Column Cassandra::getColumn(const string& key,
                             const string& column_family,
                             const string& column_name)
 {
-  return getColumn(key, column_family, "", column_name, ConsistencyLevel::LOCAL_QUORUM);
+  return getColumn(key, column_family, "", column_name, ConsistencyLevel::QUORUM);
 }
 
 
@@ -299,7 +299,7 @@ SuperColumn Cassandra::getSuperColumn(const string& key,
                                       const string& column_family,
                                       const string& super_column_name)
 {
-  return getSuperColumn(key, column_family, super_column_name, ConsistencyLevel::LOCAL_QUORUM);
+  return getSuperColumn(key, column_family, super_column_name, ConsistencyLevel::QUORUM);
 }
 
 
@@ -330,7 +330,7 @@ vector<Column> Cassandra::getSliceNames(const string& key,
                                         const ColumnParent& col_parent,
                                         SlicePredicate& pred)
 {
-  return getSliceNames(key, col_parent, pred, ConsistencyLevel::LOCAL_QUORUM);
+  return getSliceNames(key, col_parent, pred, ConsistencyLevel::QUORUM);
 }
 
 
@@ -361,7 +361,7 @@ vector<Column> Cassandra::getSliceRange(const string& key,
                                         const ColumnParent& col_parent,
                                         SlicePredicate& pred)
 {
-  return getSliceRange(key, col_parent, pred, ConsistencyLevel::LOCAL_QUORUM);
+  return getSliceRange(key, col_parent, pred, ConsistencyLevel::QUORUM);
 }
 
 
@@ -404,7 +404,7 @@ map<string, vector<Column> > Cassandra::getRangeSlice(const ColumnParent& col_pa
                                                       const string& finish,
                                                       const int32_t row_count)
 {
-  return getRangeSlice(col_parent, pred, start, finish, row_count, ConsistencyLevel::LOCAL_QUORUM);
+  return getRangeSlice(col_parent, pred, start, finish, row_count, ConsistencyLevel::QUORUM);
 }
 
 
@@ -448,7 +448,7 @@ map<string, vector<SuperColumn> > Cassandra::getSuperRangeSlice(const ColumnPare
                                                                 const string& finish,
                                                                 const int32_t row_count)
 {
-  return getSuperRangeSlice(col_parent, pred, start, finish, row_count, ConsistencyLevel::LOCAL_QUORUM);
+  return getSuperRangeSlice(col_parent, pred, start, finish, row_count, ConsistencyLevel::QUORUM);
 }
 
 
@@ -491,7 +491,7 @@ int32_t Cassandra::getCount(const string& key,
                             const ColumnParent& col_parent,
                             const SlicePredicate& pred)
 {
-  return (getCount(key, col_parent, pred, ConsistencyLevel::LOCAL_QUORUM));
+  return (getCount(key, col_parent, pred, ConsistencyLevel::QUORUM));
 }
 
 

@@ -22,7 +22,7 @@ using namespace org::apache::cassandra;
 KeyspaceDefinition::KeyspaceDefinition()
   :
     name(),
-    strategy_class("org.apache.cassandra.locator.NetworkTopologyStrategy"),
+    strategy_class("org.apache.cassandra.locator.SimpleStrategy"),
     strategy_options(),
     replication_factor(1),
     col_family_defs()
