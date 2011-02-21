@@ -37,8 +37,8 @@ class CassandraFactory
 
 public:
 
-  CassandraFactory(const std::string &server_list);
-  CassandraFactory(const std::string &in_host, int in_port);
+  CassandraFactory(const std::string& server_list);
+  CassandraFactory(const std::string& in_host, int in_port);
   ~CassandraFactory();
 
   /**
@@ -46,13 +46,19 @@ public:
    */
   std::tr1::shared_ptr<Cassandra> create();
 
+  /**
+   * @param[in] keyspace name of keyspace to associate this instance with
+   * @return a shared ptr which points to a Cassandra client
+   */
+  std::tr1::shared_ptr<Cassandra> create(const std::string& keyspace);
+
   int getPort() const;
   const std::string &getHost() const;
   const std::string &getURL() const;
 
 private:
 
-  org::apache::cassandra::CassandraClient *createThriftClient(const std::string &host,
+  org::apache::cassandra::CassandraClient *createThriftClient(const std::string& host,
                                                               int port);
 
   std::string url;

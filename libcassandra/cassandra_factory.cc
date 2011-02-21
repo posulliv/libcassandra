@@ -29,7 +29,7 @@ using namespace org::apache::cassandra;
 using namespace boost;
 
 
-CassandraFactory::CassandraFactory(const string &server_list)
+CassandraFactory::CassandraFactory(const string& server_list)
   :
     url(server_list),
     host(),
@@ -46,7 +46,7 @@ CassandraFactory::CassandraFactory(const string &server_list)
 }
 
 
-CassandraFactory::CassandraFactory(const string &in_host, int in_port)
+CassandraFactory::CassandraFactory(const string& in_host, int in_port)
   :
     url(),
     host(in_host),
@@ -71,7 +71,15 @@ tr1::shared_ptr<Cassandra> CassandraFactory::create()
 }
 
 
-CassandraClient *CassandraFactory::createThriftClient(const string &in_host,
+tr1::shared_ptr<Cassandra> CassandraFactory::create(const string& keyspace)
+{
+  CassandraClient *thrift_client= createThriftClient(host, port);
+  tr1::shared_ptr<Cassandra> ret(new Cassandra(thrift_client, host, port, keyspace));
+  return ret;
+}
+
+
+CassandraClient *CassandraFactory::createThriftClient(const string& in_host,
                                                       int in_port)
 {
   boost::shared_ptr<TTransport> socket(new TSocket(in_host, in_port));

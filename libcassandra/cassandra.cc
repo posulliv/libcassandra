@@ -43,10 +43,9 @@ Cassandra::Cassandra()
 	port(0),
 	cluster_name(),
 	server_version(),
-	config_file(),
+	current_keyspace(),
 	key_spaces(),
-	token_map(),
-	keyspace_map()
+	token_map()
 {
 }
 
@@ -60,10 +59,25 @@ Cassandra::Cassandra(CassandraClient *in_thrift_client,
     port(in_port),
     cluster_name(),
     server_version(),
-    config_file(),
+    current_keyspace(),
     key_spaces(),
-    token_map(),
-    keyspace_map()
+    token_map()
+{}
+
+
+Cassandra::Cassandra(CassandraClient *in_thrift_client,
+                     const string &in_host,
+                     int in_port,
+                     const string& keyspace)
+  :
+    thrift_client(in_thrift_client),
+    host(in_host),
+    port(in_port),
+    cluster_name(),
+    server_version(),
+    current_keyspace(keyspace),
+    key_spaces(),
+    token_map()
 {}
 
 
@@ -79,9 +93,25 @@ CassandraClient *Cassandra::getCassandra()
 }
 
 
+void Cassandra::login(const string& user, const string& password)
+{
+  AuthenticationRequest req;
+  req.credentials["username"]= user;
+  req.credentials["password"]= password;
+  thrift_client->login(req);
+}
+
+
 void Cassandra::setKeyspace(const string& ks_name)
 {
+  current_keyspace.assign(ks_name);
   thrift_client->set_keyspace(ks_name);
+}
+
+
+string Cassandra::getCurrentKeyspace() const
+{
+  return current_keyspace;
 }
 
 
@@ -488,43 +518,6 @@ vector<KeyspaceDefinition> Cassandra::getKeyspaces()
 }
 
 
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name)
-{
-  return getKeyspace(name, ConsistencyLevel::LOCAL_QUORUM);
-}
-
-
-tr1::shared_ptr<Keyspace> Cassandra::getKeyspace(const string& name,
-                                                 ConsistencyLevel::type level)
-{
-  string keymap_name= buildKeyspaceMapName(name, level);
-  map<string, tr1::shared_ptr<Keyspace> >::iterator key_it= keyspace_map.find(keymap_name);
-  if (key_it == keyspace_map.end())
-  {
-    getKeyspaces();
-    if (findKeyspace(name))
-    {
-      /* TODO: the keyspace description can be returned in the findKeyspace function */
-      KsDef ks_def;
-      thrift_client->describe_keyspace(ks_def, name);
-      KeyspaceDefinition ks_desc(ks_def.name,
-                                 ks_def.strategy_class,
-                                 ks_def.strategy_options,
-                                 ks_def.replication_factor,
-                                 ks_def.cf_defs);
-      tr1::shared_ptr<Keyspace> ret(new Keyspace(this, name, ks_desc, level));
-      keyspace_map[keymap_name]= ret;
-    }
-    else
-    {
-      /* throw an exception */
-      throw(NotFoundException());
-    }
-  }
-  return keyspace_map[keymap_name];
-}
-
-
 string Cassandra::createColumnFamily(const ColumnFamilyDefinition& cf_def)
 {
   string schema_id;
@@ -555,9 +548,6 @@ string Cassandra::dropKeyspace(const string& ks_name)
 {
   string ret;
   thrift_client->system_drop_keyspace(ret, ks_name);
-  /* TODO - keyspace map concept can probably be retired */
-  string keymap_name= buildKeyspaceMapName(ks_name, ConsistencyLevel::LOCAL_QUORUM);
-  keyspace_map.erase(keymap_name);
   return ret;
 }
 

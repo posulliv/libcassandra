@@ -45,6 +45,10 @@ public:
   Cassandra(org::apache::cassandra::CassandraClient *in_thrift_client,
             const std::string &in_host,
             int in_port);
+  Cassandra(org::apache::cassandra::CassandraClient *in_thrift_client,
+            const std::string &in_host,
+            int in_port,
+            const std::string& keyspace);
   ~Cassandra();
 
   enum FailoverPolicy
@@ -60,6 +64,18 @@ public:
   org::apache::cassandra::CassandraClient *getCassandra();
 
   /**
+   * Log for the current session
+   * @param[in] user to use for authentication
+   * @param[in] password to use for authentication
+   */
+  void login(const std::string& user, const std::string& password);
+
+  /**
+   * @return the keyspace associated with this session
+   */
+  std::string getCurrentKeyspace() const;
+
+  /**
    * set the keyspace for the current connection
    * @param[in] ks_name name of the keyspace to specify for current session 
    */
@@ -69,16 +85,6 @@ public:
    * @return all the keyspace definitions.
    */
   std::vector<KeyspaceDefinition> getKeyspaces();
-
-  /**
-   * @return the keyspace with the given name.
-   */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string& name);
-
-  /**
-   * @return the keyspace with the given name at the given consistency level.
-   */
-  std::tr1::shared_ptr<Keyspace> getKeyspace(const std::string& name, org::apache::cassandra::ConsistencyLevel::type level);
 
   /**
    * Insert a column, possibly inside a supercolumn
@@ -410,10 +416,9 @@ private:
   int port;
   std::string cluster_name;
   std::string server_version;
-  std::string config_file;
+  std::string current_keyspace;
   std::vector<KeyspaceDefinition> key_spaces;
   std::map<std::string, std::string> token_map;
-  std::map<std::string, std::tr1::shared_ptr<Keyspace> > keyspace_map;
 
   Cassandra(const Cassandra&);
   Cassandra &operator=(const Cassandra&);
