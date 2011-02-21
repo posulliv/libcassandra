@@ -189,6 +189,7 @@ TEST_F(ClientTest, InsertSuperColumn)
   c->createKeyspace(ks_def);
   ColumnFamilyDefinition cf_def;
   cf_def.setName("Super1");
+  cf_def.setColumnType("Super");
   cf_def.setKeyspaceName(ks_def.getName());
   c->setKeyspace(ks_def.getName());
   c->createColumnFamily(cf_def);
@@ -208,6 +209,7 @@ TEST_F(ClientTest, DeleteSuperColumn)
   c->createKeyspace(ks_def);
   ColumnFamilyDefinition cf_def;
   cf_def.setName("Super1");
+  cf_def.setColumnType("Super");
   cf_def.setKeyspaceName(ks_def.getName());
   c->setKeyspace(ks_def.getName());
   c->createColumnFamily(cf_def);
