@@ -117,8 +117,8 @@ TEST(Cassandra, GetKeyspaces)
   transport->open();
   Cassandra c(client, host, port);
   vector<KeyspaceDefinition> keyspaces= c.getKeyspaces();
-  /* we assume the test server only has 2 keyspaces: system and default */
-  EXPECT_EQ(2, keyspaces.size());
+  /* we assume the test server only has 1 keyspace: system */
+  EXPECT_EQ(1, keyspaces.size());
 }
 
 
