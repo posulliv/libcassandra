@@ -6,6 +6,8 @@ the Java client hector.
 The master branch will follow along with Cassandra trunk. Branches corresponding to stable releases
 of Cassandra will be available. Downloads of these branches are also provided.
 
+The current master and 0.7.0 branches will work with Apache Cassandra 0.7.x. 
+
 == Install
 
 $ ./config/autorun.sh
