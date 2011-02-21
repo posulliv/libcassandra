@@ -60,6 +60,12 @@ public:
   org::apache::cassandra::CassandraClient *getCassandra();
 
   /**
+   * set the keyspace for the current connection
+   * @param[in] ks_name name of the keyspace to specify for current session 
+   */
+  void setKeyspace(const std::string& ks_name);
+
+  /**
    * @return all the keyspace definitions.
    */
   std::vector<KeyspaceDefinition> getKeyspaces();

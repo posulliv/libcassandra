@@ -79,6 +79,12 @@ CassandraClient *Cassandra::getCassandra()
 }
 
 
+void Cassandra::setKeyspace(const string& ks_name)
+{
+  thrift_client->set_keyspace(ks_name);
+}
+
+
 void Cassandra::insertColumn(const string& key,
                              const string& column_family,
                              const string& super_column_name,

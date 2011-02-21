@@ -9,6 +9,7 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "libcassandra/cassandra_host.h"
 #include "libcassandra/util_functions.h"
@@ -96,6 +97,56 @@ CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
   {
     thrift_cf_def.row_cache_size= cf_def.getRowCacheSize();
     thrift_cf_def.__isset.row_cache_size= true;
+  }
+  if (cf_def.isKeyCacheSizeSet())
+  {
+    thrift_cf_def.key_cache_size= cf_def.getKeyCacheSize();
+    thrift_cf_def.__isset.key_cache_size= true;
+  }
+  if (cf_def.isReadRepairChanceSet())
+  {
+    thrift_cf_def.read_repair_chance= cf_def.getReadRepairChance();
+    thrift_cf_def.__isset.read_repair_chance= true;
+  }
+  if (cf_def.isGcGraceSecondsSet())
+  {
+    thrift_cf_def.gc_grace_seconds= cf_def.getGcGraceSeconds();
+    thrift_cf_def.__isset.gc_grace_seconds= true;
+  }
+  if (cf_def.isDefaultValidationClassSet())
+  {
+    thrift_cf_def.default_validation_class.assign(cf_def.getDefaultValidationClass());
+    thrift_cf_def.__isset.default_validation_class= true;
+  }
+  if (cf_def.isIdSet())
+  {
+    thrift_cf_def.id= cf_def.getId();
+    thrift_cf_def.__isset.id= true;
+  }
+  if (cf_def.isMaxCompactionThresholdSet())
+  {
+    thrift_cf_def.max_compaction_threshold= cf_def.getMaxCompactionThreshold();
+    thrift_cf_def.__isset.max_compaction_threshold= true;
+  }
+  if (cf_def.isMinCompactionThresholdSet())
+  {
+    thrift_cf_def.min_compaction_threshold= cf_def.getMinCompactionThreshold();
+    thrift_cf_def.__isset.min_compaction_threshold= true;
+  }
+  if (cf_def.isMemtableFlushAfterMinsSet())
+  {
+    thrift_cf_def.memtable_flush_after_mins= cf_def.getMemtableFlushAfterMins();
+    thrift_cf_def.__isset.memtable_flush_after_mins= true;
+  }
+  if (cf_def.isMemtableOperationsInMillionsSet())
+  {
+    thrift_cf_def.memtable_operations_in_millions= cf_def.getMemtableOperationsInMillions();
+    thrift_cf_def.__isset.memtable_operations_in_millions= true;
+  }
+  if (cf_def.isMemtableThroughputInMbSet())
+  {
+    thrift_cf_def.memtable_throughput_in_mb= cf_def.getMemtableThroughputInMb();
+    thrift_cf_def.__isset.memtable_throughput_in_mb= cf_def.getMemtableThroughputInMb();
   }
   return thrift_cf_def;
 }

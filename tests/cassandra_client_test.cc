@@ -141,11 +141,12 @@ TEST_F(ClientTest, InsertColumn)
   KeyspaceDefinition ks_def;
   ks_def.setName("unittest");
   ks_def.setReplicationFactor(1);
-  //c->createKeyspace(ks_def);
+  c->createKeyspace(ks_def);
   ColumnFamilyDefinition cf_def;
   cf_def.setName("padraig");
   cf_def.setKeyspaceName(ks_def.getName());
   cout << "creating column family..." << endl;
+  c->setKeyspace(ks_def.getName());
   c->createColumnFamily(cf_def);
   cout << "getting to insert data ..." << endl;
   c->insertColumn("sarah", "padraig", "third", mock_data);

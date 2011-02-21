@@ -51,7 +51,6 @@ org::apache::cassandra::KsDef createKsDefObject(const KeyspaceDefinition& ks_def
  */
 org::apache::cassandra::CfDef createCfDefObject(const ColumnFamilyDefinition& ks_def);
 
-
 } /* end namespace libcassandra */
 
 #endif /* __LIBCASSANDRA_UTIL_FUNCTIONS_H */
