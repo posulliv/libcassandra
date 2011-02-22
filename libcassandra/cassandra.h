@@ -101,7 +101,8 @@ public:
                     const std::string& super_column_name,
                     const std::string& column_name,
                     const std::string& value,
-                    org::apache::cassandra::ConsistencyLevel::type level);
+                    org::apache::cassandra::ConsistencyLevel::type level,
+		    int32_t ttl=0);
 
   /**
    * Insert a column, possibly inside a supercolumn
