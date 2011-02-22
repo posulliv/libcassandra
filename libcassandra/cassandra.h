@@ -53,9 +53,9 @@ public:
 
   enum FailoverPolicy
   {
-    FAIL_FAST= 0,
-    ON_FAIL_TRY_ONE_NEXT_AVAILABLE,
-    ON_FAIL_TRY_ALL_AVAILABLE
+    FAIL_FAST= 0, /* return error as is to user */
+    ON_FAIL_TRY_ONE_NEXT_AVAILABLE, /* try 1 random server before returning to user */
+    ON_FAIL_TRY_ALL_AVAILABLE /* try all available servers in cluster before return to user */
   };
 
   /**
