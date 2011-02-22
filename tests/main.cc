@@ -13,6 +13,8 @@
 
 #include <gtest/gtest.h>
 
+#include <libcassandra/cassandra_util.h>
+
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -25,19 +27,11 @@ int main(int argc, char **argv)
    * not take responsibility for starting the cassandra server at the
    * moment. This may be added at a later stage time permitting.
    */
-  try
-  {
-    boost::asio::io_service io_service;
-    tcp::resolver resolver(io_service);
-    tcp::resolver::query query(tcp::v4(), "localhost", "9160");
-    tcp::resolver::iterator iterator= resolver.resolve(query);
-    tcp::socket socket(io_service);
-	  socket.connect(*iterator);
-  } 
-  catch (exception &)
+  bool up= libcassandra::util::pingCassandraServer("localhost", 9160);
+  if (! up)
   {
     cerr << "Cassandra service is not running on localhost port 9160" << endl;
-	  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   /* we have a running server, lets go with the unit tests */
