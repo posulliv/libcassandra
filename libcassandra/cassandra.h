@@ -95,6 +95,7 @@ public:
    * @param[in] column_name the column name
    * @param[in] value the column value
    * @param[in] level consistency level
+   * @param[in] ttl time to live
    */
   void insertColumn(const std::string& key,
                     const std::string& column_family,
@@ -102,7 +103,7 @@ public:
                     const std::string& column_name,
                     const std::string& value,
                     org::apache::cassandra::ConsistencyLevel::type level,
-		    int32_t ttl=0);
+                    int32_t ttl);
 
   /**
    * Insert a column, possibly inside a supercolumn

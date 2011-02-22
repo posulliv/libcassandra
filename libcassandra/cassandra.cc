@@ -121,7 +121,7 @@ void Cassandra::insertColumn(const string& key,
                              const string& column_name,
                              const string& value,
                              ConsistencyLevel::type level,
-			     int32_t ttl)
+                             int32_t ttl= 0)
 {
   ColumnParent col_parent;
   col_parent.column_family.assign(column_family);
@@ -134,7 +134,8 @@ void Cassandra::insertColumn(const string& key,
   col.name.assign(column_name);
   col.value.assign(value);
   col.timestamp= createTimestamp();
-  if (ttl) {
+  if (ttl) 
+  {
     col.ttl=ttl;
     col.__isset.ttl=true;
   }
