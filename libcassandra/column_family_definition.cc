@@ -429,3 +429,15 @@ void ColumnFamilyDefinition::setColumnMetadata(vector<ColumnDefinition>& meta)
   }
 }
 
+
+void ColumnFamilyDefinition::addColumnMetadata(const ColumnDefinition& col_meta)
+{
+  column_metadata.push_back(col_meta);
+}
+
+
+bool ColumnFamilyDefinition::isColumnMetadataSet() const
+{
+  return (! column_metadata.empty());
+}
+

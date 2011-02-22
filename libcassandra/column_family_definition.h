@@ -261,6 +261,10 @@ public:
 
   void setColumnMetadata(std::vector<ColumnDefinition>& meta);
 
+  void addColumnMetadata(const ColumnDefinition& col_meta);
+
+  bool isColumnMetadataSet() const;
+
 private:
 
   std::string keyspace_name;

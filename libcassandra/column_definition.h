@@ -38,10 +38,14 @@ public:
    */
   std::string getName() const;
 
+  void setName(const std::string& new_name);
+
   /**
    * @return validation class name for this keyspace
    */
   std::string getValidationClass() const;
+
+  void setValidationClass(const std::string& class_name);
 
   /**
    * @return the index type for this column

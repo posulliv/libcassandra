@@ -45,6 +45,15 @@ string parseHostFromURL(const string &url)
 }
 
 
+ColumnDef createColumnDefObject(const ColumnDefinition& col_def)
+{
+  ColumnDef thrift_col_def;
+  thrift_col_def.name.assign(col_def.getName());
+  thrift_col_def.validation_class.assign(col_def.getValidationClass());
+  return thrift_col_def;
+}
+
+
 KsDef createKsDefObject(const KeyspaceDefinition& ks_def)
 {
   KsDef thrift_ks_def;
@@ -147,6 +156,18 @@ CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
   {
     thrift_cf_def.memtable_throughput_in_mb= cf_def.getMemtableThroughputInMb();
     thrift_cf_def.__isset.memtable_throughput_in_mb= cf_def.getMemtableThroughputInMb();
+  }
+  if (cf_def.isColumnMetadataSet())
+  {
+    vector<ColumnDefinition> cols= cf_def.getColumnMetadata();
+    for (vector<ColumnDefinition>::iterator it= cols.begin();
+         it != cols.end();
+         ++it)
+    {
+      ColumnDef thrift_col= createColumnDefObject(*it);
+      thrift_cf_def.column_metadata.push_back(thrift_col);
+    }
+    thrift_cf_def.__isset.column_metadata= true;
   }
   return thrift_cf_def;
 }

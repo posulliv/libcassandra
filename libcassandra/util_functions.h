@@ -36,6 +36,14 @@ int parsePortFromURL(const std::string &url);
 std::string parseHostFromURL(const std::string &url);
 
 /**
+ * Convert a ColumnDefinition object to the thrift 
+ * equivalent - ColumnDef
+ * @param[in] col_def a ColumnDefinition object
+ * @return a thrift ColumnDef object equivalent to the col_def input
+ */
+org::apache::cassandra::ColumnDef createColumnDefObject(const ColumnDefinition& col_def);
+
+/**
  * Convert a KeyspaceDefinition object to the thrift 
  * equivalent - KsDef
  * @param[in] ks_def a KeyspaceDefinition object

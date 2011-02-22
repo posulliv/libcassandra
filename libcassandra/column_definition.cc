@@ -45,9 +45,21 @@ string ColumnDefinition::getName() const
 }
 
 
+void ColumnDefinition::setName(const string& new_name)
+{
+  name.assign(new_name);
+}
+
+
 string ColumnDefinition::getValidationClass() const
 {
   return validation_class;
+}
+
+
+void ColumnDefinition::setValidationClass(const string& class_name)
+{
+  validation_class.assign(class_name);
 }
 
 
