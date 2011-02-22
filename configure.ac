@@ -14,7 +14,7 @@ AC_CONFIG_AUX_DIR(config)
 PANDORA_CANONICAL_TARGET(less-warnings, warnings-always-on, require-cxx, skip-visibility)
 
 #shared library versioning
-CASSANDRA_LIBRARY_VERSION=1:0:0
+CASSANDRA_LIBRARY_VERSION=2:0:0
 #                         | | |
 #                  +------+ | +---+
 #                  |        |     |

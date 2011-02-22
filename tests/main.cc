@@ -32,12 +32,12 @@ int main(int argc, char **argv)
     tcp::resolver::query query(tcp::v4(), "localhost", "9160");
     tcp::resolver::iterator iterator= resolver.resolve(query);
     tcp::socket socket(io_service);
-	socket.connect(*iterator);
+	  socket.connect(*iterator);
   } 
   catch (exception &)
   {
     cerr << "Cassandra service is not running on localhost port 9160" << endl;
-	return EXIT_FAILURE;
+	  return EXIT_FAILURE;
   }
 
   /* we have a running server, lets go with the unit tests */

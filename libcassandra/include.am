@@ -9,13 +9,15 @@ nobase_include_HEADERS+= \
 			 libcassandra/cassandra.h \
 			 libcassandra/cassandra_factory.h \
 			 libcassandra/cassandra_host.h \
+			 libcassandra/cassandra_util.h \
 			 libcassandra/column_definition.h \
 			 libcassandra/column_family_definition.h \
 			 libcassandra/exception.h \
 			 libcassandra/keyspace.h \
 			 libcassandra/keyspace_definition.h \
 			 libcassandra/keyspace_factory.h \
-			 libcassandra/util_functions.h
+			 libcassandra/util_functions.h \
+			 libcassandra/util/ping.h
 
 lib_LTLIBRARIES+= libcassandra/libcassandra.la
 libcassandra_libcassandra_la_CXXFLAGS= ${AM_CXXFLAGS}
@@ -28,7 +30,8 @@ libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/keyspace.cc \
 				       libcassandra/keyspace_definition.cc \
 				       libcassandra/keyspace_factory.cc \
-				       libcassandra/util_functions.cc
+				       libcassandra/util_functions.cc \
+				       libcassandra/util/ping.cc
 
 libcassandra_libcassandra_la_DEPENDENCIES= libgenthrift/libgenthrift.la
 libcassandra_libcassandra_la_LIBADD= $(LIBM) libgenthrift/libgenthrift.la
