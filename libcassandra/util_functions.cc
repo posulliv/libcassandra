@@ -50,6 +50,16 @@ ColumnDef createColumnDefObject(const ColumnDefinition& col_def)
   ColumnDef thrift_col_def;
   thrift_col_def.name.assign(col_def.getName());
   thrift_col_def.validation_class.assign(col_def.getValidationClass());
+  if (col_def.isIndexTypeSet())
+  {
+    thrift_col_def.index_type= col_def.getIndexType();
+    thrift_col_def.__isset.index_type= true;
+  }
+  if (col_def.isIndexNameSet())
+  {
+    thrift_col_def.index_name.assign(col_def.getIndexName());
+    thrift_col_def.__isset.index_name= true;
+  }
   return thrift_col_def;
 }
 

@@ -38,6 +38,9 @@ public:
    */
   std::string getName() const;
 
+  /**
+   * @param[in] new_name new column name
+   */
   void setName(const std::string& new_name);
 
   /**
@@ -45,6 +48,9 @@ public:
    */
   std::string getValidationClass() const;
 
+  /**
+   * @param[in] class_name name of the validation class to use
+   */
   void setValidationClass(const std::string& class_name);
 
   /**
@@ -53,9 +59,29 @@ public:
   org::apache::cassandra::IndexType::type getIndexType() const;
 
   /**
+   * @param[in] new_type index type for this column
+   */
+  void setIndexType(org::apache::cassandra::IndexType::type new_type);
+
+  /**
+   * @return true if index type is set; false otherwise
+   */
+  bool isIndexTypeSet() const;
+
+  /**
    * @return index name
    */
   std::string getIndexName() const;
+
+  /**
+   * @param[in] new_name index name
+   */
+  void setIndexName(const std::string& new_name);
+
+  /**
+   * @return true if index name is set; false otherwise
+   */
+  bool isIndexNameSet() const;
 
 private:
 
@@ -64,6 +90,8 @@ private:
   std::string validation_class;
 
   org::apache::cassandra::IndexType::type index_type;
+
+  bool is_index_type_set;
 
   std::string index_name;
 
