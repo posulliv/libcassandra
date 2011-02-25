@@ -261,7 +261,7 @@ TEST_F(ClientTest, SecondaryIndexes)
   IndexedSlicesQuery query;
   vector<string> column_names;
   column_names.push_back("full_name");
-  column_names.push_back("birth_data");
+  column_names.push_back("birth_date");
   column_names.push_back("state");
   query.setColumns(column_names);
   query.addGtExpression("birth_date", "00001970");
