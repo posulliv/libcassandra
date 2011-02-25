@@ -52,8 +52,19 @@ public:
    */
   std::tr1::shared_ptr<Cassandra> create(const std::string& keyspace);
 
+  /**
+   * @return port number associated with cassandra instances created
+   */
   int getPort() const;
+
+  /**
+   * @return host name of cassandra instances created
+   */
   const std::string &getHost() const;
+
+  /**
+   * @return URL of cassandra instances created
+   */
   const std::string &getURL() const;
 
 private:

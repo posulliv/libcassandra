@@ -30,8 +30,10 @@ IndexedSlicesQuery::IndexedSlicesQuery()
     start_key(),
     start_column(),
     end_column(),
+    column_names(),
     column_reversed(false),
     count(100),
+    level(ConsistencyLevel::QUORUM),
     index_clause()
 {}
 
@@ -86,9 +88,50 @@ void IndexedSlicesQuery::addLtEqualsExpression(const string& column, const strin
 }
 
 
+void IndexedSlicesQuery::addIndexExpression(const string& column, 
+                                            const string& value,
+                                            IndexOperator::type op_type)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(value);
+  new_expr.op= op_type;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
+void IndexedSlicesQuery::setColumns(vector<string>& columns)
+{
+  for (vector<string>::iterator it= columns.begin();
+       it != columns.end();
+       ++it)
+  {
+    column_names.push_back(*it);
+  }
+}
+
+
+vector<string> IndexedSlicesQuery::getColumns() const
+{
+  return column_names;
+}
+
+
+bool IndexedSlicesQuery::isColumnsSet() const
+{
+  return (! column_names.empty());
+}
+
+
 void IndexedSlicesQuery::setColumnFamily(const string& column_family_name)
 {
   column_family.assign(column_family_name);
+}
+
+
+string IndexedSlicesQuery::getColumnFamily() const
+{
+  return column_family;
 }
 
 
@@ -100,39 +143,73 @@ void IndexedSlicesQuery::setStartKey(const string& new_start_key)
 
 void IndexedSlicesQuery::setRowCount(int32_t new_count)
 {
+  count= new_count;
   index_clause.count= new_count;
 }
 
 
-map<string, map<string, string> > IndexedSlicesQuery::execute(tr1::shared_ptr<Cassandra> client)
+int32_t IndexedSlicesQuery::getRowCount() const
 {
-  map<string, map<string, string> > ret_map;
-  vector<KeySlice> ret;
+  return count;
+}
 
-  SliceRange thrift_slice_range;
-  SlicePredicate thrift_slice_pred;
-  ColumnParent col_parent;
-  thrift_slice_pred.slice_range= thrift_slice_range;
-  thrift_slice_pred.__isset.slice_range= true;
-  col_parent.column_family.assign(column_family);
 
-  client->getCassandra()->get_indexed_slices(ret, col_parent, index_clause, thrift_slice_pred, ConsistencyLevel::QUORUM);
+IndexClause IndexedSlicesQuery::getIndexClause() const
+{
+  return index_clause;
+}
 
-  for (vector<KeySlice>::iterator it= ret.begin();
-       it != ret.end();
-       ++it)
-  {
-    vector<Column> thrift_cols= getColumnList((*it).columns);
-    map<string, string> rows;
-    for (vector<Column>::iterator inner_it= thrift_cols.begin();
-         inner_it != thrift_cols.end();
-         ++inner_it)
-    {
-      rows.insert(make_pair((*inner_it).name, (*inner_it).value));
-    }
-    ret_map.insert(make_pair((*it).key, rows));
-  }
 
-  return ret_map;
+void IndexedSlicesQuery::setReverseColumns(bool to_reverse)
+{
+  column_reversed= to_reverse;
+}
+
+
+bool IndexedSlicesQuery::getReverseColumns() const
+{
+  return column_reversed;
+}
+
+
+void IndexedSlicesQuery::setRange(const string& start,
+                                  const string& end,
+                                  bool reversed,
+                                  int32_t range_count)
+{
+  start_column.assign(start);
+  end_column.assign(end);
+  column_reversed= reversed;
+  count= range_count;
+}
+
+
+bool IndexedSlicesQuery::isRangeSet() const
+{
+  return ((! start_column.empty()) && (! end_column.empty()));
+}
+
+
+string IndexedSlicesQuery::getStartColumn() const
+{
+  return start_column;
+}
+
+
+string IndexedSlicesQuery::getEndColumn() const
+{
+  return end_column;
+}
+
+
+void IndexedSlicesQuery::setConsistencyLevel(ConsistencyLevel::type new_level)
+{
+  level= new_level;
+}
+
+
+ConsistencyLevel::type IndexedSlicesQuery::getConsistencyLevel() const
+{
+  return level;
 }
 

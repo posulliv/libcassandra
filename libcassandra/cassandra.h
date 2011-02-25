@@ -18,6 +18,7 @@
 
 #include "libgenthrift/cassandra_types.h"
 
+#include "libcassandra/indexed_slices_query.h"
 #include "libcassandra/keyspace_definition.h"
 
 namespace org
@@ -317,6 +318,14 @@ public:
                      const std::string& finish,
                      const int32_t count);
 
+  /**
+   * Return a list of slices using the given query object
+   * @param[in] query object that encapuslates everything needed
+   *                  for a query using secondary indexes
+   * @return a map of row keys to column names and values
+   */
+  std::map<std::string, std::map<std::string, std::string> >
+  getIndexedSlices(const IndexedSlicesQuery& query);
 
   /**
    * @return number of columns in a row or super column
@@ -360,8 +369,6 @@ public:
    * @return the schema ID for the column family dropped
    */
   std::string dropColumnFamily(const std::string& cf_name);
-
-
 
   /**
    * @return the target server cluster name.

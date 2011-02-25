@@ -183,6 +183,34 @@ CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
 }
 
 
+SlicePredicate createSlicePredicateObject(const IndexedSlicesQuery& query)
+{
+  SlicePredicate thrift_slice_pred;
+  if (query.isColumnsSet())
+  {
+    thrift_slice_pred.__isset.column_names= true;
+    vector<string> cols= query.getColumns();
+    for (vector<string>::iterator it= cols.begin();
+         it != cols.end();
+         ++it)
+    {
+      thrift_slice_pred.column_names.push_back(*it);
+    }
+  }
+  if (query.isRangeSet())
+  {
+    SliceRange thrift_slice_range;
+    thrift_slice_range.start.assign(query.getStartColumn());
+    thrift_slice_range.finish.assign(query.getEndColumn());
+    thrift_slice_range.reversed= query.getReverseColumns();
+    thrift_slice_range.count= query.getRowCount();
+    thrift_slice_pred.__isset.slice_range= true;
+    thrift_slice_pred.slice_range= thrift_slice_range;
+  }
+  return thrift_slice_pred;
+}
+
+
 vector<Column> getColumnList(vector<ColumnOrSuperColumn>& cols)
 {
   vector<Column> ret(cols.size());

@@ -15,6 +15,7 @@
 #include "libgenthrift/cassandra_types.h"
 
 #include "libcassandra/column_family_definition.h"
+#include "libcassandra/indexed_slices_query.h"
 #include "libcassandra/keyspace_definition.h"
 
 
@@ -58,6 +59,14 @@ org::apache::cassandra::KsDef createKsDefObject(const KeyspaceDefinition& ks_def
  * @return a thrift CfDef object equivalent to the cf_def input
  */
 org::apache::cassandra::CfDef createCfDefObject(const ColumnFamilyDefinition& ks_def);
+
+/**
+ * Convert a IndexedSlicesQuery object to the thrift 
+ * equivalent - SlicePredicate
+ * @param[in] query an IndexedSlicesQuery object
+ * @return a thrift SlicePredicate object equivalent to the query input
+ */
+org::apache::cassandra::SlicePredicate createSlicePredicateObject(const IndexedSlicesQuery& query);
 
 /**
  * Extract the columns from the vector of columns or super columns

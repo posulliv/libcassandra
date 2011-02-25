@@ -17,6 +17,7 @@
 
 #include "libcassandra/cassandra.h"
 #include "libcassandra/exception.h"
+#include "libcassandra/indexed_slices_query.h"
 #include "libcassandra/keyspace.h"
 #include "libcassandra/keyspace_definition.h"
 #include "libcassandra/util_functions.h"
@@ -457,6 +458,38 @@ map<string, vector<SuperColumn> > Cassandra::getSuperRangeSlice(const ColumnPare
   return getSuperRangeSlice(col_parent, pred, start, finish, row_count, ConsistencyLevel::QUORUM);
 }
 
+
+map<string, map<string, string> >
+Cassandra::getIndexedSlices(const IndexedSlicesQuery& query)
+{
+  map<string, map<string, string> > ret_map;
+  vector<KeySlice> ret;
+  SlicePredicate thrift_slice_pred= createSlicePredicateObject(query);
+  ColumnParent thrift_col_parent;
+  thrift_col_parent.column_family.assign(query.getColumnFamily());
+  thrift_client->get_indexed_slices(ret, 
+                                    thrift_col_parent, 
+                                    query.getIndexClause(),
+                                    thrift_slice_pred,
+                                    query.getConsistencyLevel());
+  
+  for(vector<KeySlice>::iterator it= ret.begin();
+      it != ret.end();
+      ++it)
+  {
+    vector<Column> thrift_cols= getColumnList((*it).columns);
+    map<string, string> rows;
+    for (vector<Column>::iterator inner_it= thrift_cols.begin();
+         inner_it != thrift_cols.end();
+         ++inner_it)
+    {
+      rows.insert(make_pair((*inner_it).name, (*inner_it).value));
+    }
+    ret_map.insert(make_pair((*it).key, rows));
+  }
+
+  return ret_map;
+}
 
 
 int32_t Cassandra::getCount(const string& key, 
