@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <tr1/memory>
 
 #include "libgenthrift/cassandra_types.h"
 
@@ -23,12 +24,12 @@
 namespace libcassandra
 {
 
-class IndexSlicesQuery
+class IndexedSlicesQuery
 {
 public:
 
-  IndexSlicesQuery();
-  ~IndexSlicesQuery() {}
+  IndexedSlicesQuery();
+  ~IndexedSlicesQuery() {}
 
   void addEqualsExpression(const std::string& column, const std::string& value);
 
@@ -46,7 +47,7 @@ public:
 
   void setCount(int32_t new_count);
 
-  std::map<std::string, std::map<std::string, std::string> > execute(tr1::shared_ptr<Cassandra> client);
+  std::map<std::string, std::map<std::string, std::string> > execute(std::tr1::shared_ptr<Cassandra> client);
 
 private:
 
@@ -55,6 +56,12 @@ private:
   std::string column_family;
 
   std::string start_key;
+
+  std::string start_column;
+
+  std::string end_column;
+
+  bool column_reversed;
 
   int32_t count;
 

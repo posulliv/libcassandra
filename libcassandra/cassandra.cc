@@ -458,31 +458,6 @@ map<string, vector<SuperColumn> > Cassandra::getSuperRangeSlice(const ColumnPare
 }
 
 
-vector<Column> Cassandra::getColumnList(vector<ColumnOrSuperColumn>& cols)
-{
-  vector<Column> ret(cols.size());
-  for (vector<ColumnOrSuperColumn>::iterator it= cols.begin();
-       it != cols.end();
-       ++it)
-  {
-    ret.push_back((*it).column);
-  }
-  return ret;
-}
-
-
-vector<SuperColumn> Cassandra::getSuperColumnList(vector<ColumnOrSuperColumn>& cols)
-{
-  vector<SuperColumn> ret(cols.size());
-  for (vector<ColumnOrSuperColumn>::iterator it= cols.begin();
-       it != cols.end();
-       ++it)
-  {
-    ret.push_back((*it).super_column);
-  }
-  return ret;
-}
-
 
 int32_t Cassandra::getCount(const string& key, 
                             const ColumnParent& col_parent,
@@ -613,11 +588,4 @@ bool Cassandra::findKeyspace(const string& name)
   return false;
 }
 
-
-int64_t Cassandra::createTimestamp()
-{
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return (int64_t) tv.tv_sec * 1000000 + (int64_t) tv.tv_usec;
-}
 

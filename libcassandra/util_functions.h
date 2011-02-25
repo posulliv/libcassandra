@@ -59,6 +59,28 @@ org::apache::cassandra::KsDef createKsDefObject(const KeyspaceDefinition& ks_def
  */
 org::apache::cassandra::CfDef createCfDefObject(const ColumnFamilyDefinition& ks_def);
 
+/**
+ * Extract the columns from the vector of columns or super columns
+ * @param[in] cols vector to process
+ * @return vector of Column objects
+ */
+std::vector<org::apache::cassandra::Column>
+getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn>& cols);
+
+/**
+ * Extract the super columns from the vector of columns or super columns
+ * @param[in] cols vector to process
+ * @return vector of SuperColumn objects
+ */
+std::vector<org::apache::cassandra::SuperColumn>
+getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn>& cols);
+
+
+/**
+ * @return a timestamp in micro-seconds
+ */
+int64_t createTimestamp();
+
 } /* end namespace libcassandra */
 
 #endif /* __LIBCASSANDRA_UTIL_FUNCTIONS_H */

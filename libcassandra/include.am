@@ -13,6 +13,7 @@ nobase_include_HEADERS+= \
 			 libcassandra/column_definition.h \
 			 libcassandra/column_family_definition.h \
 			 libcassandra/exception.h \
+			 libcassandra/indexed_slices_query.h \
 			 libcassandra/keyspace.h \
 			 libcassandra/keyspace_definition.h \
 			 libcassandra/keyspace_factory.h \
@@ -27,6 +28,7 @@ libcassandra_libcassandra_la_SOURCES = \
 				       libcassandra/cassandra_host.cc \
 				       libcassandra/column_definition.cc \
 				       libcassandra/column_family_definition.cc \
+				       libcassandra/indexed_slices_query.cc \
 				       libcassandra/keyspace.cc \
 				       libcassandra/keyspace_definition.cc \
 				       libcassandra/keyspace_factory.cc \

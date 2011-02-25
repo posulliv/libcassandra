@@ -391,11 +391,6 @@ public:
 private:
 
   /**
-   * @return a timestamp in micro-seconds
-   */
-  int64_t createTimestamp();
-
-  /**
    * Creates a unique map name for the keyspace and its consistency level
    */
   std::string buildKeyspaceMapName(std::string keyspace, int level);
@@ -405,13 +400,6 @@ private:
    * @return true if found; false otherwise
    */
   bool findKeyspace(const std::string& name);
-
-  std::vector<org::apache::cassandra::Column>
-  getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
-
-  std::vector<org::apache::cassandra::SuperColumn>
-  getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn> &cols);
-
 
   org::apache::cassandra::CassandraClient *thrift_client;
   std::string host;

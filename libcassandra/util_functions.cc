@@ -182,4 +182,38 @@ CfDef createCfDefObject(const ColumnFamilyDefinition& cf_def)
   return thrift_cf_def;
 }
 
+
+vector<Column> getColumnList(vector<ColumnOrSuperColumn>& cols)
+{
+  vector<Column> ret(cols.size());
+  for (vector<ColumnOrSuperColumn>::iterator it= cols.begin();
+       it != cols.end();
+       ++it)
+  {
+    ret.push_back((*it).column);
+  }
+  return ret;
+}
+
+
+vector<SuperColumn> getSuperColumnList(vector<ColumnOrSuperColumn>& cols)
+{
+  vector<SuperColumn> ret(cols.size());
+  for (vector<ColumnOrSuperColumn>::iterator it= cols.begin();
+       it != cols.end();
+       ++it)
+  {
+    ret.push_back((*it).super_column);
+  }
+  return ret;
+}
+
+
+int64_t createTimestamp()
+{
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return (int64_t) tv.tv_sec * 1000000 + (int64_t) tv.tv_usec;
+}
+
 } /* end namespace libcassandra */
