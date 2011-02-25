@@ -45,7 +45,7 @@ public:
 
   void setStartKey(const std::string& new_start_key);
 
-  void setCount(int32_t new_count);
+  void setRowCount(int32_t new_count);
 
   std::map<std::string, std::map<std::string, std::string> > execute(std::tr1::shared_ptr<Cassandra> client);
 

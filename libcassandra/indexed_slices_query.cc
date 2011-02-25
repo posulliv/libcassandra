@@ -98,7 +98,7 @@ void IndexedSlicesQuery::setStartKey(const string& new_start_key)
 }
 
 
-void IndexedSlicesQuery::setCount(int32_t new_count)
+void IndexedSlicesQuery::setRowCount(int32_t new_count)
 {
   index_clause.count= new_count;
 }
