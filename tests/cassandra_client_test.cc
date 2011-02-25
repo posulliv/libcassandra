@@ -22,6 +22,7 @@
 #include <libcassandra/cassandra.h>
 #include <libcassandra/cassandra_factory.h>
 #include <libcassandra/column_family_definition.h>
+#include <libcassandra/indexed_slices_query.h>
 #include <libcassandra/keyspace.h>
 #include <libcassandra/keyspace_definition.h>
 
@@ -216,5 +217,64 @@ TEST_F(ClientTest, DeleteSuperColumn)
   c->removeSuperColumn("teeny", "Super1", "padraig");
   ASSERT_THROW(c->getColumnValue("teeny", "Super1", "padraig", "third"), org::apache::cassandra::NotFoundException);
   c->dropColumnFamily("Super1");
+  c->dropKeyspace("unittest");
+}
+
+
+/**
+ * This unit test uses the blog post from data stax as its basis
+ * http://www.datastax.com/dev/blog/whats-new-cassandra-07-secondary-indexes
+ */
+TEST_F(ClientTest, SecondaryIndexes)
+{
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("users");
+  cf_def.setKeyspaceName(ks_def.getName());
+  ColumnDefinition name_col;
+  name_col.setName("full_name");
+  name_col.setValidationClass("UTF8Type");
+  ColumnDefinition sec_col;
+  sec_col.setName("birth_date");
+  sec_col.setValidationClass("LongType");
+  sec_col.setIndexType(IndexType::KEYS);
+  ColumnDefinition third_col;
+  third_col.setName("state");
+  third_col.setValidationClass("UTF8Type");
+  third_col.setIndexType(IndexType::KEYS);
+  cf_def.addColumnMetadata(name_col);
+  cf_def.addColumnMetadata(sec_col);
+  cf_def.addColumnMetadata(third_col);
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
+  c->insertColumn("bsanderson", cf_def.getName(), "full_name", "Brandon Sanderson");
+  c->insertColumn("bsanderson", cf_def.getName(), "birth_date", "00001975");
+  c->insertColumn("bsanderson", cf_def.getName(), "state", "UT");
+  c->insertColumn("prothfuss", cf_def.getName(), "full_name", "Patrick Rothfuss");
+  c->insertColumn("prothfuss", cf_def.getName(), "birth_date", "00001973");
+  c->insertColumn("prothfuss", cf_def.getName(), "state", "WI");
+  c->insertColumn("htayler", cf_def.getName(), "full_name", "Howard Tayler");
+  c->insertColumn("htayler", cf_def.getName(), "birth_date", "00001968");
+  c->insertColumn("htayler", cf_def.getName(), "state", "UT");
+  IndexedSlicesQuery query;
+  vector<string> column_names;
+  column_names.push_back("full_name");
+  column_names.push_back("birth_data");
+  column_names.push_back("state");
+  query.setColumns(column_names);
+  query.addGtExpression("birth_date", "00001970");
+  query.addEqualsExpression("state", "UT");
+  query.setColumnFamily("users");
+  map<string, map<string, string> > res= c->getIndexedSlices(query);
+  EXPECT_EQ(1, res.size());
+  for (map<string, map<string, string> >::iterator it= res.begin();
+       it != res.end();
+       ++it)
+  {
+    EXPECT_EQ("bsanderson", it->first);
+  }
+  c->dropColumnFamily("users");
   c->dropKeyspace("unittest");
 }
