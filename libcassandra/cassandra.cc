@@ -8,10 +8,12 @@
  */
 
 #include <time.h>
+#include <netinet/in.h>
 
 #include <string>
 #include <set>
 #include <sstream>
+#include <iostream>
 
 #include "libgenthrift/Cassandra.h"
 
@@ -25,16 +27,6 @@
 using namespace std;
 using namespace org::apache::cassandra;
 using namespace libcassandra;
-
-/* utility functions */
-
-template<class T>
-inline string toString(const T &tt)
-{
-  stringstream ss;
-  ss << tt;
-  return ss.str();
-}
 
 
 Cassandra::Cassandra()
@@ -164,6 +156,16 @@ void Cassandra::insertColumn(const string& key,
                              const string& value)
 {
   insertColumn(key, column_family, "", column_name, value, ConsistencyLevel::QUORUM);
+}
+
+
+void Cassandra::insertColumn(const string& key,
+                             const string& column_family,
+                             const string& column_name,
+                             const int64_t value)
+{
+  //int64_t store_value= htonll(value);
+  insertColumn(key, column_family, "", column_name, serializeLong(value), ConsistencyLevel::QUORUM);
 }
 
 
@@ -595,15 +597,6 @@ string Cassandra::getHost()
 int Cassandra::getPort() const
 {
   return port;
-}
-
-
-string Cassandra::buildKeyspaceMapName(string keyspace, int level)
-{
-  keyspace.append("[");
-  keyspace.append(toString(level));
-  keyspace.append("]");
-  return keyspace;
 }
 
 

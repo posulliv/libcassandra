@@ -33,13 +33,23 @@ public:
 
   void addEqualsExpression(const std::string& column, const std::string& value);
 
+  void addEqualsExpression(const std::string& column, const int64_t value);
+
   void addGtExpression(const std::string& column, const std::string& value);
+
+  void addGtExpression(const std::string& column, const int64_t value);
 
   void addGtEqualsExpression(const std::string& column, const std::string& value);
 
+  void addGtEqualsExpression(const std::string& column, const int64_t value);
+
   void addLtExpression(const std::string& column, const std::string& value);
 
+  void addLtExpression(const std::string& column, const int64_t value);
+
   void addLtEqualsExpression(const std::string& column, const std::string& value);
+
+  void addLtEqualsExpression(const std::string& column, const int64_t value);
 
   void addIndexExpression(const std::string& column,
                           const std::string& value,

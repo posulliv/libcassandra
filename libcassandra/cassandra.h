@@ -135,6 +135,19 @@ public:
                     const std::string& value);
 
   /**
+   * Insert a column, directly in a columnfamily
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name
+   * @param[in] value the column value
+   */
+  void insertColumn(const std::string& key,
+                    const std::string& column_family,
+                    const std::string& column_name,
+                    const int64_t value);
+
+  /**
    * Removes all the columns that match the given column path
    *
    * @param[in] key the column or super column key
@@ -396,11 +409,6 @@ public:
   int getPort() const;
 
 private:
-
-  /**
-   * Creates a unique map name for the keyspace and its consistency level
-   */
-  std::string buildKeyspaceMapName(std::string keyspace, int level);
 
   /**
    * Finds the given keyspace in the list of keyspace definitions

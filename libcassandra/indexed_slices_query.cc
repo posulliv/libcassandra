@@ -48,11 +48,32 @@ void IndexedSlicesQuery::addEqualsExpression(const string& column, const string&
 }
 
 
+
+void IndexedSlicesQuery::addEqualsExpression(const string& column, const int64_t value)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(serializeLong(value));
+  new_expr.op= IndexOperator::EQ;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
 void IndexedSlicesQuery::addGtExpression(const string& column, const string& value)
 {
   IndexExpression new_expr;
   new_expr.column_name.assign(column);
   new_expr.value.assign(value);
+  new_expr.op= IndexOperator::GT;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
+void IndexedSlicesQuery::addGtExpression(const string& column, const int64_t value)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(serializeLong(value));
   new_expr.op= IndexOperator::GT;
   index_clause.expressions.push_back(new_expr);
 }
@@ -68,6 +89,16 @@ void IndexedSlicesQuery::addGtEqualsExpression(const string& column, const strin
 }
 
 
+void IndexedSlicesQuery::addGtEqualsExpression(const string& column, const int64_t value)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(serializeLong(value));
+  new_expr.op= IndexOperator::GTE;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
 void IndexedSlicesQuery::addLtExpression(const string& column, const string& value)
 {
   IndexExpression new_expr;
@@ -78,11 +109,31 @@ void IndexedSlicesQuery::addLtExpression(const string& column, const string& val
 }
 
 
+void IndexedSlicesQuery::addLtExpression(const string& column, const int64_t value)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(serializeLong(value));
+  new_expr.op= IndexOperator::LT;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
 void IndexedSlicesQuery::addLtEqualsExpression(const string& column, const string& value)
 {
   IndexExpression new_expr;
   new_expr.column_name.assign(column);
   new_expr.value.assign(value);
+  new_expr.op= IndexOperator::LT;
+  index_clause.expressions.push_back(new_expr);
+}
+
+
+void IndexedSlicesQuery::addLtEqualsExpression(const string& column, const int64_t value)
+{
+  IndexExpression new_expr;
+  new_expr.column_name.assign(column);
+  new_expr.value.assign(serializeLong(value));
   new_expr.op= IndexOperator::LT;
   index_clause.expressions.push_back(new_expr);
 }

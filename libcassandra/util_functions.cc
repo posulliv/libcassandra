@@ -244,4 +244,19 @@ int64_t createTimestamp()
   return (int64_t) tv.tv_sec * 1000000 + (int64_t) tv.tv_usec;
 }
 
+
+string serializeLong(int64_t t)
+{
+  unsigned char raw_array[8];
+  raw_array[0]= (t >> 56) & 0xff;
+  raw_array[1]= (t >> 48) & 0xff;
+  raw_array[2]= (t >> 40) & 0xff;
+  raw_array[3]= (t >> 32) & 0xff;
+  raw_array[4]= (t >> 24) & 0xff;
+  raw_array[5]= (t >> 16) & 0xff;
+  raw_array[6]= (t >> 8) & 0xff;
+  raw_array[7]= t & 0xff;
+  return string(reinterpret_cast<const char *>(raw_array), 8);
+}
+
 } /* end namespace libcassandra */

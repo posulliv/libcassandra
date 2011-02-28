@@ -84,11 +84,19 @@ getColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn>& cols);
 std::vector<org::apache::cassandra::SuperColumn>
 getSuperColumnList(std::vector<org::apache::cassandra::ColumnOrSuperColumn>& cols);
 
-
 /**
  * @return a timestamp in micro-seconds
  */
 int64_t createTimestamp();
+
+/**
+ * Convert given 64 bit integer to big-endian
+ * format and place these raw bytes in a std::string
+ * This is the format thrift expects for a LongType
+ * @param[in] t integer to work with
+ * @return a std::string representing the input in big-endian format
+ */
+std::string serializeLong(int64_t t);
 
 } /* end namespace libcassandra */
 

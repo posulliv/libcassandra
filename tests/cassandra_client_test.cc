@@ -250,13 +250,13 @@ TEST_F(ClientTest, SecondaryIndexes)
   c->setKeyspace(ks_def.getName());
   c->createColumnFamily(cf_def);
   c->insertColumn("bsanderson", cf_def.getName(), "full_name", "Brandon Sanderson");
-  c->insertColumn("bsanderson", cf_def.getName(), "birth_date", "00001975");
+  c->insertColumn("bsanderson", cf_def.getName(), "birth_date", 1975);
   c->insertColumn("bsanderson", cf_def.getName(), "state", "UT");
   c->insertColumn("prothfuss", cf_def.getName(), "full_name", "Patrick Rothfuss");
-  c->insertColumn("prothfuss", cf_def.getName(), "birth_date", "00001973");
+  c->insertColumn("prothfuss", cf_def.getName(), "birth_date", 1973);
   c->insertColumn("prothfuss", cf_def.getName(), "state", "WI");
   c->insertColumn("htayler", cf_def.getName(), "full_name", "Howard Tayler");
-  c->insertColumn("htayler", cf_def.getName(), "birth_date", "00001968");
+  c->insertColumn("htayler", cf_def.getName(), "birth_date", 1968);
   c->insertColumn("htayler", cf_def.getName(), "state", "UT");
   IndexedSlicesQuery query;
   vector<string> column_names;
@@ -264,7 +264,7 @@ TEST_F(ClientTest, SecondaryIndexes)
   column_names.push_back("birth_date");
   column_names.push_back("state");
   query.setColumns(column_names);
-  query.addGtExpression("birth_date", "00001970");
+  query.addGtExpression("birth_date", 1970);
   query.addEqualsExpression("state", "UT");
   query.setColumnFamily("users");
   map<string, map<string, string> > res= c->getIndexedSlices(query);
