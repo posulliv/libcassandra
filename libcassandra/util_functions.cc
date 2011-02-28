@@ -7,6 +7,8 @@
  * the COPYING file in the parent directory for full text.
  */
 
+#include <sys/time.h>
+
 #include <string>
 #include <sstream>
 #include <iostream>
