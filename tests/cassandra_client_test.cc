@@ -143,6 +143,25 @@ TEST_F(ClientTest, InsertColumn)
 }
 
 
+TEST_F(ClientTest, InsertLongColumn)
+{
+  int64_t mock_data= 56;
+  KeyspaceDefinition ks_def;
+  ks_def.setName("unittest");
+  c->createKeyspace(ks_def);
+  ColumnFamilyDefinition cf_def;
+  cf_def.setName("padraig");
+  cf_def.setKeyspaceName(ks_def.getName());
+  c->setKeyspace(ks_def.getName());
+  c->createColumnFamily(cf_def);
+  c->insertColumn("sarah", "padraig", "third", mock_data);
+  int64_t res= c->getIntegerColumnValue("sarah", "padraig", "third");
+  EXPECT_EQ(mock_data, res);
+  c->dropColumnFamily("padraig");
+  c->dropKeyspace("unittest");
+}
+
+
 TEST_F(ClientTest, DeleteColumn)
 {
   KeyspaceDefinition ks_def;

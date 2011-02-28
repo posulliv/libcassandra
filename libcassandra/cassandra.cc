@@ -282,6 +282,15 @@ string Cassandra::getColumnValue(const string& key,
 }
 
 
+int64_t Cassandra::getIntegerColumnValue(const string& key,
+                                         const string& column_family,
+                                         const string& column_name)
+{
+	string ret= getColumn(key, column_family, column_name).value;
+  return deserializeLong(ret);
+}
+
+
 SuperColumn Cassandra::getSuperColumn(const string& key,
                                       const string& column_family,
                                       const string& super_column_name,

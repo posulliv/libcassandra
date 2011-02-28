@@ -232,8 +232,7 @@ vector<SuperColumn> getSuperColumnList(vector<ColumnOrSuperColumn>& cols)
        ++it)
   {
     ret.push_back((*it).super_column);
-  }
-  return ret;
+  } return ret;
 }
 
 
@@ -257,6 +256,30 @@ string serializeLong(int64_t t)
   raw_array[6]= (t >> 8) & 0xff;
   raw_array[7]= t & 0xff;
   return string(reinterpret_cast<const char *>(raw_array), 8);
+}
+
+
+int64_t deserializeLong(string& t)
+{
+  int64_t ret= 0;
+  int64_t tmp= 0;
+  unsigned char *raw_array= reinterpret_cast<unsigned char *>(const_cast<char *>(t.c_str()));
+  ret|= raw_array[7];
+  tmp= raw_array[6];
+  ret|= (tmp << 8);
+  tmp= raw_array[5];
+  ret|= (tmp << 16);
+  tmp= raw_array[4];
+  ret|= (tmp << 24);
+  tmp= raw_array[3];
+  ret|= (tmp << 32);
+  tmp= raw_array[2];
+  ret|= (tmp << 40);
+  tmp= raw_array[1];
+  ret|= (tmp << 48);
+  tmp= raw_array[0];
+  ret|= (tmp << 56);
+  return ret;
 }
 
 } /* end namespace libcassandra */

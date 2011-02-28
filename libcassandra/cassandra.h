@@ -274,6 +274,19 @@ public:
                              const std::string& column_family,
                              const std::string& column_name);
 
+  /**
+   * Retrieve a column value
+   *
+   * @param[in] key the column key
+   * @param[in] column_family the column family
+   * @param[in] column_name the column name (optional)
+   * @return the value for the column that corresponds to the given parameters
+   *         but as an integer
+   */
+  int64_t getIntegerColumnValue(const std::string& key,
+                                const std::string& column_family,
+                                const std::string& column_name);
+
   org::apache::cassandra::SuperColumn getSuperColumn(const std::string& key,
                                                      const std::string& column_family,
                                                      const std::string& super_column_name,

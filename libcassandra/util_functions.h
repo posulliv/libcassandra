@@ -98,6 +98,14 @@ int64_t createTimestamp();
  */
 std::string serializeLong(int64_t t);
 
+/**
+ * Convert given string in big-endian format
+ * to a 64 bit integer
+ * @param[in] t string to work with
+ * @return a int64_t 
+ */
+int64_t deserializeLong(std::string& t);
+
 } /* end namespace libcassandra */
 
 #endif /* __LIBCASSANDRA_UTIL_FUNCTIONS_H */
